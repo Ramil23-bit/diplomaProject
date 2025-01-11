@@ -2,6 +2,8 @@ package org.telran.web.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "storage")
 public class Storage {
@@ -10,6 +12,18 @@ public class Storage {
     private Long id;
 
     private Long amount;
+
+    @OneToMany
+    @JoinColumn(name = "product_id")
+    private List<Storage> storageList;
+
+    public Storage() {
+    }
+
+    public Storage(Long id, Long amount) {
+        this.id = id;
+        this.amount = amount;
+    }
 
     public Long getId() {
         return id;

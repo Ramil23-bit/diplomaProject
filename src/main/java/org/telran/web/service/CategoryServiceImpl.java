@@ -3,7 +3,7 @@ package org.telran.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.web.entity.Category;
-import org.telran.web.excdeption.CategoryNotFoundException;
+import org.telran.web.exception.CategoryNotFoundException;
 import org.telran.web.repository.CategoryJpaRepository;
 
 import java.util.List;

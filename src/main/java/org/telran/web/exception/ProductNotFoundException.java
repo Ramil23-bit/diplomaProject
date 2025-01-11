@@ -1,4 +1,4 @@
-package org.telran.web.excdeption;
+package org.telran.web.exception;
 
 public class ProductNotFoundException extends RuntimeException {
     public ProductNotFoundException(String message) {

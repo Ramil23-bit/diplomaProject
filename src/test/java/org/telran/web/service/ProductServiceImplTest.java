@@ -1,4 +1,4 @@
-package org.telran.service;
+package org.telran.web.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -6,9 +6,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telran.web.entity.Product;
-import org.telran.web.excdeption.ProductNotFoundException;
+import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.ProductJpaRepository;
-import org.telran.web.service.ProductServiceImpl;
 
 import java.util.Arrays;
 import java.util.List;

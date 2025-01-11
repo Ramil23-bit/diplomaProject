@@ -6,7 +6,7 @@ import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.dto.ProductResponseDto;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
-import org.telran.web.excdeption.CategoryNotFoundException;
+import org.telran.web.exception.CategoryNotFoundException;
 import org.telran.web.repository.CategoryJpaRepository;
 
 @Component
