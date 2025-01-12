@@ -31,7 +31,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "storage_id")
-    private Storage storageList;
+    private Storage storage;
 
     @Column(name = "discount")
     private BigDecimal discount;
@@ -48,35 +48,35 @@ public class Product {
         //
     }
 
-    public Product(Long id, String productTitle, BigDecimal price, String productInfo, Category category, Storage storageList, BigDecimal discount, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Product(Long id, String productTitle, BigDecimal price, String productInfo, Category category, Storage storage, BigDecimal discount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.productTitle = productTitle;
         this.price = price;
         this.productInfo = productInfo;
         this.category = category;
-        this.storageList = storageList;
+        this.storage = storage;
         this.discount = discount;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public Product(String productTitle, BigDecimal price, String productInfo, Category category, Storage storageList, BigDecimal discount, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Product(String productTitle, BigDecimal price, String productInfo, Category category, Storage storage, BigDecimal discount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.productTitle = productTitle;
         this.price = price;
         this.productInfo = productInfo;
         this.category = category;
-        this.storageList = storageList;
+        this.storage = storage;
         this.discount = discount;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public Product(String productTitle, BigDecimal price, String productInfo, Category category, Storage storageList, BigDecimal discount) {
+    public Product(String productTitle, BigDecimal price, String productInfo, Category category, Storage storage, BigDecimal discount) {
         this.productTitle = productTitle;
         this.price = price;
         this.productInfo = productInfo;
         this.category = category;
-        this.storageList = storageList;
+        this.storage = storage;
         this.discount = discount;
         this.createdAt = null;
         this.updatedAt = null;
@@ -114,6 +114,22 @@ public class Product {
         this.productInfo = productInfo;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Storage getStorage() {
+        return storage;
+    }
+
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
+
     public BigDecimal getDiscount() {
         return discount;
     }
@@ -138,14 +154,6 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
     @Override
     public String toString() {
         return "Product{" +
@@ -154,6 +162,7 @@ public class Product {
                 ", price=" + price +
                 ", productInfo='" + productInfo + '\'' +
                 ", category=" + category +
+                ", storage=" + storage +
                 ", discount=" + discount +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
