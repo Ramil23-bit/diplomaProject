@@ -8,6 +8,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.telran.web.entity.Storage;
 import org.telran.web.exception.StorageNotFoundException;
 import org.telran.web.repository.StorageJpaRepository;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +28,8 @@ class StorageServiceImplTest {
     @Test
     public void testGetAllStorages() {
         List<Storage> storages = Arrays.asList(
-                new Storage(1L, null, 100L),
-                new Storage(2L, null, 200L));
+                new Storage(100L, 1L, null),
+                new Storage(200L, 2L, null));
         when(storageJpaRepository.findAll()).thenReturn(storages);
 
         List<Storage> result = storageService.getAllStorage();
@@ -64,8 +66,8 @@ class StorageServiceImplTest {
 
     @Test
     void createStorage() {
-        Storage newStorage = new Storage(null, null, 300L);
-        Storage savedStorage = new Storage(1L, null, 300L);
+        Storage newStorage = new Storage(null, 300L, new ArrayList<>());
+        Storage savedStorage = new Storage(1L, null, new ArrayList<>());
 
         when(storageJpaRepository.save(newStorage)).thenReturn(savedStorage);
 

@@ -6,6 +6,7 @@ import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.dto.ProductResponseDto;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
+import org.telran.web.entity.Storage;
 import org.telran.web.exception.CategoryNotFoundException;
 import org.telran.web.repository.CategoryJpaRepository;
 
@@ -34,13 +35,15 @@ public class ProductCreateConverter implements ProductConverter<Product, Product
     @Override
     public Product toEntity(ProductCreateDto productCreateDto) {
         Category category = categoryJpaRepository.findById(productCreateDto.getCategoryId())
-                .orElseThrow(() -> new CategoryNotFoundException("Category not found"));;
-        category.setId(productCreateDto.getCategoryId());
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+        Storage storage = productCreateDto.getStorageList();
 
-        return new Product(productCreateDto.getProductTitle(),
+        return new Product(
+                productCreateDto.getProductTitle(),
                 productCreateDto.getPrice(),
                 productCreateDto.getProductInfo(),
-                productCreateDto.getCategoryId(),
+                category,
+                storage,
                 productCreateDto.getDiscount());
     }
 }
