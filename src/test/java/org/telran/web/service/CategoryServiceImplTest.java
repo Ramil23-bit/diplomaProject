@@ -54,7 +54,7 @@ class CategoryServiceImplTest {
     public void getByIdWhenCategryExists() {
         Long categoryId = 3333333L;
         Category categoryExpected = new Category();
-        categoryExpected.setId(3333333L);
+        categoryExpected.setId(categoryId);
 
         when(categoryJpaRepository.findById(categoryId))
                 .thenReturn(Optional.of(categoryExpected));

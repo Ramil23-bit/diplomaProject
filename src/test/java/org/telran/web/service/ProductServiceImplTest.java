@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
+import org.telran.web.entity.Storage;
 import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.ProductJpaRepository;
 
@@ -79,6 +80,7 @@ class ProductServiceImplTest {
     }
 
     private List<Product> createProductList(){
+        Storage storage = new Storage(1L, 1L, new ArrayList<>());
         return Arrays.asList(
                 new Product(
                         1L,
@@ -86,7 +88,7 @@ class ProductServiceImplTest {
                         BigDecimal.valueOf(250),
                         "Electric trimmer",
                         new Category(1L, "Tools and equipment", new ArrayList<>()),
-                        null,
+                        storage,
                         BigDecimal.ZERO,
                         null,
                         null),
@@ -96,7 +98,7 @@ class ProductServiceImplTest {
                         BigDecimal.valueOf(50),
                         "For green leafy growth",
                         new Category(2L, "Fertilizer", new ArrayList<>()),
-                        null,
+                        storage,
                         BigDecimal.ZERO,
                         null,
                         null
