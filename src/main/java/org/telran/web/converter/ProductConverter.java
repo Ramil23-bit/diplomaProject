@@ -1,6 +1,6 @@
 package org.telran.web.converter;
 
-public interface Converter <Entity, RequestDto, ResponseDto>{
+public interface ProductConverter<Entity, RequestDto, ResponseDto>{
 
     ResponseDto toDto(Entity entity);
 

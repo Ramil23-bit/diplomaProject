@@ -1,4 +1,4 @@
-package org.telran.web.excdeption;
+package org.telran.web.exception;
 
 public class CategoryNotFoundException extends RuntimeException{
 

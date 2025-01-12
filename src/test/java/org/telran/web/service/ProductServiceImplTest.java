@@ -1,4 +1,4 @@
-package org.telran.service;
+package org.telran.web.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -6,14 +6,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telran.web.entity.Product;
-import org.telran.web.excdeption.ProductNotFoundException;
+import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.ProductJpaRepository;
-import org.telran.web.service.ProductServiceImpl;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -27,10 +24,10 @@ class ProductServiceImplTest {
     private ProductServiceImpl productService;
 
     @Test
-    public void getByIdWhenCPruductExists() {
-        Long productId = 3333333l;
+    public void getByIdWhenPruductExists() {
+        Long productId = 3333333L;
         Product productExpected = new Product();
-        productExpected.setId(3333333l);
+        productExpected.setId(3333333L);
 
         when(productJpaRepository.findById(productId))
                 .thenReturn(Optional.of(productExpected));
@@ -42,7 +39,7 @@ class ProductServiceImplTest {
 
     @Test
     public void getByIdWhenProductNotExists() {
-        Long id = 4444444l;
+        Long id = 4444444L;
         when(productJpaRepository.findById(id))
                 .thenThrow(new ProductNotFoundException("Product not found"));
 
@@ -52,7 +49,9 @@ class ProductServiceImplTest {
 
     @Test
     public void testGetAllProducts() {
-        List<Product> products = Arrays.asList(new Product(1l, "Hammer"), new Product(2l, "Tomato"));
+        List<Product> products = Arrays.asList(
+                new Product(1l, "Hammer"),
+                new Product(2l, "Tomato"));
         when(productJpaRepository.findAll()).thenReturn(products);
 
         List<Product> result = productService.getAll();
@@ -63,6 +62,15 @@ class ProductServiceImplTest {
 
     @Test
     void create() {
+        Product newProduct = new Product(null, "New Product");
+        Product savedProduct = new Product(1L, "New Product");
 
+        when(productJpaRepository.save(newProduct)).thenReturn(savedProduct);
+
+        Product result = productService.create(newProduct);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("New Product", result.getProductTitle());
     }
 }

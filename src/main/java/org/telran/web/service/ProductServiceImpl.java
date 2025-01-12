@@ -3,7 +3,7 @@ package org.telran.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.web.entity.Product;
-import org.telran.web.excdeption.ProductNotFoundException;
+import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.ProductJpaRepository;
 
 import java.util.List;

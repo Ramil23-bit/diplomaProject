@@ -1,14 +1,28 @@
 CREATE TABLE IF NOT EXISTS category (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(120) NOT NULL
-);
+id BIGINT PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(120) NOT NULL);
 
 CREATE TABLE IF NOT EXISTS products (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    product_title VARCHAR(120) NOT NULL,
-    price DECIMAL(10, 2),
-    product_info TEXT,
-    discount DECIMAL(10, 2),
-    category_id BIGINT,
-    FOREIGN KEY (category_id) REFERENCES category(id)
-);
+id BIGINT PRIMARY KEY AUTO_INCREMENT,
+product_title VARCHAR(120) NOT NULL,
+price DECIMAL(10, 2),
+product_info TEXT,
+discount DECIMAL(10, 2),
+category_id BIGINT,
+storage_id BIGINT,
+FOREIGN KEY (category_id) REFERENCES category(id),
+FOREIGN KEY (storage_id) REFERENCES storage(id));
+
+CREATE TABLE IF NOT EXISTS storage (
+id BIGINT PRIMARY KEY AUTO_INCREMENT,
+product_id BIGINT,
+amount BIGINT NOT NULL,
+FOREIGN KEY (product_id) REFERENCES products(id));
+
+CREATE TABLE IF NOT EXISTS shop_users (
+id BIGINT PRIMARY KEY AUTO_INCREMENT,
+username VARCHAR(20) NOT NULL,
+email VARCHAR(50) NOT NULL UNIQUE,
+password VARCHAR(255) NOT NULL,
+phone_number VARCHAR(20) NOT NULL,
+role VARCHAR(20) NOT NULL);

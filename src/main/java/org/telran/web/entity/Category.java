@@ -1,8 +1,6 @@
 package org.telran.web.entity;
 
-
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -19,14 +17,14 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Product> products;
 
-    public Category() {
-        //
-    }
-
     public Category(Long id, String categoryTitle, List<Product> products) {
         this.id = id;
         this.categoryTitle = categoryTitle;
         this.products = products;
+    }
+
+    public Category() {
+        //
     }
 
     public Long getId() {
@@ -58,8 +56,8 @@ public class Category {
         return "Category{" +
                 "id=" + id +
                 ", categoryTitle='" + categoryTitle + '\'' +
-                ", products=" + products +
                 '}';
     }
+
 }
 

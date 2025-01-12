@@ -28,9 +28,9 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-//    @ManyToOne
-//    @JoinColumn(name = "storage_id")
-//    private Storage storage;
+    @ManyToOne
+    @JoinColumn(name = "storage_id")
+    private Storage storage;
 
     @Column(name = "discount")
     private BigDecimal discount;
