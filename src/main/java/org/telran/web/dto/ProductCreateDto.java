@@ -1,5 +1,7 @@
 package org.telran.web.dto;
 
+import org.telran.web.entity.Storage;
+
 import java.math.BigDecimal;
 
 public class ProductCreateDto {
@@ -13,6 +15,8 @@ public class ProductCreateDto {
     private Long categoryId;
 
     private BigDecimal discount;
+
+    private Storage storageList;
 
     public ProductCreateDto() {
         //
@@ -56,5 +60,13 @@ public class ProductCreateDto {
 
     public void setDiscount(BigDecimal discount) {
         this.discount = discount;
+    }
+
+    public Storage getStorageList() {
+        return storageList;
+    }
+
+    public void setStorageList(Storage storageList) {
+        this.storageList = storageList;
     }
 }

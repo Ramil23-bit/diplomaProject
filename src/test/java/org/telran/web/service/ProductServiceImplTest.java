@@ -86,6 +86,7 @@ class ProductServiceImplTest {
                         BigDecimal.valueOf(250),
                         "Electric trimmer",
                         new Category(1L, "Tools and equipment", new ArrayList<>()),
+                        null,
                         BigDecimal.ZERO,
                         null,
                         null),
@@ -95,6 +96,7 @@ class ProductServiceImplTest {
                         BigDecimal.valueOf(50),
                         "For green leafy growth",
                         new Category(2L, "Fertilizer", new ArrayList<>()),
+                        null,
                         BigDecimal.ZERO,
                         null,
                         null

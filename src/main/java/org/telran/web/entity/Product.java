@@ -48,34 +48,38 @@ public class Product {
         //
     }
 
-    public Product(Long id, String productTitle, BigDecimal price, String productInfo, Category category, BigDecimal discount, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Product(Long id, String productTitle, BigDecimal price, String productInfo, Category category, Storage storageList, BigDecimal discount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.productTitle = productTitle;
         this.price = price;
         this.productInfo = productInfo;
         this.category = category;
+        this.storageList = storageList;
         this.discount = discount;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public Product(String productTitle, BigDecimal price, String productInfo, Category category, BigDecimal discount, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Product(String productTitle, BigDecimal price, String productInfo, Category category, Storage storageList, BigDecimal discount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.productTitle = productTitle;
         this.price = price;
         this.productInfo = productInfo;
         this.category = category;
+        this.storageList = storageList;
         this.discount = discount;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public Product(Long id, String productTitle) {
-        this.id = id;
+    public Product(String productTitle, BigDecimal price, String productInfo, Category category, Storage storageList, BigDecimal discount) {
         this.productTitle = productTitle;
-    }
-
-
-    public Product(String productTitle, BigDecimal price, String productInfo, Long categoryId, BigDecimal discount) {
+        this.price = price;
+        this.productInfo = productInfo;
+        this.category = category;
+        this.storageList = storageList;
+        this.discount = discount;
+        this.createdAt = null;
+        this.updatedAt = null;
     }
 
     public Long getId() {
