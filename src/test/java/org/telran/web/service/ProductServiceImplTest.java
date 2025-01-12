@@ -5,10 +5,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
 import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.ProductJpaRepository;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -20,48 +23,82 @@ import static org.mockito.Mockito.when;
 class ProductServiceImplTest {
 
     @Mock
-    private ProductJpaRepository productJpaRepository;
+    private ProductJpaRepository repository;
 
     @InjectMocks
-    private ProductServiceImpl productService;
+    private ProductServiceImpl service;
 
     @Test
-    public void getByIdWhenCPruductExists() {
-        Long productId = 3333333l;
-        Product productExpected = new Product();
-        productExpected.setId(3333333l);
+    public void getAllProducts() {
 
-        when(productJpaRepository.findById(productId))
-                .thenReturn(Optional.of(productExpected));
+        Product productOne = createProductList().get(0);
+        Product productTwo = createProductList().get(1);
 
-        Product productActual = productService.getById(productId);
+        List<Product> productsFromMock = Arrays.asList(productOne, productTwo);
+        when(repository.findAll()).thenReturn(productsFromMock);
+        List<Product> products = service.getAll();
 
-        assertEquals(productExpected.getId(), productActual.getId());
+        assertNotNull(products);
+        assertEquals(2, products.size());
+        assertEquals(productOne, products.get(0));
+        assertEquals(productTwo, products.get(1));
+    }
+    @Test
+    public void getProductByIdWhenProductExists() {
+        Long productId = 1L;
+        Product productOne = createProductList().get(0);
+        when(repository.findById(productId))
+                .thenReturn((Optional.of(productOne)));
+        Product productActual = service.getById(productId);
+        assertNotNull(productActual);
+        assertEquals(productOne, productActual);
     }
 
     @Test
-    public void getByIdWhenProductNotExists() {
-        Long id = 4444444l;
-        when(productJpaRepository.findById(id))
+    public void getProductByIdWhenProductNotExists() {
+        Long productId = 1L;
+        when(repository.findById(productId))
                 .thenThrow(new ProductNotFoundException("Product not found"));
-
         assertThrows(ProductNotFoundException.class,
-                () -> productService.getById(id));
+                () -> service.getById(productId));
     }
 
     @Test
-    public void testGetAllProducts() {
-        List<Product> products = Arrays.asList(new Product(1l, "Hammer"), new Product(2l, "Tomato"));
-        when(productJpaRepository.findAll()).thenReturn(products);
+    void createProduct() {
+        Product product = createProductList().get(0);
+        product.setId(null);
+        Product savedProduct = createProductList().get(0);
 
-        List<Product> result = productService.getAll();
-        assertEquals(2, result.size());
-        assertEquals("Hammer", result.get(0).getProductTitle());
-        assertEquals("Tomato", result.get(1).getProductTitle());
+        when(repository.save(product)).thenReturn(savedProduct);
+        Product createdProduct = service.create(product);
+
+        assertNotNull(createdProduct);
+        assertNotNull(createdProduct.getId());
+        assertEquals(1L, createdProduct.getId());
+
     }
 
-    @Test
-    void create() {
-
+    private List<Product> createProductList(){
+        return Arrays.asList(
+                new Product(
+                        1L,
+                        "Trimmer",
+                        BigDecimal.valueOf(250),
+                        "Electric trimmer",
+                        new Category(1L, "Tools and equipment", new ArrayList<>()),
+                        BigDecimal.ZERO,
+                        null,
+                        null),
+                new Product(
+                        2L,
+                        "Nitrogen",
+                        BigDecimal.valueOf(50),
+                        "For green leafy growth",
+                        new Category(2L, "Fertilizer", new ArrayList<>()),
+                        BigDecimal.ZERO,
+                        null,
+                        null
+                )
+        );
     }
 }
