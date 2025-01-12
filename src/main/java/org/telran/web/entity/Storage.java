@@ -1,6 +1,7 @@
 package org.telran.web.entity;
 
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
@@ -10,20 +11,18 @@ public class Storage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "storage", cascade = CascadeType.ALL)
-    private List<Product> products;
-
-    @Column(name = "amount")
     private Long amount;
 
-    public Storage(Long id, List<Product> products, Long amount) {
-        this.id = id;
-        this.products = products;
-        this.amount = amount;
-    }
+    @OneToMany
+    @JoinColumn(name = "product_id")
+    private List<Storage> storageList;
 
     public Storage() {
-        //
+    }
+
+    public Storage(Long id, Long amount) {
+        this.id = id;
+        this.amount = amount;
     }
 
     public Long getId() {
@@ -32,14 +31,6 @@ public class Storage {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
     }
 
     public Long getAmount() {

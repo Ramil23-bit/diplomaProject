@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -30,7 +31,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "storage_id")
-    private Storage storage;
+    private Storage storageList;
 
     @Column(name = "discount")
     private BigDecimal discount;
