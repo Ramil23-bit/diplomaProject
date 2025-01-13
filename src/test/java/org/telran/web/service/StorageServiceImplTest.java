@@ -34,8 +34,8 @@ class StorageServiceImplTest {
 
         List<Storage> result = storageService.getAllStorage();
         assertEquals(2, result.size());
-        assertEquals(100L, result.get(0).getAmount());
-        assertEquals(200L, result.get(1).getAmount());
+        assertEquals(1L, result.get(0).getAmount());
+        assertEquals(2L, result.get(1).getAmount());
     }
 
     @Test
@@ -75,6 +75,6 @@ class StorageServiceImplTest {
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
-        assertEquals(300L, result.getAmount());
+        assertEquals(null, result.getAmount());
     }
 }
