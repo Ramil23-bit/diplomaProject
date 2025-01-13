@@ -1,10 +1,10 @@
 package org.telran.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.telran.web.converter.CategoryConverter;
+import org.telran.web.dto.CategoryCreateDto;
+import org.telran.web.dto.CategoryResponseDto;
 import org.telran.web.entity.Category;
 import org.telran.web.service.CategoryService;
 
@@ -17,16 +17,21 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private CategoryConverter<Category, CategoryCreateDto, CategoryResponseDto> categoryConverter;
+
     @PostMapping
-    public Category create(@RequestBody Category category) {
-        return categoryService.create(category);
+    public CategoryResponseDto create(@RequestBody CategoryCreateDto categoryDto) {
+        return categoryConverter.toDto(categoryService.create(categoryConverter.toEntity(categoryDto)));
     }
 
+    @GetMapping
     public List<Category>getAll() {
         return categoryService.getAll();
     }
 
-    public Category getById(Long id) {
+    @GetMapping("/{id}")
+    public Category getById(@PathVariable(name = "id") Long id) {
         return categoryService.getById(id);
     }
 }

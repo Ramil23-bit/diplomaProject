@@ -23,6 +23,11 @@ public class Category {
         this.products = products;
     }
 
+    public Category(String categoryTitle, List<Product> products) {
+        this.categoryTitle = categoryTitle;
+        this.products = products;
+    }
+
     public Category() {
         //
     }

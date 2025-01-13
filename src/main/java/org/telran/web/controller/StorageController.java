@@ -3,6 +3,9 @@ package org.telran.web.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.telran.web.converter.StorageConverter;
+import org.telran.web.dto.StorageCreateDto;
+import org.telran.web.dto.StorageResponseDto;
 import org.telran.web.entity.Storage;
 import org.telran.web.service.StorageService;
 
@@ -15,6 +18,9 @@ public class StorageController {
     @Autowired
     private StorageService storageService;
 
+    @Autowired
+    private StorageConverter<Storage, StorageCreateDto, StorageResponseDto> storageConverter;
+
     @GetMapping
     public List<Storage> getAll(){
         return storageService.getAllStorage();
@@ -26,7 +32,7 @@ public class StorageController {
     }
 
     @PostMapping
-    public Storage create(@RequestBody @Valid Storage storage){
-        return storageService.createStorage(storage);
+    public StorageResponseDto create(@RequestBody StorageCreateDto storageDto){
+        return storageConverter.toDto(storageService.createStorage(storageConverter.toEntity(storageDto)));
     }
 }

@@ -21,6 +21,11 @@ public class Storage {
         //
     }
 
+    public Storage(Long amount, List<Product> products) {
+        this.amount = amount;
+        this.products = products;
+    }
+
     public Storage(Long id, Long amount, List<Product> products) {
         this.id = id;
         this.amount = amount;
