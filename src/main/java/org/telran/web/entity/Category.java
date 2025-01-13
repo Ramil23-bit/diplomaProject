@@ -1,5 +1,6 @@
 package org.telran.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -14,7 +15,8 @@ public class Category {
     @Column(name = "category_title")
     private String categoryTitle;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL,fetch = FetchType.LAZY )
+    @JsonManagedReference
     private List<Product> products;
 
     public Category(Long id, String categoryTitle, List<Product> products) {

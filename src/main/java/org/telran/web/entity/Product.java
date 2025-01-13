@@ -1,5 +1,7 @@
 package org.telran.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -27,10 +29,12 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonBackReference
     private Category category;
 
     @ManyToOne
     @JoinColumn(name = "storage_id")
+    @JsonBackReference
     private Storage storage;
 
     @Column(name = "discount")
@@ -152,6 +156,16 @@ public class Product {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @JsonProperty("category_id")
+    public Long getCategoryId() {
+        return category != null ? category.getId() : null;
+    }
+
+    @JsonProperty("storage_id")
+    public Long getStorageId() {
+        return storage != null ? storage.getId() : null;
     }
 
     @Override
