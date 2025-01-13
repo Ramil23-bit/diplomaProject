@@ -6,7 +6,7 @@ import org.telran.web.dto.UserResponseDto;
 import org.telran.web.entity.User;
 
 @Component
-public class UserCreateConverter implements UserConverter<User, UserCreateDto, UserResponseDto>{
+public class UserCreateConverter implements Converter<User, UserCreateDto, UserResponseDto>{
 
     @Override
     public UserResponseDto toDto(User user) {

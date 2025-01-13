@@ -5,7 +5,7 @@ import org.telran.web.dto.CategoryCreateDto;
 import org.telran.web.dto.CategoryResponseDto;
 import org.telran.web.entity.Category;
 @Component
-public class CategoryCreateConverter implements CategoryConverter<Category, CategoryCreateDto, CategoryResponseDto>{
+public class CategoryCreateConverter implements Converter<Category, CategoryCreateDto, CategoryResponseDto>{
     @Override
     public CategoryResponseDto toDto(Category category) {
         return new CategoryResponseDto(category.getId(), category.getCategoryTitle());

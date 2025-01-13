@@ -11,7 +11,7 @@ import org.telran.web.exception.CategoryNotFoundException;
 import org.telran.web.repository.CategoryJpaRepository;
 
 @Component
-public class ProductCreateConverter implements ProductConverter<Product, ProductCreateDto, ProductResponseDto> {
+public class ProductCreateConverter implements Converter<Product, ProductCreateDto, ProductResponseDto> {
 
     @Autowired
     private CategoryJpaRepository categoryJpaRepository;
