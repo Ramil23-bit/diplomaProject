@@ -2,7 +2,7 @@ package org.telran.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.telran.web.converter.ProductConverter;
+import org.telran.web.converter.Converter;
 import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.dto.ProductResponseDto;
 import org.telran.web.entity.Product;
@@ -18,7 +18,7 @@ public class ProductController {
     private ProductService productService;
 
     @Autowired
-    private ProductConverter<Product, ProductCreateDto, ProductResponseDto> createConverter;
+    private Converter<Product, ProductCreateDto, ProductResponseDto> createConverter;
 
    @PostMapping
     public ProductResponseDto create(@RequestBody ProductCreateDto productDto) {

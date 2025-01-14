@@ -11,4 +11,12 @@ public interface CategoryService {
     List<Category> getAll();
 
     Category getById(Long id);
+
+    void editTitle(Long id, String title);
+
+    Category editListOfProductsAddProduct(Long categoryId, Long productId);
+
+    Category editListOfProductsRemoveProduct(Long categoryId, Long productId);
+
+    void delete(Long id);
 }
