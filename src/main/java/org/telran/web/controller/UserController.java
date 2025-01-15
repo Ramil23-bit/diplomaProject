@@ -1,9 +1,9 @@
 package org.telran.web.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.telran.web.converter.UserConverter;
+
+import org.telran.web.converter.Converter;
 import org.telran.web.dto.UserCreateDto;
 import org.telran.web.dto.UserResponseDto;
 import org.telran.web.entity.User;
@@ -20,7 +20,7 @@ public class UserController {
     private UserService service;
 
     @Autowired
-    private UserConverter<User, UserCreateDto, UserResponseDto> converter;
+    private Converter<User, UserCreateDto, UserResponseDto> converter;
 
     @GetMapping
     public List<UserResponseDto> getAll() {

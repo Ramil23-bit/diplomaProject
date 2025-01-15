@@ -2,7 +2,8 @@ package org.telran.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.telran.web.converter.CategoryConverter;
+
+import org.telran.web.converter.Converter;
 import org.telran.web.dto.CategoryCreateDto;
 import org.telran.web.dto.CategoryResponseDto;
 import org.telran.web.entity.Category;
@@ -18,7 +19,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @Autowired
-    private CategoryConverter<Category, CategoryCreateDto, CategoryResponseDto> categoryConverter;
+    private Converter<Category, CategoryCreateDto, CategoryResponseDto> categoryConverter;
 
     @PostMapping
     public CategoryResponseDto create(@RequestBody CategoryCreateDto categoryDto) {
