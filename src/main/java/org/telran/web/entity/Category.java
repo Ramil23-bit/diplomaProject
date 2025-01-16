@@ -19,8 +19,12 @@ public class Category {
     private String categoryTitle;
 
 
-    public Category(Long id, String categoryTitle) {
+    public Category(Long id, String categoryTitle, List<Product> products) {
         this.id = id;
+        this.categoryTitle = categoryTitle;
+    }
+
+    public Category(String categoryTitle, List<Product> products) {
         this.categoryTitle = categoryTitle;
     }
 
