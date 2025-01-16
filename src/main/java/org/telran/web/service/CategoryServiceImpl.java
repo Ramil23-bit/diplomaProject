@@ -49,21 +49,25 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public Category editListOfProductsAddProduct(Long categoryId, Long productId) {
         Category category = getById(categoryId);
-        Product product = productService.setCategory(productId, category);
-        category.getProducts().add(product);
-        return categoryJpaRepository.save(category);
+        Product product = productService.getById(productId);
+        productService.setCategory(productId, category);
+        //productService.save(product);
+        //category.getProducts().add(product);
+        return category;
     }
 
     @Override
     @Transactional
     public Category editListOfProductsRemoveProduct(Long categoryId, Long productId) {
         Category category = getById(categoryId);
-        if(!productService.getById(productId).getCategory().equals(category)) {
+        Product product = productService.getById(productId);
+        if (!product.getCategory().equals(category)) {
             throw new IllegalArgumentException("Product does not belong to the category");
         }
         productService.setCategory(productId, null);
-        category.getProducts().remove(productId);
-        return categoryJpaRepository.save(category);
+        //productService.save(product);
+        //category.getProducts().remove(productId);
+        return category;
     }
 
     @Override

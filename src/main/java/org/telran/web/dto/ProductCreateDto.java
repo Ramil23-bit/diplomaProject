@@ -14,6 +14,8 @@ public class ProductCreateDto {
 
     private Long categoryId;
 
+    private Long storageId;
+
     private BigDecimal discount;
 
     private Storage storageList;
@@ -68,5 +70,13 @@ public class ProductCreateDto {
 
     public void setStorageList(Storage storageList) {
         this.storageList = storageList;
+    }
+
+    public Long getStorageId() {
+        return storageId;
+    }
+
+    public void setStorageId(Long storageId) {
+        this.storageId = storageId;
     }
 }

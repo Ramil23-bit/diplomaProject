@@ -3,10 +3,16 @@ package org.telran.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
+import org.telran.web.entity.Storage;
+import org.telran.web.exception.CategoryNotFoundException;
 import org.telran.web.exception.ProductNotFoundException;
+import org.telran.web.exception.StorageNotFoundException;
+import org.telran.web.repository.CategoryJpaRepository;
 import org.telran.web.repository.ProductJpaRepository;
+import org.telran.web.repository.StorageJpaRepository;
 
 import java.util.List;
 
@@ -15,6 +21,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductJpaRepository productJpaRepository;
+
+    @Autowired
+    private CategoryJpaRepository categoryJpaRepository;
+
+    @Autowired
+    private StorageJpaRepository storageJpaRepository;
 
     @Override
     public List<Product> getAll() {
@@ -28,7 +40,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product create(Product product) {
+    public Product create(Long categoryId, Long storageId, String productTitle) {
+        Category category = categoryJpaRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException("Category with id " + categoryId + " not found"));
+        Storage storage = storageJpaRepository.findById(storageId)
+                .orElseThrow(() -> new StorageNotFoundException("Storage with id " + storageId + " not found"));
+        Product product = new Product();
+        product.setProductTitle(productTitle);
+        product.setCategory(category);
+        product.setStorage(storage);
+
         return productJpaRepository.save(product);
     }
 
@@ -77,5 +98,7 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProductsById(Long id) {
         productJpaRepository.deleteById(id);
     }
+
+
 
 }

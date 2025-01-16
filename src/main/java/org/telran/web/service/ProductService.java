@@ -13,11 +13,11 @@ public interface ProductService {
 
     Product getById(Long id);
 
-    Product create(Product product);
-
     Product setCategory(Long productId, Category category);
 
     void editProducts(Long id, Product product);
 
     void deleteProductsById(Long id);
+
+    Product create(Long categoryId, Long storageId, String productTitle);
 }

@@ -2,6 +2,8 @@ package org.telran.web.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 @Entity
@@ -13,21 +15,22 @@ public class Category {
     private Long id;
 
     @Column(name = "category_title")
+    @NotNull
     private String categoryTitle;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL,fetch = FetchType.LAZY )
-    @JsonManagedReference
-    private List<Product> products;
+//    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL,fetch = FetchType.LAZY )
+//    @JsonManagedReference
+//    private List<Product> products;
 
     public Category(Long id, String categoryTitle, List<Product> products) {
         this.id = id;
         this.categoryTitle = categoryTitle;
-        this.products = products;
+        //this.products = products;
     }
 
     public Category(String categoryTitle, List<Product> products) {
         this.categoryTitle = categoryTitle;
-        this.products = products;
+        //this.products = products;
     }
 
     public Category() {
@@ -50,13 +53,13 @@ public class Category {
         this.categoryTitle = categoryTitle;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+//    public List<Product> getProducts() {
+//        return products;
+//    }
+//
+//    public void setProducts(List<Product> products) {
+//        this.products = products;
+//    }
 
     @Override
     public String toString() {

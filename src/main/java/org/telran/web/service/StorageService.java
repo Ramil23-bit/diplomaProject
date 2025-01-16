@@ -11,4 +11,5 @@ public interface StorageService {
     Storage getByIdStorage(Long id);
 
     Storage createStorage(Storage storage);
+
 }

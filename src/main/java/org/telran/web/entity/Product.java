@@ -3,6 +3,7 @@ package org.telran.web.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -18,9 +19,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Column(name = "product_title")
     private String productTitle;
 
+    @NotNull
     @Column(name = "price")
     private BigDecimal price;
 
@@ -28,11 +31,13 @@ public class Product {
     private String productInfo;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "category_id")
     @JsonBackReference
     private Category category;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "storage_id")
     @JsonBackReference
     private Storage storage;
@@ -53,6 +58,9 @@ public class Product {
     }
 
     public Product(Long id, String productTitle, BigDecimal price, String productInfo, Category category, Storage storage, BigDecimal discount, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        if (category == null || storage == null) {
+            throw new IllegalArgumentException("Category and Storage cannot be null");
+        }
         this.id = id;
         this.productTitle = productTitle;
         this.price = price;
@@ -76,6 +84,9 @@ public class Product {
     }
 
     public Product(String productTitle, BigDecimal price, String productInfo, Category category, Storage storage, BigDecimal discount) {
+        if (category == null || storage == null) {
+            throw new IllegalArgumentException("Category and Storage cannot be null");
+        }
         this.productTitle = productTitle;
         this.price = price;
         this.productInfo = productInfo;
@@ -175,8 +186,8 @@ public class Product {
                 ", productTitle='" + productTitle + '\'' +
                 ", price=" + price +
                 ", productInfo='" + productInfo + '\'' +
-                ", category=" + category +
-                ", storage=" + storage +
+                ", categoryId=" + (category != null ? category.getId() : null) +
+                ", storageId=" + (storage != null ? storage.getId() : null) +
                 ", discount=" + discount +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
