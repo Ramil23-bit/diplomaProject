@@ -9,6 +9,9 @@ import jakarta.validation.constraints.Size;
 import org.telran.web.enums.Role;
 import org.telran.web.validation.ValidPassword;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "shop_users")
 public class User {
@@ -35,6 +38,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_USER;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<Favorites> favorites = new ArrayList<>();
 
     public User() {
         //
