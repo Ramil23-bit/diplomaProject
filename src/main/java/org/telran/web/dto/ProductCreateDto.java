@@ -20,6 +20,14 @@ public class ProductCreateDto {
 
     private Storage storageList;
 
+    public Storage getStorageList() {
+        return storageList;
+    }
+
+    public void setStorageList(Storage storageList) {
+        this.storageList = storageList;
+    }
+
     public ProductCreateDto() {
         //
     }
@@ -62,14 +70,6 @@ public class ProductCreateDto {
 
     public void setDiscount(BigDecimal discount) {
         this.discount = discount;
-    }
-
-    public Storage getStorageList() {
-        return storageList;
-    }
-
-    public void setStorageList(Storage storageList) {
-        this.storageList = storageList;
     }
 
     public Long getStorageId() {
