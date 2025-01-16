@@ -2,6 +2,7 @@ package org.telran.web.service;
 
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
+import org.telran.web.entity.Storage;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,5 +20,5 @@ public interface ProductService {
 
     void deleteProductsById(Long id);
 
-    Product create(Long categoryId, Long storageId, String productTitle);
+    Product create(Long categoryId, BigDecimal price, Long storageId, String productTitle);
 }

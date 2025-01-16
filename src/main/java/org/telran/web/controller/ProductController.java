@@ -41,6 +41,7 @@ public class ProductController {
 
        Product product = productService.create(
                productDto.getCategoryId(),
+               productDto.getPrice(),
                productDto.getStorageId(),
                productDto.getProductTitle()
        );

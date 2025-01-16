@@ -14,6 +14,7 @@ import org.telran.web.repository.CategoryJpaRepository;
 import org.telran.web.repository.ProductJpaRepository;
 import org.telran.web.repository.StorageJpaRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -40,12 +41,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product create(Long categoryId, Long storageId, String productTitle) {
+    public Product create(Long categoryId, BigDecimal price, Long storageId, String productTitle) {
         Category category = categoryJpaRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException("Category with id " + categoryId + " not found"));
         Storage storage = storageJpaRepository.findById(storageId)
                 .orElseThrow(() -> new StorageNotFoundException("Storage with id " + storageId + " not found"));
         Product product = new Product();
+        product.setPrice(price);
         product.setProductTitle(productTitle);
         product.setCategory(category);
         product.setStorage(storage);
