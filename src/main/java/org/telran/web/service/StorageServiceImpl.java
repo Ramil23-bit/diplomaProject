@@ -28,4 +28,5 @@ public class StorageServiceImpl implements StorageService {
     public Storage createStorage(Storage storage) {
         return storageJpaRepository.save(storage);
     }
+
 }

@@ -18,19 +18,14 @@ public class Category {
     @NotNull
     private String categoryTitle;
 
-//    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL,fetch = FetchType.LAZY )
-//    @JsonManagedReference
-//    private List<Product> products;
 
-    public Category(Long id, String categoryTitle, List<Product> products) {
+    public Category(Long id, String categoryTitle) {
         this.id = id;
         this.categoryTitle = categoryTitle;
-        //this.products = products;
     }
 
-    public Category(String categoryTitle, List<Product> products) {
+    public Category(String categoryTitle) {
         this.categoryTitle = categoryTitle;
-        //this.products = products;
     }
 
     public Category() {
@@ -52,14 +47,6 @@ public class Category {
     public void setCategoryTitle(String categoryTitle) {
         this.categoryTitle = categoryTitle;
     }
-
-//    public List<Product> getProducts() {
-//        return products;
-//    }
-//
-//    public void setProducts(List<Product> products) {
-//        this.products = products;
-//    }
 
     @Override
     public String toString() {

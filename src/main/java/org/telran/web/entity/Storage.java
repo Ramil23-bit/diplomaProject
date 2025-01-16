@@ -15,23 +15,17 @@ public class Storage {
 
     private Long amount;
 
-//    @OneToMany(mappedBy = "storage", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JsonManagedReference
-//    private List<Product> products;
-
     public Storage() {
         //
     }
 
-    public Storage(Long amount, List<Product> products) {
+    public Storage(Long amount) {
         this.amount = amount;
-        //this.products = products;
     }
 
-    public Storage(Long id, Long amount, List<Product> products) {
+    public Storage(Long id, Long amount) {
         this.id = id;
         this.amount = amount;
-        //this.products = products;
     }
 
     public Long getId() {
@@ -50,11 +44,4 @@ public class Storage {
         this.amount = amount;
     }
 
-//    public List<Product> getProducts() {
-//        return products;
-//    }
-//
-//    public void setProducts(List<Product> products) {
-//        this.products = products;
-//    }
 }
