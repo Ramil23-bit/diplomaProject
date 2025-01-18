@@ -20,5 +20,5 @@ public interface ProductService {
 
     void deleteProductsById(Long id);
 
-    Product create(Long categoryId, BigDecimal price, Long storageId, String productTitle);
+    Product create(Product product);
 }

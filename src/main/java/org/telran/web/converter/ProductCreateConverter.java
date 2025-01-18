@@ -9,41 +9,38 @@ import org.telran.web.entity.Product;
 import org.telran.web.entity.Storage;
 import org.telran.web.exception.CategoryNotFoundException;
 import org.telran.web.repository.CategoryJpaRepository;
+import org.telran.web.service.CategoryService;
+import org.telran.web.service.StorageService;
 
 @Component
 public class ProductCreateConverter implements Converter<Product, ProductCreateDto, ProductResponseDto> {
 
     @Autowired
-    private CategoryJpaRepository categoryJpaRepository;
+    private CategoryService categoryService;
+
+    @Autowired
+    private StorageService storageService;
 
     @Override
     public ProductResponseDto toDto(Product product) {
-        Long categoryId;
-        if (product.getCategory() == null) {
-            throw new CategoryNotFoundException("Category not found for product with ID: " + product.getId());
-        } else {
-            categoryId = product.getCategory().getId();
-        }
         return new ProductResponseDto(
                 product.getId(),
                 product.getProductTitle(),
                 product.getPrice(),
                 product.getDiscount(),
-                categoryId);
+                product.getCategoryId()
+        );
     }
 
     @Override
     public Product toEntity(ProductCreateDto productCreateDto) {
-        Category category = categoryJpaRepository.findById(productCreateDto.getCategoryId())
-                .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
-        Storage storage = productCreateDto.getStorageList();
-
         return new Product(
                 productCreateDto.getProductTitle(),
                 productCreateDto.getPrice(),
                 productCreateDto.getProductInfo(),
-                category,
-                storage,
-                productCreateDto.getDiscount());
+                categoryService.getById(productCreateDto.getCategoryId()),
+                storageService.getByIdStorage(productCreateDto.getStorageId()),
+                productCreateDto.getDiscount()
+        );
     }
 }

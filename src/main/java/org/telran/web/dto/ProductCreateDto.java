@@ -7,17 +7,11 @@ import java.math.BigDecimal;
 public class ProductCreateDto {
 
     private String productTitle;
-
     private BigDecimal price;
-
     private String productInfo;
-
     private Long categoryId;
-
     private Long storageId;
-
     private BigDecimal discount;
-
     private Storage storageList;
 
     public Storage getStorageList() {

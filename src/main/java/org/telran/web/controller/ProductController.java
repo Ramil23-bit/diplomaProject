@@ -18,6 +18,7 @@ import org.telran.web.service.StorageService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -27,36 +28,23 @@ public class ProductController {
     private ProductService productService;
 
     @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    private StorageService storageService;
-
-    @Autowired
     private Converter<Product, ProductCreateDto, ProductResponseDto> createConverter;
 
    @PostMapping
     public ProductResponseDto create(@Valid @RequestBody ProductCreateDto productDto) {
-       validateCategoryAndStorage(productDto);
-
-       Product product = productService.create(
-               productDto.getCategoryId(),
-               productDto.getPrice(),
-               productDto.getStorageId(),
-               productDto.getProductTitle()
-       );
-
-       return createConverter.toDto(product);
+       return createConverter.toDto(productService.create(createConverter.toEntity(productDto)));
    }
 
    @GetMapping
-   public List<Product>getAll(){
-       return productService.getAll();
+   public List<ProductResponseDto>getAll(){
+       return productService.getAll().stream()
+               .map(product -> createConverter.toDto(product))
+               .collect(Collectors.toList());
    }
 
    @GetMapping("/{id}")
-   public Product getById(@PathVariable Long id) {
-       return productService.getById(id);
+   public ProductResponseDto getById(@PathVariable Long id) {
+       return createConverter.toDto(productService.getById(id));
    }
 
    @PutMapping("/{id}")
@@ -70,19 +58,4 @@ public class ProductController {
        productService.deleteProductsById(id);
    }
 
-    private void validateCategoryAndStorage(ProductCreateDto productDto) {
-        if (productDto.getCategoryId() == null) {
-            throw new CategoryNotFoundException("Category ID must not be null");
-        }
-        if (productDto.getStorageId() == null) {
-            throw new StorageNotFoundException("Storage ID must not be null");
-        }
-
-        if (categoryService.getById(productDto.getCategoryId()) == null) {
-            throw new CategoryNotFoundException("Category not found with ID: " + productDto.getCategoryId());
-        }
-        if (storageService.getByIdStorage(productDto.getStorageId()) == null) {
-            throw new StorageNotFoundException("Storage not found with ID: " + productDto.getStorageId());
-        }
-    }
 }
