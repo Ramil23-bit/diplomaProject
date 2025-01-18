@@ -31,16 +31,16 @@ public class Product {
     @Column(name = "product_info")
     private String productInfo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
     @JoinColumn(name = "category_id")
-    @JsonBackReference
+    //@JsonBackReference
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
     @JoinColumn(name = "storage_id")
-    @JsonBackReference
+    //@JsonBackReference
     private Storage storage;
 
     @Column(name = "discount")

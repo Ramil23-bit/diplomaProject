@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface ProductJpaRepository extends JpaRepository<Product, Long>{
     @Modifying
-    @Query("SELECT p.productInfo FROM Product p WHERE p.discount =:discount")
+    @Query("SELECT p FROM Product p WHERE p.discount =:discount")
     List<Product> getAllProductByDiscount(@Param("discount") BigDecimal discount);
 
 

@@ -3,6 +3,7 @@ package org.telran.web.dto;
 import org.telran.web.entity.Storage;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class ProductCreateDto {
 
@@ -13,6 +14,8 @@ public class ProductCreateDto {
     private Long storageId;
     private BigDecimal discount;
     private Storage storageList;
+
+    private LocalDateTime updateAt;
 
     public Storage getStorageList() {
         return storageList;
@@ -72,5 +75,13 @@ public class ProductCreateDto {
 
     public void setStorageId(Long storageId) {
         this.storageId = storageId;
+    }
+
+    public LocalDateTime getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(LocalDateTime updateAt) {
+        this.updateAt = updateAt;
     }
 }

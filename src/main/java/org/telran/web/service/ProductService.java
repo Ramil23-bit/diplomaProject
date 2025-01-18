@@ -1,5 +1,6 @@
 package org.telran.web.service;
 
+import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
 import org.telran.web.entity.Storage;
@@ -18,7 +19,7 @@ public interface ProductService {
 
     Product setCategory(Long productId, Category category);
 
-    void editProducts(Long id, Product product);
+    Product editProducts(Long id, ProductCreateDto product);
 
     void deleteProductsById(Long id);
 

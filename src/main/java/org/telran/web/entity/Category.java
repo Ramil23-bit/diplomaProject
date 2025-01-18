@@ -18,7 +18,6 @@ public class Category {
     @NotNull
     private String categoryTitle;
 
-
     public Category(Long id, String categoryTitle, List<Product> products) {
         this.id = id;
         this.categoryTitle = categoryTitle;

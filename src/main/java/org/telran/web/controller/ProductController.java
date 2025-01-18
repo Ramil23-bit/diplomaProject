@@ -53,9 +53,10 @@ public class ProductController {
    }
 
    @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable(name = "id") Long id, @RequestBody @Valid Product product){
-       productService.editProducts(id, product);
-       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    public ResponseEntity<ProductResponseDto> update(@PathVariable(name = "id") Long id, @RequestBody @Valid ProductCreateDto product){
+       Product productUpdate = productService.editProducts(id, product);
+       ProductResponseDto productResponseDto = createConverter.toDto(productUpdate);
+       return ResponseEntity.ok(productResponseDto);
    }
 
    @DeleteMapping("/{id}")

@@ -5,6 +5,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
 import org.telran.web.entity.Storage;
@@ -17,6 +18,7 @@ import org.telran.web.repository.StorageJpaRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -64,25 +66,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void editProducts(Long id, Product updateProduct) {
-        if (updateProduct == null) {
-            throw new IllegalArgumentException("Update product cannot be null");
-        }
+    public Product editProducts(Long id, ProductCreateDto productDto) {
+        Product actualProduct = getById(id);
+        actualProduct.setPrice(productDto.getPrice());
+        actualProduct.setProductInfo(productDto.getProductInfo());
+        actualProduct.setDiscount(productDto.getDiscount());
+        actualProduct.setUpdatedAt(productDto.getUpdateAt());
 
-        Product product = getById(id);
-
-        if (updateProduct.getPrice() != null) {
-            product.setPrice(updateProduct.getPrice());
-        }
-        if (updateProduct.getProductInfo() != null) {
-            product.setProductInfo(updateProduct.getProductInfo());
-        }
-        if (updateProduct.getDiscount() != null) {
-            product.setDiscount(updateProduct.getDiscount());
-            product.setUpdatedAt(updateProduct.getUpdatedAt());
-        }
-
-        productJpaRepository.save(product);
+        return productJpaRepository.save(actualProduct);
 
     }
 
