@@ -54,6 +54,11 @@ public class ProductController {
        return productService.getAll();
    }
 
+   @GetMapping("/{discount}")
+   public List<Product> getAllProductDiscount(@PathVariable(name = "discount") BigDecimal discount){
+       return productService.getAllDiscount(discount);
+   }
+
    @GetMapping("/{id}")
    public Product getById(@PathVariable Long id) {
        return productService.getById(id);
