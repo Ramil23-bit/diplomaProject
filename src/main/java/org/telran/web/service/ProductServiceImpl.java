@@ -23,12 +23,6 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductJpaRepository productJpaRepository;
 
-    @Autowired
-    private CategoryJpaRepository categoryJpaRepository;
-
-    @Autowired
-    private StorageJpaRepository storageJpaRepository;
-
     @Override
     public List<Product> getAll() {
         return productJpaRepository.findAll();
