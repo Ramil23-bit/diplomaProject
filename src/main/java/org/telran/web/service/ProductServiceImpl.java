@@ -37,6 +37,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> getAllProductByPrice(BigDecimal price) {
+        return productJpaRepository.findAllProductByMinMaxPrice(price);
+    }
+
+    @Override
     public Product getById(Long id) {
         return productJpaRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));

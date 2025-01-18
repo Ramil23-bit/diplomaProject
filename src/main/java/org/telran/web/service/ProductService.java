@@ -15,6 +15,8 @@ public interface ProductService {
 
     List<Product> getAllDiscount(BigDecimal discount);
 
+    List<Product> getAllProductByPrice(BigDecimal price);
+
     Product getById(Long id);
 
     Product setCategory(Long productId, Category category);

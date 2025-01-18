@@ -2,21 +2,15 @@ package org.telran.web.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.dto.ProductResponseDto;
 import org.telran.web.entity.Product;
-import org.telran.web.exception.CategoryNotFoundException;
-import org.telran.web.exception.StorageNotFoundException;
-import org.telran.web.service.CategoryService;
 import org.telran.web.service.ProductService;
-import org.telran.web.service.StorageService;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,8 +37,19 @@ public class ProductController {
    }
 
    @GetMapping("/{discount}")
-   public List<Product> getAllProductDiscount(@PathVariable(name = "discount") BigDecimal discount){
-       return productService.getAllDiscount(discount);
+   public List<ProductResponseDto> getAllProductDiscount(@RequestParam String discount){
+       BigDecimal discountValue = discount != null ? new BigDecimal(discount) : null;
+       return productService.getAllDiscount(discountValue).stream()
+               .map(product -> createConverter.toDto(product))
+               .collect(Collectors.toList());
+   }
+
+   @GetMapping("/{price}")
+   public List<ProductResponseDto> getAllProductPrice(@RequestParam String price){
+       BigDecimal priceValue = price != null ? new BigDecimal(price) : null;
+       return productService.getAllProductByPrice(priceValue).stream()
+               .map(product -> createConverter.toDto(product))
+               .collect(Collectors.toList());
    }
 
    @GetMapping("/{id}")
