@@ -1,6 +1,7 @@
 package org.telran.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getAll() {
         return productJpaRepository.findAll();
+    }
+
+    @Override
+    public List<Product> getAllDiscount(BigDecimal discount) {
+        return productJpaRepository.getAllProductByDiscount(discount);
     }
 
     @Override

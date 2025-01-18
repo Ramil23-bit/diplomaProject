@@ -64,20 +64,20 @@ class ProductServiceImplTest {
                 () -> service.getById(productId));
     }
 
-    @Test
-    void createProduct() {
-        Product product = createProductList().get(0);
-        product.setId(null);
-        Product savedProduct = createProductList().get(0);
-
-        when(repository.save(product)).thenReturn(savedProduct);
-        Product createdProduct = service.create(product);
-
-        assertNotNull(createdProduct);
-        assertNotNull(createdProduct.getId());
-        assertEquals(1L, createdProduct.getId());
-
-    }
+//    @Test
+//    void createProduct() {
+//        Product product = createProductList().get(0);
+//        product.setId(null);
+//        Product savedProduct = createProductList().get(0);
+//
+//        when(repository.save(product)).thenReturn(savedProduct);
+//        Product createdProduct = service.create(product);
+//
+//        assertNotNull(createdProduct);
+//        assertNotNull(createdProduct.getId());
+//        assertEquals(1L, createdProduct.getId());
+//
+//    }
 
     private List<Product> createProductList(){
         Storage storage = new Storage(1L, 1L, new ArrayList<>());

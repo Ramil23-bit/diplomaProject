@@ -42,6 +42,11 @@ public class ProductController {
                .collect(Collectors.toList());
    }
 
+   @GetMapping("/{discount}")
+   public List<Product> getAllProductDiscount(@PathVariable(name = "discount") BigDecimal discount){
+       return productService.getAllDiscount(discount);
+   }
+
    @GetMapping("/{id}")
    public ProductResponseDto getById(@PathVariable Long id) {
        return createConverter.toDto(productService.getById(id));
