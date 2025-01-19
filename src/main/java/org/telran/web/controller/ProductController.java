@@ -44,10 +44,11 @@ public class ProductController {
                .collect(Collectors.toList());
    }
 
-   @GetMapping("/{price}")
-   public List<ProductResponseDto> getAllProductPrice(@RequestParam String price){
-       BigDecimal priceValue = price != null ? new BigDecimal(price) : null;
-       return productService.getAllProductByPrice(priceValue).stream()
+   @GetMapping("/price")
+   public List<ProductResponseDto> getAllProductPrice(@RequestParam String minPrice, @RequestParam String maxPrice){
+       BigDecimal priceValueMin = minPrice != null ? new BigDecimal(minPrice) : null;
+       BigDecimal priceValueMax = maxPrice != null ? new BigDecimal(maxPrice) : null;
+       return productService.getAllProductByPrice(priceValueMin, priceValueMax).stream()
                .map(product -> createConverter.toDto(product))
                .collect(Collectors.toList());
    }

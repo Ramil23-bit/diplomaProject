@@ -41,8 +41,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getAllProductByPrice(BigDecimal price) {
-        return productJpaRepository.findAllProductByMinMaxPrice(price);
+    public List<Product> getAllProductByPrice(BigDecimal minPrice, BigDecimal maxPrice) {
+        return productJpaRepository.findAllProductByMinMaxPrice(minPrice, maxPrice);
     }
 
     @Override

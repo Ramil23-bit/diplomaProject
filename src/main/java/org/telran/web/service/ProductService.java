@@ -13,7 +13,7 @@ public interface ProductService {
 
     List<Product> getAllDiscount(BigDecimal discount);
 
-    List<Product> getAllProductByPrice(BigDecimal price);
+    List<Product> getAllProductByPrice(BigDecimal minPrice, BigDecimal maxPrice);
 
     Product getById(Long id);
 
