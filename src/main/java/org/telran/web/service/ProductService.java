@@ -3,10 +3,8 @@ package org.telran.web.service;
 import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
-import org.telran.web.entity.Storage;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ProductService {
@@ -26,4 +24,6 @@ public interface ProductService {
     void deleteProductsById(Long id);
 
     Product create(Product product);
+
+    List<Product> getProductsSortedByColumnsAscOrDesc(boolean asc, String column);
 }

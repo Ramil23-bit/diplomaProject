@@ -69,4 +69,11 @@ public class ProductController {
        productService.deleteProductsById(id);
    }
 
+   @GetMapping("/sort")
+    public List<ProductResponseDto> getProductsSortedByColumnsAscOrDesc(@RequestParam(name = "column") String column,  @RequestParam(name = "asc") boolean asc){
+       return productService.getProductsSortedByColumnsAscOrDesc(asc, column).stream()
+               .map(product -> createConverter.toDto(product))
+               .collect(Collectors.toList());
+   }
+
 }

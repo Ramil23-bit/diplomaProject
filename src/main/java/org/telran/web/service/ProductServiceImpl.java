@@ -1,6 +1,7 @@
 package org.telran.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,14 @@ import org.telran.web.repository.ProductJpaRepository;
 import org.telran.web.repository.StorageJpaRepository;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    private static final List<String> validColumnName = Arrays.asList("price", "createdAt", "productTitle");
 
     @Autowired
     private ProductJpaRepository productJpaRepository;
@@ -87,6 +91,11 @@ public class ProductServiceImpl implements ProductService {
         productJpaRepository.deleteById(id);
     }
 
-
-
+    @Override
+    public List<Product> getProductsSortedByColumnsAscOrDesc(boolean asc, String column) {
+        if(!validColumnName.contains(column)) {
+            throw new IllegalArgumentException("Invalid column name: " + column);
+        }
+        return productJpaRepository.findAll(Sort.by(asc ? Sort.Direction.ASC : Sort.Direction.DESC, column));
+    }
 }
