@@ -1,5 +1,6 @@
 package org.telran.web.service;
 
+import org.springframework.data.domain.Sort;
 import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
@@ -14,6 +15,8 @@ public interface ProductService {
     List<Product> getAllDiscount(BigDecimal discount);
 
     List<Product> getAllProductByPrice(BigDecimal minPrice, BigDecimal maxPrice);
+
+    List<Product> getAllProductByCategoryTitle(String categoryTitle);
 
     Product getById(Long id);
 

@@ -46,6 +46,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> getAllProductByCategoryTitle(String categoryTitle) {
+        return productJpaRepository.findAllProductByCategoryTitle(categoryTitle);
+    }
+
+
+    @Override
     public Product getById(Long id) {
         return productJpaRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
@@ -98,4 +104,6 @@ public class ProductServiceImpl implements ProductService {
         }
         return productJpaRepository.findAll(Sort.by(asc ? Sort.Direction.ASC : Sort.Direction.DESC, column));
     }
+
+
 }

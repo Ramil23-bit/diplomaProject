@@ -14,7 +14,6 @@ public class ProductCreateDto {
     private Long storageId;
     private BigDecimal discount;
     private Storage storageList;
-
     private LocalDateTime updateAt;
 
     public Storage getStorageList() {
