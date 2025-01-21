@@ -12,6 +12,7 @@ import org.telran.web.entity.Storage;
 import org.telran.web.service.StorageService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/storage")
@@ -24,13 +25,15 @@ public class StorageController {
     private Converter<Storage, StorageCreateDto, StorageResponseDto> storageConverter;
 
     @GetMapping
-    public List<Storage> getAll(){
-        return storageService.getAllStorage();
+    public List<StorageResponseDto> getAll(){
+        return storageService.getAllStorage().stream()
+                .map(storage -> storageConverter.toDto(storage))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public Storage getById(@PathVariable(name = "id") Long id){
-        return storageService.getByIdStorage(id);
+    public StorageResponseDto getById(@PathVariable(name = "id") Long id){
+        return storageConverter.toDto(storageService.getByIdStorage(id));
     }
 
     @PostMapping

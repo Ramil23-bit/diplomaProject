@@ -12,6 +12,7 @@ import org.telran.web.service.CategoryService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -29,13 +30,15 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category>getAll() {
-        return categoryService.getAll();
+    public List<CategoryResponseDto>getAll() {
+        return categoryService.getAll().stream()
+                .map(category -> categoryConverter.toDto(category))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public Category getById(@PathVariable(name = "id") Long id) {
-        return categoryService.getById(id);
+    public CategoryResponseDto getById(@PathVariable(name = "id") Long id) {
+        return categoryConverter.toDto(categoryService.getById(id));
     }
 
     @DeleteMapping("/{id}")
