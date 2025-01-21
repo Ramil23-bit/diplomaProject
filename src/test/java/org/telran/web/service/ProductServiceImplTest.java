@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
 import org.telran.web.entity.Storage;
@@ -104,5 +105,42 @@ class ProductServiceImplTest {
                         null
                 )
         );
+    }
+
+    @Test
+    void editProductWhenProductExists() {
+        Long productId = 1L;
+        Product existingProduct = createProductList().get(0);
+
+        ProductCreateDto updateDto = new ProductCreateDto();
+        updateDto.setPrice(BigDecimal.valueOf(300));
+        updateDto.setProductInfo("New Electric Trimmer");
+        updateDto.setDiscount(BigDecimal.valueOf(10));
+        updateDto.setUpdateAt(java.time.LocalDateTime.now());
+
+        when(repository.findById(productId))
+                .thenReturn(Optional.of(existingProduct));
+        when(repository.save(existingProduct))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Product updatedProduct = service.editProducts(productId, updateDto);
+
+        assertNotNull(updatedProduct);
+        assertEquals(updateDto.getPrice(), updatedProduct.getPrice());
+        assertEquals(updateDto.getProductInfo(), updatedProduct.getProductInfo());
+        assertEquals(updateDto.getDiscount(), updatedProduct.getDiscount());
+        assertEquals(updateDto.getUpdateAt(), updatedProduct.getUpdatedAt());
+    }
+
+    @Test
+    void editProductWhenProductDoesNotExist() {
+        Long productId = 1L;
+        ProductCreateDto updateDto = new ProductCreateDto();
+        updateDto.setPrice(BigDecimal.valueOf(300));
+
+        when(repository.findById(productId)).thenReturn(Optional.empty());
+
+        assertThrows(ProductNotFoundException.class,
+                () -> service.editProducts(productId, updateDto));
     }
 }

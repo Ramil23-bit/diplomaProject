@@ -1,5 +1,5 @@
 databaseChangeLog:
-  - logicalFilePath: db/changelog/db.changelog-master.yml
+  - logicalFilePath: db.changelog/db.changelog-master.yml
   - changeSet:
       id: 1
       author: team_diploma_project
@@ -24,33 +24,33 @@ databaseChangeLog:
                   type: varchar(100)
               - column:
                   name: price
-                  type: decimal(10.2)
-                  constrains:
+                  type: decimal(10, 2)
+                  constraints:
                     nullable: false
               - column:
                   name: discount
-                  type: decimal(10.2)
+                  type: decimal(10, 2)
               - column:
                   name: createAt
                   type: timestamp
-                  constrains:
+                  constraints:
                     autoIncrement: true
               - column:
                   name: updateAt
                   type: timestamp
-                  constrains:
+                  constraints:
                     autoIncrement: true
               - column:
                   name: category_id
                   type: bigint
-                  constrains:
+                  constraints:
                     nullable: false
                     foreignKeyName: fk_product_category
                     reference: category(id)
               - column:
                   name: storage_id
                   type: bigint
-                  constrains:
+                  constraints:
                     nullable: false
                     foreignKeyName: fk_product_storage
                     reference: storage(id)
@@ -65,14 +65,14 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
-                  constrains:
+                  constraints:
                     primaryKey: true
                     nullable: false
                     autoIncrement: true
               - column:
                   name: category_title
                   type: varchar(100)
-                  constrains:
+                  constraints:
                     nullable: false
 
   - changeSet:
@@ -112,6 +112,28 @@ databaseChangeLog:
                   name: category_title
                   value: 'вода'
 
+  - changeSet:
+      id: 5
+      author: team_diploma_project
+      changes:
+        - createTable:
+            tableName: favorites
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    autoIncrement: true
+              - column:
+                  name: product_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_favorites_product
+                    reference: product(id)
+
       rollback:
         - delete:
             tableName: product
@@ -119,3 +141,6 @@ databaseChangeLog:
         - delete:
             tableName: category
             where: id in ('1')
+        - delete:
+            tableName: favorites
+            where: id = 1
