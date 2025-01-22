@@ -23,6 +23,11 @@ public class Category {
         this.categoryTitle = categoryTitle;
     }
 
+    public Category(Long id, String categoryTitle) {
+        this.id = id;
+        this.categoryTitle = categoryTitle;
+    }
+
     public Category(String categoryTitle, List<Product> products) {
         this.categoryTitle = categoryTitle;
     }

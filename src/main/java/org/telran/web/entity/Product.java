@@ -77,6 +77,16 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
+    public Product(Long id, String productTitle, BigDecimal price, String productInfo, Category category, Storage storage, BigDecimal discount) {
+        this.id = id;
+        this.productTitle = productTitle;
+        this.price = price;
+        this.productInfo = productInfo;
+        this.category = category;
+        this.storage = storage;
+        this.discount = discount;
+    }
+
     public Product(String productTitle, BigDecimal price, String productInfo, Category category, Storage storage, BigDecimal discount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.productTitle = productTitle;
         this.price = price;
