@@ -1,0 +1,146 @@
+databaseChangeLog:
+  - logicalFilePath: db.changelog/db.changelog-master.yml
+  - changeSet:
+      id: 1
+      author: team_diploma_project
+      changes:
+        - createTable:
+            tableName: product
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    autoIncrement: true
+              - column:
+                  name: product_title
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_info
+                  type: varchar(100)
+              - column:
+                  name: price
+                  type: decimal(10, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: discount
+                  type: decimal(10, 2)
+              - column:
+                  name: createAt
+                  type: timestamp
+                  constraints:
+                    autoIncrement: true
+              - column:
+                  name: updateAt
+                  type: timestamp
+                  constraints:
+                    autoIncrement: true
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_product_category
+                    reference: category(id)
+              - column:
+                  name: storage_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_product_storage
+                    reference: storage(id)
+
+  - changeSet:
+      id: 2
+      author: team_diploma_project
+      changes:
+        - createTable:
+            tableName: category
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    autoIncrement: true
+              - column:
+                  name: category_title
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 3
+      author: team_diploma_project
+      changes:
+        - insert:
+            tableName: product
+            columns:
+              - column:
+                  name: product_title
+                  value: 'акваминерале'
+              - column:
+                  name: product_info
+                  value: 'вода'
+              - column:
+                  name: price
+                  value: '100'
+              - column:
+                  name: discount
+                  value: '10.0'
+              - column:
+                  name: category_id
+                  valueNumeric: 1
+              - column:
+                  name: storage_id
+                  valueNumeric: 1
+
+  - changeSet:
+      id: 4
+      author: team_diploma_project
+      changes:
+        - insert:
+            tableName: category
+            columns:
+              - column:
+                  name: category_title
+                  value: 'вода'
+
+  - changeSet:
+      id: 5
+      author: team_diploma_project
+      changes:
+        - createTable:
+            tableName: favorites
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    autoIncrement: true
+              - column:
+                  name: product_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_favorites_product
+                    reference: product(id)
+
+      rollback:
+        - delete:
+            tableName: product
+            where: id in ('1')
+        - delete:
+            tableName: category
+            where: id in ('1')
+        - delete:
+            tableName: favorites
+            where: id = 1

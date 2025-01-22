@@ -8,7 +8,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.telran.web.entity.Storage;
 import org.telran.web.exception.StorageNotFoundException;
 import org.telran.web.repository.StorageJpaRepository;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -77,4 +76,5 @@ class StorageServiceImplTest {
         assertEquals(1L, result.getId());
         assertEquals(null, result.getAmount());
     }
+
 }

@@ -34,13 +34,13 @@ public class Product {
     @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
     @JoinColumn(name = "category_id")
-    //@JsonBackReference
+    @JsonBackReference
     private Category category;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
     @JoinColumn(name = "storage_id")
-    //@JsonBackReference
+    @JsonBackReference
     private Storage storage;
 
     @Column(name = "discount")
