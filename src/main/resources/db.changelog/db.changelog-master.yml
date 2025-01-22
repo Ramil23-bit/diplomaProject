@@ -5,7 +5,7 @@ databaseChangeLog:
       author: team_diploma_project
       changes:
         - createTable:
-            tableName: product
+            tableName: products
             columns:
               - column:
                   name: id
@@ -60,7 +60,7 @@ databaseChangeLog:
       author: team_diploma_project
       changes:
         - createTable:
-            tableName: category
+            tableName: categories
             columns:
               - column:
                   name: id
@@ -75,49 +75,49 @@ databaseChangeLog:
                   constraints:
                     nullable: false
 
-  - changeSet:
-      id: 3
-      author: team_diploma_project
-      changes:
-        - insert:
-            tableName: product
-            columns:
-              - column:
-                  name: product_title
-                  value: 'акваминерале'
-              - column:
-                  name: product_info
-                  value: 'вода'
-              - column:
-                  name: price
-                  value: '100'
-              - column:
-                  name: discount
-                  value: '10.0'
-              - column:
-                  name: category_id
-                  valueNumeric: 1
-              - column:
-                  name: storage_id
-                  valueNumeric: 1
+#  - changeSet:
+#      id: 3
+#      author: team_diploma_project
+#      changes:
+#        - insert:
+#            tableName: products
+#            columns:
+#              - column:
+#                  name: product_title
+#                  value: 'акваминерале'
+#              - column:
+#                  name: product_info
+#                  value: 'вода'
+#              - column:
+#                  name: price
+#                  value: '100'
+#              - column:
+#                  name: discount
+#                  value: '10.0'
+#              - column:
+#                  name: category_id
+#                  valueNumeric: 1
+#              - column:
+#                  name: storage_id
+#                  valueNumeric: 1
 
-  - changeSet:
-      id: 4
-      author: team_diploma_project
-      changes:
-        - insert:
-            tableName: category
-            columns:
-              - column:
-                  name: category_title
-                  value: 'вода'
+#  - changeSet:
+#      id: 4
+#      author: team_diploma_project
+#      changes:
+#        - insert:
+#            tableName: categories
+#            columns:
+#              - column:
+#                  name: category_title
+#                  value: 'вода'
 
   - changeSet:
       id: 5
       author: team_diploma_project
       changes:
         - createTable:
-            tableName: favorites
+            tableName: favoriter
             columns:
               - column:
                   name: id
@@ -132,7 +132,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_favorites_product
-                    reference: product(id)
+                    reference: products(id)
 
   - changeSet:
       id: 6
@@ -154,16 +154,16 @@ databaseChangeLog:
                     constraints:
                       nullable: false
 
-  - changeSet:
-      id: 7
-      author: team_diploma_project
-      changes:
-          - insert:
-              tableName: storage
-              columns:
-                - column:
-                    name: amount
-                    valueNumeric: 500
+#  - changeSet:
+#      id: 7
+#      author: team_diploma_project
+#      changes:
+#          - insert:
+#              tableName: storage
+#              columns:
+#                - column:
+#                    name: amount
+#                    valueNumeric: 500
 
   - changeSet:
       id: 8
@@ -222,7 +222,7 @@ databaseChangeLog:
       author: team_diploma_project
       changes:
         - addColumn:
-            tableName: favorites
+            tableName: favoriter
             columns:
               - column:
                   name: user_id
@@ -232,38 +232,38 @@ databaseChangeLog:
                     foreignKeyName: fk_favorites_user
                     references: shop_users(id)
 
-  - changeSet:
-      id: 10
-      author: team_diploma_project
-      changes:
-        - insert:
-            tableName: shop_users
-            columns:
-              - column:
-                  name: username
-                  value: 'testuser'
-              - column:
-                  name: email
-                  value: 'test@example.com'
-              - column:
-                  name: password
-                  value: 'securepassword'
-              - column:
-                  name: phone_number
-                  value: '+1234567890'
-              - column:
-                  name: role
-                  value: 'ROLE_USER'
+#  - changeSet:
+#      id: 10
+#      author: team_diploma_project
+#      changes:
+#        - insert:
+#            tableName: shop_users
+#            columns:
+#              - column:
+#                  name: username
+#                  value: 'testuser'
+#              - column:
+#                  name: email
+#                  value: 'test@example.com'
+#              - column:
+#                  name: password
+#                  value: 'securepassword'
+#              - column:
+#                  name: phone_number
+#                  value: '+1234567890'
+#              - column:
+#                  name: role
+#                  value: 'ROLE_USER'
 
       rollback:
         - delete:
-            tableName: product
+            tableName: products
             where: id in ('1')
         - delete:
-            tableName: category
+            tableName: categories
             where: id in ('1')
         - delete:
-            tableName: favorites
+            tableName: favoriter
             where: id = 1
         - delete:
             tableName: storage
