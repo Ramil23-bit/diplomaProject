@@ -1,0 +1,290 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: team_diploma_project
+      changes:
+        - createTable:
+            tableName: shop_users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    autoIncrement: true
+              - column:
+                  name: username
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone_number
+                  type: varchar(15)
+              - column:
+                  name: role
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 2
+      author: team_diploma_project
+      changes:
+        - insert:
+            tableName: shop_users
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: username
+                  value: 'igor'
+              - column:
+                  name: email
+                  value: 'igor@example.com'
+              - column:
+                  name: password
+                  value: '1235sfasd'
+              - column:
+                  name: phone_number
+                  value: '8946138712'
+              - column:
+                  name: role
+                  value: 'customer'
+
+  - changeSet:
+      id: 3
+      author: team_diploma_project
+      changes:
+        - createTable:
+            tableName: categories
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    autoIncrement: true
+              - column:
+                  name: category_title
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 4
+      author: team_diploma_project
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: category_title
+                  value: 'Electronics'
+
+  - changeSet:
+      id: 5
+      author: team_diploma_project
+      changes:
+        - createTable:
+            tableName: storage
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    autoIncrement: true
+              - column:
+                  name: amount
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 6
+      author: team_diploma_project
+      changes:
+        - insert:
+            tableName: storage
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: amount
+                  value: 100
+
+  - changeSet:
+      id: 7
+      author: team_diploma_project
+      changes:
+        - createTable:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    autoIncrement: true
+              - column:
+                  name: product_title
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: decimal(10, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_info
+                  type: varchar(100)
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: storage_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: discount
+                  type: decimal(10, 2)
+              - column:
+                  name: create_at
+                  type: timestamp
+              - column:
+                  name: update_at
+                  type: timestamp
+
+  - changeSet:
+      id: 8
+      author: team_diploma_project
+      changes:
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: product_title
+                  value: 'Smartphone'
+              - column:
+                  name: price
+                  value: 699.99
+              - column:
+                  name: product_info
+                  value: 'Latest model with high resolution camera'
+              - column:
+                  name: category_id
+                  value: 1
+              - column:
+                  name: storage_id
+                  value: 1
+              - column:
+                  name: discount
+                  value: 50.00
+              - column:
+                  name: create_at
+                  value: '2025-01-23 10:00:00'
+              - column:
+                  name: update_at
+                  value: '2023-01-23 11:00:00'
+
+  - changeSet:
+      id: 9
+      author: team_diploma_project
+      changes:
+        - createTable:
+            tableName: favoriter
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    autoIncrement: true
+              - column:
+                  name: product_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 10
+      author: team_diploma_project
+      changes:
+        - insert:
+            tableName: favoriter
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: product_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+
+        - addForeignKeyConstraint:
+            baseTableName: favoriter
+            baseColumnNames: product_id
+            referencedTableName: products
+            referencedColumnNames: id
+            constraintName: fk_favorites_product
+
+        - addForeignKeyConstraint:
+            baseTableName: favoriter
+            baseColumnNames: user_id
+            referencedTableName: shop_users
+            referencedColumnNames: id
+            constraintName: fk_favorites_user
+
+
+      rollback:
+        - delete:
+            tableName: products
+            where: id = 1
+        - delete:
+            tableName: categories
+            where: id = 1
+        - delete:
+            tableName: favoriter
+            where: id = 1
+        - delete:
+            tableName: storage
+            where: id = 1
+        - delete:
+            tableName: shop_users
+            where: id = 1
