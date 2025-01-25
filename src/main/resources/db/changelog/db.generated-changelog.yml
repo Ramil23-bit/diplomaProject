@@ -1,0 +1,283 @@
+databaseChangeLog:
+- changeSet:
+    id: 1737791989722-1
+    author: elena (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: shop_users_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: username
+            type: VARCHAR(20)
+        - column:
+            constraints:
+              nullable: false
+            name: email
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: password
+            type: VARCHAR(128)
+        - column:
+            name: phone_number
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: role
+            type: VARCHAR(255)
+        tableName: shop_users
+- changeSet:
+    id: 1737791989722-2
+    author: elena (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: email
+        constraintName: shop_users_email_key
+        tableName: shop_users
+- changeSet:
+    id: 1737791989722-3
+    author: elena (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: cart_pkey
+            name: user_id
+            type: BIGINT
+        tableName: cart
+- changeSet:
+    id: 1737791989722-4
+    author: elena (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: cart_items_pkey
+            name: id
+            type: BIGINT
+        - column:
+            name: quantity
+            type: BIGINT
+        - column:
+            name: cart_id
+            type: BIGINT
+        tableName: cart_items
+- changeSet:
+    id: 1737791989722-5
+    author: elena (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: categories_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: category_title
+            type: VARCHAR(255)
+        tableName: categories
+- changeSet:
+    id: 1737791989722-6
+    author: elena (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: favoriter_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: user_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: product_id
+            type: BIGINT
+        tableName: favoriter
+- changeSet:
+    id: 1737791989722-7
+    author: elena (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: products_pkey
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: product_title
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: price
+            type: numeric(38, 2)
+        - column:
+            name: product_info
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: category_id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: storage_id
+            type: BIGINT
+        - column:
+            name: discount
+            type: numeric(38, 2)
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: updated_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        tableName: products
+- changeSet:
+    id: 1737791989722-8
+    author: elena (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: storage_pkey
+            name: id
+            type: BIGINT
+        - column:
+            name: amount
+            type: BIGINT
+        tableName: storage
+- changeSet:
+    id: 1737791989722-9
+    author: elena (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: cart_id
+        baseTableName: cart_items
+        constraintName: fk99e0am9jpriwxcm6is7xfedy3
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: user_id
+        referencedTableName: cart
+        validate: true
+- changeSet:
+    id: 1737791989722-10
+    author: elena (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: product_id
+        baseTableName: favoriter
+        constraintName: fk_favoriter_product
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: products
+        validate: true
+- changeSet:
+    id: 1737791989722-11
+    author: elena (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: favoriter
+        constraintName: fk_favoriter_user
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: shop_users
+        validate: true
+- changeSet:
+    id: 1737791989722-12
+    author: elena (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: category_id
+        baseTableName: products
+        constraintName: fk_products_category
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: categories
+        validate: true
+- changeSet:
+    id: 1737791989722-13
+    author: elena (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: storage_id
+        baseTableName: products
+        constraintName: fk_products_storage
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: storage
+        validate: true
+- changeSet:
+    id: 1737791989722-14
+    author: elena (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: cart
+        constraintName: fkb60dpsiajs0q4cf1cvgwa4upl
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: shop_users
+        validate: true
+

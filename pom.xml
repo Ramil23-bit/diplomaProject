@@ -67,9 +67,16 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>4.29.0</version>
                 <executions>
+                    <!--
                     <execution>
                         <goals>
                             <goal>status</goal>
+                        </goals>
+                    </execution>
+                    -->
+                    <execution>
+                        <goals>
+                            <goal>generateChangeLog</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -79,6 +86,7 @@
                     <password>qwerty</password>
                     <driver>org.postgresql.Driver</driver>
                     <changeLogFile>src/main/resources/db/changelog/db.changelog-master.yml</changeLogFile>
+                    <outputChangeLogFile>src/main/resources/db/changelog/db.generated-changelog.yml</outputChangeLogFile>
                 </configuration>
             </plugin>
         </plugins>
