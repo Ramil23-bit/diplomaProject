@@ -8,13 +8,12 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.3.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
 
     <groupId>org.example</groupId>
     <artifactId>diplomproject</artifactId>
     <version>1.0-SNAPSHOT</version>
-
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -23,7 +22,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -61,7 +59,30 @@
             <artifactId>liquibase-core</artifactId>
             <version>4.29.0</version>
         </dependency>
-
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>4.29.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>status</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <url>jdbc:postgresql://localhost:5432/home_garden-products</url>
+                    <username>postgres</username>
+                    <password>qwerty</password>
+                    <driver>org.postgresql.Driver</driver>
+                    <changeLogFile>src/main/resources/db/changelog/db.changelog-master.yml</changeLogFile>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 
 </project>

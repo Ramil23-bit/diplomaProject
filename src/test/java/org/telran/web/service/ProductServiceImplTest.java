@@ -142,7 +142,7 @@ class ProductServiceImplTest {
     @Test
     void editProductWhenProductExists() {
         Long productId = 1L;
-        Product existingProduct = createProductList().get(0);
+        Product existingProduct = PRODUCTS.get(0);
 
         ProductCreateDto updateDto = new ProductCreateDto();
         updateDto.setPrice(BigDecimal.valueOf(300));

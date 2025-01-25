@@ -26,6 +26,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigserial
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -73,7 +74,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_products_storage
-                    reference: storage(id)
+                    references: storage(id)
               - column:
                   name: discount
                   type: DECIMAL(10,2)
@@ -133,7 +134,6 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-                    autoIncrement: true
               - column:
                   name: user_id
                   type: BIGINT
@@ -147,7 +147,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_favoriter_product
-                    reference: products(id)
+                    references: products(id)
   - changeSet:
       id: 6
       author: team_diploma_project
@@ -217,7 +217,7 @@ databaseChangeLog:
                   value: 'ROLE_USER'
   - changeSet:
       id: 10
-      author: team_diploma_poject
+      author: team_diploma_project
       changes:
         - insert:
             tableName: favoriter
@@ -234,10 +234,10 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: products
-            where: id in ('1')
+            where: id in (1)
         - delete:
             tableName: categories
-            where: id in ('1')
+            where: id in (1)
         - delete:
             tableName: favoriter
             where: id = 1
