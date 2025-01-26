@@ -49,4 +49,11 @@ public class Storage {
         this.amount = amount;
     }
 
+    @Override
+    public String toString() {
+        return "Storage{" +
+                "id=" + id +
+                ", amount=" + amount +
+                '}';
+    }
 }

@@ -50,4 +50,12 @@ public class Favorites {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    @Override
+    public String toString() {
+        return "Favorites{" +
+                "id=" + id +
+                ", product=" + product +
+                '}';
+    }
 }
