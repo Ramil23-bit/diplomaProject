@@ -14,6 +14,7 @@ import org.telran.web.service.ProductService;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,10 +32,32 @@ public class ProductController {
         return createConverter.toDto(productService.create(createConverter.toEntity(productDto)));
     }
 
+    //localhost:8080/api/v1/products?categoryId=0&sort=1&minPrice=0
+    //localhost:8080/api/v1/products - без фильтров
+    //localhost:8080/api/v1/products?sort=1 -отсортированный список
+    //localhost:8080/api/v1/products?minPrice=100 - список с минимальной ценой
+    //localhost:8080/api/v1/products?sort=1&minPrice=100 - сортировка по двум параметрам
     @GetMapping
-    public List<ProductResponseDto> getAll() {
-        return productService.getAll().stream()
-                .map(product -> createConverter.toDto(product))
+    public List<ProductResponseDto> getAll(
+            @RequestParam(name = "category_id", required = false) Optional<Long> categoryId,
+            @RequestParam(name = "sort", required = false) Integer direction,
+            @RequestParam(name = "minPrice", required = false) BigDecimal minPrice,
+            @RequestParam(name = "maxPrice", required = false) BigDecimal maxPrice,
+            @RequestParam(name = "discount", required = false) BigDecimal discount) {
+        BigDecimal defaultMinPrice = BigDecimal.ZERO;
+        BigDecimal defaultMaxPrice = BigDecimal.valueOf(Long.MAX_VALUE);
+
+        List<Product> products = productService.getAll(
+                categoryId.orElse(null),
+                direction != null ? direction : 0, // Default sorting direction
+                minPrice != null ? minPrice : defaultMinPrice, // Default minimum price
+                maxPrice != null ? maxPrice : defaultMaxPrice, // Default maximum price
+                discount);
+        /*
+        SELECT * FROM product WHERE categoryId = categoryId AND minPrice > min
+         */
+        return products.stream()
+                .map(createConverter::toDto)
                 .collect(Collectors.toList());
     }
 

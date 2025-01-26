@@ -22,6 +22,6 @@ public interface ProductJpaRepository extends JpaRepository<Product, Long>{
     @Query("SELECT p FROM Product p WHERE p.price BETWEEN :minPrice AND :maxPrice")
     List<Product> findAllProductByMinMaxPrice(@Param("minPrice") BigDecimal minPrice, @Param("maxPrice") BigDecimal maxPrice);
     @Query("SELECT p FROM Product p JOIN p.category c WHERE c.categoryTitle =:categoryTitle")
-    List<Product> findAllProductByCategoryTitle(String categoryTitle);
+    List<Product> findAllProductByCategoryTitle(@Param("categoryTitle") String categoryTitle);
 
 }

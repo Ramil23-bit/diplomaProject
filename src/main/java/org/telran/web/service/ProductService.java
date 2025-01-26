@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    List<Product> getAll();
+    List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount);
 
     List<Product> getAllDiscount(BigDecimal discount);
 
@@ -29,4 +29,5 @@ public interface ProductService {
     Product create(Product product);
 
     List<Product> getProductsSortedByColumnsAscOrDesc(boolean asc, String column);
+
 }

@@ -1,38 +1,65 @@
 package org.telran.web.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
-import org.telran.web.entity.Storage;
-import org.telran.web.exception.CategoryNotFoundException;
 import org.telran.web.exception.ProductNotFoundException;
-import org.telran.web.exception.StorageNotFoundException;
-import org.telran.web.repository.CategoryJpaRepository;
 import org.telran.web.repository.ProductJpaRepository;
-import org.telran.web.repository.StorageJpaRepository;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private static final List<String> validColumnName = Arrays.asList("price", "createdAt", "productTitle");
+    @Autowired
+    private EntityManager entityManager;
 
     @Autowired
     private ProductJpaRepository productJpaRepository;
 
-    @Override
-    public List<Product> getAll() {
-        return productJpaRepository.findAll();
+    private static final List<String> validColumnName = Arrays.asList("price", "createdAt", "productTitle");
+
+    public List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+        Root<Product> root = cq.from(Product.class);
+
+        Predicate predicate = cb.conjunction();
+        if (categoryId != null) {
+            predicate = cb.and(predicate, cb.equal(root.get("category").get("id"), categoryId));
+        }
+        if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) > 0) {
+            predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("price"), minPrice));
+        }
+        if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) > 0) {
+            predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("price"), maxPrice));
+        }
+        if (discount != null) {
+            predicate = cb.and(predicate, cb.equal(root.get("discount"), discount));
+        }
+
+        cq.where(predicate);
+
+        if (direction == 1) {
+            cq.orderBy(cb.asc(root.get("price")));
+        } else if (direction == -1) {
+            cq.orderBy(cb.desc(root.get("price")));
+        }
+
+        TypedQuery<Product> query = entityManager.createQuery(cq);
+        return query.getResultList();
     }
 
     @Override
@@ -104,6 +131,5 @@ public class ProductServiceImpl implements ProductService {
         }
         return productJpaRepository.findAll(Sort.by(asc ? Sort.Direction.ASC : Sort.Direction.DESC, column));
     }
-
 
 }
