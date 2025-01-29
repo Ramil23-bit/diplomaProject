@@ -6,19 +6,19 @@ public class CartCreateDto {
 
     private Long id;
 
-    private User user;
+    private Long userId;
 
-    public CartCreateDto(Long userId, User user) {
-        this.user = user;
+    public CartCreateDto(Long id, Long userId) {
         this.id = id;
+        this.userId = userId;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUser() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Long userId) {
+        this.userId = userId;
     }
 
     public Long getId() {

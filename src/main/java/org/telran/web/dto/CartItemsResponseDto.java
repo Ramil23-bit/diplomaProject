@@ -1,6 +1,7 @@
 package org.telran.web.dto;
 
 import org.telran.web.entity.Product;
+import org.telran.web.entity.User;
 
 public class CartItemsResponseDto {
     private Long id;
@@ -9,10 +10,13 @@ public class CartItemsResponseDto {
 
     private Product product;
 
-    public CartItemsResponseDto(Long id, Long quantity, Product product) {
+    private User user;
+
+    public CartItemsResponseDto(Long id, Long quantity, Product product, User user) {
         this.id = id;
         this.quantity = quantity;
         this.product = product;
+        this.user = user;
     }
 
     public Long getId() {
@@ -37,5 +41,13 @@ public class CartItemsResponseDto {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

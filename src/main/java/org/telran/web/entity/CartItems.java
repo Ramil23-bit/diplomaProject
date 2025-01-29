@@ -30,6 +30,12 @@ public class CartItems {
         this.product = product;
     }
 
+    public CartItems(Long quantity, Cart cart, Product product) {
+        this.quantity = quantity;
+        this.cart = cart;
+        this.product = product;
+    }
+
     public CartItems() {
     }
 

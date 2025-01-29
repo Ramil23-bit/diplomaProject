@@ -5,28 +5,40 @@ import org.telran.web.entity.Product;
 
 public class CartItemsCreateDto {
 
-    private Cart cartId;
+    private Long quantity;
 
-    private Product productId;
+    private Long cartId;
 
-    public CartItemsCreateDto(Cart cartId, Product productId) {
+    private Long productId;
+
+
+    public CartItemsCreateDto(Long quantity, Long cartId, Long productId) {
+        this.quantity = quantity;
         this.cartId = cartId;
         this.productId = productId;
     }
 
-    public Cart getCartId() {
+    public Long getCartId() {
         return cartId;
     }
 
-    public void setCartId(Cart cartId) {
+    public void setCartId(Long cartId) {
         this.cartId = cartId;
     }
 
-    public Product getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(Product productId) {
+    public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
     }
 }
