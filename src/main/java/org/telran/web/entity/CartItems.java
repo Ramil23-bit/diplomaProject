@@ -14,15 +14,20 @@ public class CartItems {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id")
     private Cart cart;
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "cart_product_id")
-    //private Product product;
+    @ManyToOne
+    @JoinColumn(name = "cart_product_id", foreignKey = @ForeignKey(name = "FK_CART_ITEMS_PRODUCT"))
+    private Product product;
 
-    public CartItems(Long id, Long quantity, Cart cart) {
+    public CartItems(Long id, Long quantity, Cart cart, Product product) {
         this.id = id;
         this.quantity = quantity;
         this.cart = cart;
-        //this.product = product;
+        this.product = product;
+    }
+
+    public CartItems(Cart cart, Product product) {
+        this.cart = cart;
+        this.product = product;
     }
 
     public CartItems() {
@@ -52,12 +57,21 @@ public class CartItems {
         this.cart = cart;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     @Override
     public String toString() {
         return "CartItems{" +
                 "id=" + id +
                 ", quantity=" + quantity +
                 ", cart=" + cart +
+                ", product=" + product +
                 '}';
     }
 }

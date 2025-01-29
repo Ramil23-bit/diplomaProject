@@ -14,7 +14,6 @@ public class Cart {
     private Long id;
     @OneToOne(fetch = FetchType.LAZY)
     @NotNull
-    @MapsId
     private User user;
     @OneToMany
     @JoinColumn(name = "cart_id")
@@ -24,6 +23,11 @@ public class Cart {
         this.id = id;
         this.user = user;
         this.cartItemsList = cartItemsList;
+    }
+
+    public Cart(Long id, User user) {
+        this.id = id;
+        this.user = user;
     }
 
     public Cart() {
