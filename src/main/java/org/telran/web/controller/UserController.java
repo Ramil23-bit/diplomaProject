@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/shop_users")
 public class UserController {
 
     @Autowired
