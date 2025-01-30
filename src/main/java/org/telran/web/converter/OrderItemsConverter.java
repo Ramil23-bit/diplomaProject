@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.telran.web.dto.OrderItemsCreateDto;
 import org.telran.web.dto.OrderItemsResponseDto;
 import org.telran.web.entity.OrderItems;
+import org.telran.web.entity.Product;
 import org.telran.web.service.OrderItemsService;
 import org.telran.web.service.ProductService;
 
@@ -23,6 +24,7 @@ public class OrderItemsConverter implements Converter<OrderItems, OrderItemsCrea
     }
 
     public OrderItems toEntity(OrderItemsCreateDto orderItemsCreateDto) {
-        return new OrderItems(orderItemsCreateDto.getQuantity(), orderItemsCreateDto.getProductId(), orderItemsCreateDto.getPriceByPurchase());
+        Product product = productService.getById(orderItemsCreateDto.getProductId());
+        return new OrderItems(orderItemsCreateDto.getQuantity(), orderItemsCreateDto.getPriceByPurchase(), product);
     }
 }

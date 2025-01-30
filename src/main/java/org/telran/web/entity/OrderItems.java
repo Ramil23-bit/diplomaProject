@@ -12,12 +12,7 @@ public class OrderItems {
     private Long id;
 
     private Long quantity;
-
     private BigDecimal priceAtPurchase;
-
-//    @ManyToOne
-//    @JoinColumn(name = "order_item_order_id")
-//    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "order_item_product_id", foreignKey = @ForeignKey(name = "FK_ORDER_ITEMS_PRODUCT"))
@@ -25,6 +20,12 @@ public class OrderItems {
 
     public OrderItems(Long id, Long quantity, BigDecimal priceAtPurchase, Product product) {
         this.id = id;
+        this.quantity = quantity;
+        this.priceAtPurchase = priceAtPurchase;
+        this.product = product;
+    }
+
+    public OrderItems(Long quantity, BigDecimal priceAtPurchase, Product product) {
         this.quantity = quantity;
         this.priceAtPurchase = priceAtPurchase;
         this.product = product;
@@ -76,3 +77,4 @@ public class OrderItems {
                 '}';
     }
 }
+
