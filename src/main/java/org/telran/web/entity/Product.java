@@ -207,5 +207,9 @@ public class Product {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+
+
     }
+
+    
 }
