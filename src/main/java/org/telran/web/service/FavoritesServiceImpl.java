@@ -1,5 +1,7 @@
 package org.telran.web.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.web.entity.Favorites;
@@ -9,6 +11,8 @@ import java.util.List;
 
 @Service
 public class FavoritesServiceImpl implements FavoritesService {
+
+    private Logger log = LoggerFactory.getLogger(FavoritesServiceImpl.class);
 
     @Autowired
     private FavoritesRepository repository;
@@ -20,6 +24,8 @@ public class FavoritesServiceImpl implements FavoritesService {
 
     @Override
     public List<Favorites> getAll() {
-        return repository.findAll();
+        List<Favorites> all = repository.findAll();
+        log.info("All{}", all);
+        return all;
     }
 }
