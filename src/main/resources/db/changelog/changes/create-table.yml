@@ -2,6 +2,11 @@ databaseChangeLog:
   - changeSet:
       id: 1
       author: team_diploma_project
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: storage
       changes:
         - createTable:
             tableName: storage
@@ -15,9 +20,15 @@ databaseChangeLog:
               - column:
                   name: amount
                   type: bigint
+
   - changeSet:
       id: 2
       author: team_diploma_project
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: categories
       changes:
         - createTable:
             tableName: categories
@@ -25,7 +36,6 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigserial
-                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -34,9 +44,15 @@ databaseChangeLog:
                   type: varchar(100)
                   constraints:
                     nullable: false
+
   - changeSet:
       id: 3
       author: team_diploma_project
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: products
       changes:
         - createTable:
             tableName: products
@@ -80,12 +96,20 @@ databaseChangeLog:
               - column:
                   name: created_at
                   type: TIMESTAMP
+                  defaultValueComputed: NOW()
               - column:
                   name: updated_at
                   type: TIMESTAMP
+                  defaultValueComputed: NOW()
+
   - changeSet:
       id: 4
       author: team_diploma_project
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: shop_users
       changes:
         - createTable:
             tableName: shop_users
@@ -120,9 +144,15 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
+
   - changeSet:
       id: 5
       author: team_diploma_project
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: favoriter
       changes:
         - createTable:
             tableName: favoriter
@@ -147,3 +177,5 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_favoriter_product
                     references: products(id)
+
+

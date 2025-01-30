@@ -1,21 +1,24 @@
 databaseChangeLog:
   - logicalFilePath: db/changelog/db.changelog-master.yml
-  - includeAll:
-      path: db/changelog/changes
+
+  - include:
+      file: db/changelog/changes/create-table.yml
+
+  - include:
+      file: db/changelog/changes/initial-data.yml
+
   - changeSet:
       id: 11
       author: team_diploma_project
+      runOnChange: true
       rollback:
         - delete:
-            tableName: products
-            where: id in (1)
-        - delete:
-            tableName: categories
-            where: id in (1)
-        - delete:
             tableName: favoriter
-            where: id = 1
         - delete:
-            tableName: storage
+            tableName: products
         - delete:
             tableName: shop_users
+        - delete:
+            tableName: categories
+        - delete:
+            tableName: storage
