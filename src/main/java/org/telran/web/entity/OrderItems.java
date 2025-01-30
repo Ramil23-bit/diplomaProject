@@ -30,7 +30,7 @@ public class OrderItems {
         this.product = product;
     }
 
-    public OrderItems(Long quantity, Long productId, BigDecimal priceByPurchase) {
+    public OrderItems() {
         //
     }
 
