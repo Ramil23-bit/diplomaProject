@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.telran.web.exception.CategoryNotFoundException;
-import org.telran.web.exception.ProductNotFoundException;
-import org.telran.web.exception.StorageNotFoundException;
-import org.telran.web.exception.UserNotFoundException;
+import org.telran.web.exception.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +23,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({CategoryNotFoundException.class,
                         StorageNotFoundException.class,
                         ProductNotFoundException.class,
-                        UserNotFoundException.class})
+                        UserNotFoundException.class,
+                        CartItemsNotFoundException.class,
+                        CartNotFoundException.class,
+                        PaymentNotFoundException.class})
     public ResponseEntity<Object> handleNotFoundException(Exception exception){
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
