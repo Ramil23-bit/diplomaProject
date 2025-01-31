@@ -9,6 +9,7 @@ import org.telran.web.entity.*;
 import org.telran.web.repository.FavoritesRepository;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

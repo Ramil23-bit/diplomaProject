@@ -1,6 +1,7 @@
 package org.telran.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.OrderItemsCreateDto;
@@ -31,12 +32,18 @@ public class OrderItemsController {
     @GetMapping
     public List<OrderItemsResponseDto> getAll(){
         return orderItemsService.getAllOrderItems().stream()
-                .map(orderItems -> orderItemsConverter.toDto(orderItems))
+                .map(orderItem -> orderItemsConverter.toDto(orderItem))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public OrderItemsResponseDto getById(@PathVariable(name = "id") Long id){
         return orderItemsConverter.toDto(orderItemsService.getByIdOrderItems(id));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable Long id) {
+        orderItemsService.deleteOrderItems(id);
     }
 }

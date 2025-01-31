@@ -71,6 +71,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         categoryJpaRepository.deleteById(id);
     }

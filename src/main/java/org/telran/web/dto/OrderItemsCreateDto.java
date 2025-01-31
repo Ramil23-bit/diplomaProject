@@ -8,12 +8,15 @@ public class OrderItemsCreateDto {
 
     private Long productId;
 
-    private BigDecimal priceByPurchase;
+    private Long orderId;
 
-    public OrderItemsCreateDto(Long quantity, Long productId, BigDecimal priceByPurchase) {
+    private BigDecimal priceAtPurchase;
+
+    public OrderItemsCreateDto(Long quantity, Long productId, Long orderId, BigDecimal priceAtPurchase) {
         this.quantity = quantity;
         this.productId = productId;
-        this.priceByPurchase = priceByPurchase;
+        this.orderId = orderId;
+        this.priceAtPurchase = priceAtPurchase;
     }
 
     public Long getQuantity() {
@@ -32,11 +35,21 @@ public class OrderItemsCreateDto {
         this.productId = productId;
     }
 
-    public BigDecimal getPriceByPurchase() {
-        return priceByPurchase;
+    public long getOrderId() {
+        return orderId;
     }
 
-    public void setPriceByPurchase(BigDecimal priceByPurchase) {
-        this.priceByPurchase = priceByPurchase;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public BigDecimal getPriceAtPurchase() {
+        return priceAtPurchase;
+    }
+
+    public void setPriceByPurchase(BigDecimal priceAtPurchase) {
+        this.priceAtPurchase = priceAtPurchase;
     }
 }
+
+

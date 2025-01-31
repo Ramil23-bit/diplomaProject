@@ -1,5 +1,6 @@
 package org.telran.web.dto;
 
+import org.telran.web.entity.Orders;
 import org.telran.web.entity.Product;
 
 import java.math.BigDecimal;
@@ -14,11 +15,14 @@ public class OrderItemsResponseDto {
 
     private Product product;
 
-    public OrderItemsResponseDto(Long id, Long quantity, BigDecimal priceAtPurchase, Product product) {
+    private Orders orders;
+
+    public OrderItemsResponseDto(Long id, Long quantity, BigDecimal priceAtPurchase, Product product, Orders orders) {
         this.id = id;
         this.quantity = quantity;
         this.priceAtPurchase = priceAtPurchase;
         this.product = product;
+        this.orders = orders;
     }
 
     public Long getId() {
@@ -51,5 +55,13 @@ public class OrderItemsResponseDto {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Orders getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Orders orders) {
+        this.orders = orders;
     }
 }

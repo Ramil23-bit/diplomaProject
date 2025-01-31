@@ -57,6 +57,7 @@ public class ProductCreateDto {
     }
 
     public void setCategoryId(Long categoryId) {
+        System.out.println("setCategoryId received: " + categoryId + " (type: " + (categoryId != null ? categoryId.getClass().getSimpleName() : "null") + ")");
         this.categoryId = categoryId;
     }
 
@@ -73,6 +74,7 @@ public class ProductCreateDto {
     }
 
     public void setStorageId(Long storageId) {
+        System.out.println("setStorageId received: " + storageId + " (type: " + (storageId != null ? storageId.getClass().getSimpleName() : "null") + ")");
         this.storageId = storageId;
     }
 

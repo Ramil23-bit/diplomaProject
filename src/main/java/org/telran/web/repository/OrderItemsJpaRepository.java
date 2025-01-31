@@ -9,7 +9,4 @@ import java.util.List;
 @Repository
 public interface OrderItemsJpaRepository extends JpaRepository<OrderItems, Long> {
 
-    List<OrderItems> findAll();
-
-    OrderItems save(OrderItems orderItems);
 }

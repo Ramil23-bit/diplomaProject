@@ -55,7 +55,7 @@ public class Product {
     private LocalDateTime updatedAt;
 
     @OneToMany
-    @JoinColumn(name = "product_id")
+    //@JoinColumn(name = "product_id")
     private List<Favorites> favorites = new ArrayList<>();
 
     public Product() {
@@ -108,9 +108,9 @@ public class Product {
         this.category = category;
         this.storage = storage;
         this.discount = discount;
-        this.createdAt = null;
-        this.updatedAt = null;
     }
+
+
 
     public Long getId() {
         return id;
@@ -201,15 +201,13 @@ public class Product {
                 ", productTitle='" + productTitle + '\'' +
                 ", price=" + price +
                 ", productInfo='" + productInfo + '\'' +
-                ", categoryId=" + (category != null ? category.getId() : null) +
-                ", storageId=" + (storage != null ? storage.getId() : null) +
+                ", categoryId=" + (category != null ? category.getId() : "null") +
+                ", storageId=" + (storage != null ? storage.getId() : "null") +
                 ", discount=" + discount +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", favoritesCount=" + favorites.size() +
                 '}';
-
-
     }
-
-    
 }
+
