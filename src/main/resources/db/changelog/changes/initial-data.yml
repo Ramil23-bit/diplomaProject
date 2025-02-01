@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 10
+      id: 11
       author: team_diploma_project
       changes:
         - insert:
@@ -10,7 +10,7 @@ databaseChangeLog:
                   name: category_title
                   value: 'вода'
   - changeSet:
-      id: 11
+      id: 12
       author: team_diploma_project
       changes:
         - insert:
@@ -20,7 +20,7 @@ databaseChangeLog:
                   name: amount
                   value: 500
   - changeSet:
-      id: 12
+      id: 13
       author: team_diploma_project
       changes:
         - insert:
@@ -45,7 +45,7 @@ databaseChangeLog:
                   name: discount
                   valueNumeric: 10.0
   - changeSet:
-      id: 13
+      id: 14
       author: team_diploma_project
       changes:
         - sql:
@@ -56,7 +56,7 @@ databaseChangeLog:
               ON CONFLICT (email) DO NOTHING; 
 
   - changeSet:
-      id: 14
+      id: 15
       author: team_diploma_project
       changes:
         - insert:
@@ -69,7 +69,7 @@ databaseChangeLog:
                   name: product_id
                   valueNumeric: 1
   - changeSet:
-      id: 15
+      id: 16
       author: team_diploma_project
       changes:
         - insert:
@@ -79,7 +79,7 @@ databaseChangeLog:
                   name: user_id
                   valueNumeric: 1
   - changeSet:
-      id: 16
+      id: 17
       author: team_diploma_project
       changes:
         - insert:
@@ -95,7 +95,7 @@ databaseChangeLog:
                   name: order_status
                   value: 'COMPLETED'
   - changeSet:
-      id: 17
+      id: 18
       author: team_diploma_project
       changes:
         - insert:
@@ -117,7 +117,7 @@ databaseChangeLog:
                   name: status
                   value: 'CREATED'
   - changeSet:
-      id: 18
+      id: 19
       author: team_diploma_project
       changes:
         - insert:
@@ -134,4 +134,20 @@ databaseChangeLog:
                   valueNumeric: 1
               - column:
                   name: order_id
+                  valueNumeric: 1
+  - changeSet:
+      id: 20
+      author: team_diploma_project
+      changes:
+        - insert:
+            tableName: cart_items
+            columns:
+              - column:
+                  name: quantity
+                  valueNumeric: 5
+              - column:
+                  name: cart_id
+                  valueNumeric: 1
+              - column:
+                  name: cart_product_id
                   valueNumeric: 1
