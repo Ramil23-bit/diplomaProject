@@ -177,5 +177,124 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_favoriter_product
                     references: products(id)
+  - changeSet:
+      id: 6
+      author: team_diploma_project
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: cart
+      changes:
+        - createTable:
+            tableName: cart
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: cart
+            baseColumnNames: user_id
+            constraintName: fk_cart_user
+            referencedTableName: shop_users
+            referencedColumnNames: id
+  - changeSet:
+      id: 7
+      author: team_diploma_project
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: payment
+      changes:
+        - createTable:
+            tableName: payment
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: amount
+                  type: bigint
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: TIMESTAMP
+                  defaultValueComputed: NOW()
+              - column:
+                  name: order_status
+                  type: varchar(50)
+                  defaultValue: 'CREATED'
+        - addForeignKeyConstraint:
+            baseTableName: payment
+            baseColumnNames: user_id
+            constraintName: fk_payment_user
+            referencedTableName: shop_users
+            referencedColumnNames: id
+  - changeSet:
+      id: 8
+      author: team_diploma_project
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: order_items
+      changes:
+        - createTable:
+            tableName: order_items
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price_at_purchase
+                  type: decimal(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_item_product_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: order_items
+            baseColumnNames: order_item_product_id
+            constraintName: FK_ORDER_ITEMS_PRODUCT
+            referencedTableName: product
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: order_items
+            baseColumnNames: order_id
+            constraintName: FK_ORDER_ITEMS_ORDER
+            referencedTableName: orders
+            referencedColumnNames: id
 
 

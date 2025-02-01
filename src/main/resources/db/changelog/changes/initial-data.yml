@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 6
+      id: 9
       author: team_diploma_project
       changes:
         - insert:
@@ -10,7 +10,7 @@ databaseChangeLog:
                   name: category_title
                   value: 'вода'
   - changeSet:
-      id: 7
+      id: 10
       author: team_diploma_project
       changes:
         - insert:
@@ -20,7 +20,7 @@ databaseChangeLog:
                   name: amount
                   value: 500
   - changeSet:
-      id: 8
+      id: 11
       author: team_diploma_project
       changes:
         - insert:
@@ -45,7 +45,7 @@ databaseChangeLog:
                   name: discount
                   valueNumeric: 10.0
   - changeSet:
-      id: 9
+      id: 12
       author: team_diploma_project
       changes:
         - sql:
@@ -56,7 +56,7 @@ databaseChangeLog:
               ON CONFLICT (email) DO NOTHING; 
 
   - changeSet:
-      id: 10
+      id: 13
       author: team_diploma_project
       changes:
         - insert:
@@ -67,4 +67,49 @@ databaseChangeLog:
                   valueNumeric: 1
               - column:
                   name: product_id
+                  valueNumeric: 1
+  - changeSet:
+      id: 14
+      author: team_diploma_project
+      changes:
+        - insert:
+            tableName: cart
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+  - changeSet:
+      id: 15
+      author: team_diploma_project
+      changes:
+        - insert:
+            tableName: payment
+            columns:
+              - column:
+                  name: amount
+                  valueNumeric: 1500
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: order_status
+                  value: 'COMPLETED'
+  - changeSet:
+      id: 16
+      author: team_diploma_project
+      changes:
+        - insert:
+            tableName: order_items
+            columns:
+              - column:
+                  name: quantity
+                  valueNumeric: 2
+              - column:
+                  name: price_at_purchase
+                  valueNumeric: 100.0
+              - column:
+                  name: order_item_product_id
+                  valueNumeric: 1
+              - column:
+                  name: order_id
                   valueNumeric: 1
