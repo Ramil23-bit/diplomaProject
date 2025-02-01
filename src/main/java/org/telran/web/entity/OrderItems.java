@@ -28,7 +28,7 @@ public class OrderItems {
     @JsonIgnore
     private Orders orders;
 
-    // Конструктор с ID (используется, если ID передаётся явно)
+
     public OrderItems(Long id, Long quantity, BigDecimal priceAtPurchase, Product product, Orders orders) {
         this.id = id;
         this.quantity = quantity;
@@ -37,7 +37,6 @@ public class OrderItems {
         this.orders = orders;
     }
 
-    // Конструктор без ID (используется для создания новой записи)
     public OrderItems(Long quantity, BigDecimal priceAtPurchase, Product product, Orders orders) {
         this.quantity = quantity;
         this.priceAtPurchase = priceAtPurchase;
@@ -46,7 +45,7 @@ public class OrderItems {
     }
 
     public OrderItems() {
-        // Пустой конструктор для JPA
+        //
     }
 
     public Long getId() {
