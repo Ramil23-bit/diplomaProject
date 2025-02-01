@@ -6,21 +6,31 @@ import java.util.List;
 
 public class OrderCreateDto {
 
-    private List<OrderItems> orderItems;
+    private Long userId;
+    private List<OrderItemsCreateDto> orderItems;
     private String deliveryAddress;
     private String deliveryMethod;
 
-    public OrderCreateDto(List<OrderItems> orderItems, String deliveryAddress, String deliveryMethod) {
+    public OrderCreateDto(Long userId, List<OrderItemsCreateDto> orderItems, String deliveryAddress, String deliveryMethod) {
+        this.userId = userId;
         this.orderItems = orderItems;
         this.deliveryAddress = deliveryAddress;
         this.deliveryMethod = deliveryMethod;
     }
 
-    public List<OrderItems> getOrderItems() {
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public List<OrderItemsCreateDto> getOrderItems() {
         return orderItems;
     }
 
-    public void setOrderItems(List<OrderItems> orderItems) {
+    public void setOrderItems(List<OrderItemsCreateDto> orderItems) {
         this.orderItems = orderItems;
     }
 

@@ -23,17 +23,17 @@ public class Orders {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_items", referencedColumnName = "id")
-    @NotNull
+    //@NotNull
     private List<OrderItems> orderItems;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @NotNull
+    //@NotNull
     private String deliveryAddress;
     private String contactPhone;
 
-    @NotNull
+    //@NotNull
     private String deliveryMethod;
 
     @Enumerated(EnumType.STRING)
@@ -48,6 +48,17 @@ public class Orders {
 
     public Orders(List<OrderItems> orderItems, String deliveryAddress, String deliveryMethod) {
         this.orderItems = orderItems;
+        this.deliveryAddress = deliveryAddress;
+        this.deliveryMethod = deliveryMethod;
+    }
+
+    public Orders(String deliveryAddress, String deliveryMethod) {
+        this.deliveryAddress = deliveryAddress;
+        this.deliveryMethod = deliveryMethod;
+    }
+
+    public Orders(User user, String deliveryAddress, String deliveryMethod) {
+        this.user = user;
         this.deliveryAddress = deliveryAddress;
         this.deliveryMethod = deliveryMethod;
     }

@@ -6,11 +6,15 @@ import org.telran.web.dto.OrderCreateDto;
 import org.telran.web.dto.OrderResponseDto;
 import org.telran.web.entity.Orders;
 import org.telran.web.service.OrderItemsService;
+import org.telran.web.service.UserService;
 
 import java.util.stream.Collectors;
 
 @Component
 public class OrderCreateConverter implements Converter<Orders, OrderCreateDto, OrderResponseDto>{
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public OrderResponseDto toDto(Orders orders) {
@@ -28,10 +32,6 @@ public class OrderCreateConverter implements Converter<Orders, OrderCreateDto, O
 
     @Override
     public Orders toEntity(OrderCreateDto orderCreateDto) {
-        return new Orders(
-                orderCreateDto.getOrderItems(),
-                orderCreateDto.getDeliveryAddress(),
-                orderCreateDto.getDeliveryMethod()
-        );
+        return new Orders(userService.getById(orderCreateDto.getUserId()), orderCreateDto.getDeliveryAddress(), orderCreateDto.getDeliveryMethod());
     }
 }

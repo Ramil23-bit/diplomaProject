@@ -12,10 +12,20 @@ public class OrderItemsCreateDto {
 
     private BigDecimal priceAtPurchase;
 
+    public OrderItemsCreateDto() {
+        //
+    }
+
     public OrderItemsCreateDto(Long quantity, Long productId, Long orderId, BigDecimal priceAtPurchase) {
         this.quantity = quantity;
         this.productId = productId;
         this.orderId = orderId;
+        this.priceAtPurchase = priceAtPurchase;
+    }
+
+    public OrderItemsCreateDto(Long quantity, Long productId, BigDecimal priceAtPurchase) {
+        this.quantity = quantity;
+        this.productId = productId;
         this.priceAtPurchase = priceAtPurchase;
     }
 
