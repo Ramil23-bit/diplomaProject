@@ -15,7 +15,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Payment getByIdPayment(Long id) {
         return paymentJpaRepository.findById(id)
-                .orElseThrow(()-> new PaymentNotFoundException("Payment by " + id + " not Found"));
+                .orElseThrow(()-> new PaymentNotFoundException("Payment by ID " + id + " not found"));
     }
 
     @Override

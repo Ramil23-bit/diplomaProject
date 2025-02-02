@@ -71,11 +71,11 @@ public class Payment {
         this.date = date;
     }
 
-    public OrderStatus getOrder() {
+    public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrder(OrderStatus orderStatus) {
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 }

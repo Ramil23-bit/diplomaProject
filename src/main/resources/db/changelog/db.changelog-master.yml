@@ -8,7 +8,7 @@ databaseChangeLog:
       file: db/changelog/changes/initial-data.yml
 
   - changeSet:
-      id: 19
+      id: 21
       author: team_diploma_project
       runOnChange: true
       rollback:
