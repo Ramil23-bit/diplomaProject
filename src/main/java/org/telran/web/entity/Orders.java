@@ -21,10 +21,9 @@ public class Orders {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_items", referencedColumnName = "id")
-    //@NotNull
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItems> orderItems;
+
 
     @CreationTimestamp
     private LocalDateTime createdAt;
