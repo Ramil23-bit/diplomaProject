@@ -35,8 +35,9 @@ public class OrderItemsServiceImpl implements OrderItemsService {
     @Override
     @Transactional
     public void deleteOrderItems(Long id) {
-        OrderItems orderItem = orderItemsJpaRepository.findById(id)
-                .orElseThrow(() -> new OrderItemsNotFoundException("OrderItem with id " + id + " not found"));
-        orderItemsJpaRepository.delete(orderItem);
+        if(!orderItemsJpaRepository.existsById(id)){
+            throw new OrderItemsNotFoundException("OrderItem with id " + id + " not found");
+        }
+        orderItemsJpaRepository.deleteById(id);
     }
 }
