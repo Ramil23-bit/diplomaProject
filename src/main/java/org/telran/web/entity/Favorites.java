@@ -19,7 +19,17 @@ public class Favorites {
     private Product product;
 
     public Favorites() {
-        //
+
+    }
+
+    public Favorites(Long id) {
+        this.id = id;
+    }
+
+    public Favorites(Long id, User user, Product product) {
+        this.id = id;
+        this.user = user;
+        this.product = product;
     }
 
     public Favorites(User user, Product product) {

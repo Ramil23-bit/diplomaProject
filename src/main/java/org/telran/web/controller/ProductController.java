@@ -2,6 +2,7 @@ package org.telran.web.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
@@ -26,6 +27,7 @@ public class ProductController {
     private Converter<Product, ProductCreateDto, ProductResponseDto> createConverter;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ProductResponseDto create(@Valid @RequestBody ProductCreateDto productDto) {
         return createConverter.toDto(productService.create(createConverter.toEntity(productDto)));
     }
@@ -52,23 +54,6 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/discount")
-    public List<ProductResponseDto> getAllProductDiscount(@RequestParam String discount) {
-        BigDecimal discountValue = discount != null ? new BigDecimal(discount) : null;
-        return productService.getAllDiscount(discountValue).stream()
-                .map(product -> createConverter.toDto(product))
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/price")
-    public List<ProductResponseDto> getAllProductPrice(@RequestParam String minPrice, @RequestParam String maxPrice) {
-        BigDecimal priceValueMin = minPrice != null ? new BigDecimal(minPrice) : null;
-        BigDecimal priceValueMax = maxPrice != null ? new BigDecimal(maxPrice) : null;
-        return productService.getAllProductByPrice(priceValueMin, priceValueMax).stream()
-                .map(product -> createConverter.toDto(product))
-                .collect(Collectors.toList());
-    }
-
     @GetMapping("/{id}")
     public ProductResponseDto getById(@PathVariable Long id) {
         return createConverter.toDto(productService.getById(id));
@@ -82,20 +67,9 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(name = "id") Long id) {
         productService.deleteProductsById(id);
     }
 
-    @GetMapping("/sort")
-    public List<ProductResponseDto> getProductsSortedByColumnsAscOrDesc(@RequestParam(name = "column") String column, @RequestParam(name = "asc") boolean asc) {
-        return productService.getProductsSortedByColumnsAscOrDesc(asc, column).stream()
-                .map(product -> createConverter.toDto(product))
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/category")
-    public ResponseEntity<List<Product>> getProductByCategory(@RequestParam(name = "categoryTitle") String title){
-        List<Product> sortedProducts = productService.getAllProductByCategoryTitle(title);
-        return ResponseEntity.ok(sortedProducts);
-    }
 }

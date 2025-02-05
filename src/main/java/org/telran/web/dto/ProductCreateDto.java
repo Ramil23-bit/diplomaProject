@@ -28,6 +28,19 @@ public class ProductCreateDto {
         //
     }
 
+    public ProductCreateDto(String productTitle, BigDecimal price, String productInfo, Long categoryId,
+                            Long storageId, BigDecimal discount, Storage storageList) {
+        this.productTitle = productTitle;
+        this.price = price;
+        this.productInfo = productInfo;
+        this.categoryId = categoryId;
+        this.storageId = storageId;
+        this.discount = discount;
+        this.storageList = storageList;
+    }
+
+
+
     public String getProductTitle() {
         return productTitle;
     }

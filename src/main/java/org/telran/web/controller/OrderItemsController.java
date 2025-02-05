@@ -23,6 +23,7 @@ public class OrderItemsController {
     private Converter<OrderItems, OrderItemsCreateDto, OrderItemsResponseDto> orderItemsConverter;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public OrderItemsResponseDto create(@RequestBody OrderItemsCreateDto orderItemsCreateDto){
         return orderItemsConverter.toDto(
                 orderItemsService.createOrderItems(

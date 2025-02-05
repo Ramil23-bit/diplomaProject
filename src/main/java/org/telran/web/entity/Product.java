@@ -110,7 +110,14 @@ public class Product {
         this.discount = discount;
     }
 
-
+    public Product(Long id, String productTitle, BigDecimal price,
+                   String productInfo, BigDecimal discount) {
+        this.id = id;
+        this.productTitle = productTitle;
+        this.price = price;
+        this.productInfo = productInfo;
+        this.discount = discount;
+    }
 
     public Long getId() {
         return id;

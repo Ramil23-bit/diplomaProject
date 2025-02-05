@@ -1,6 +1,7 @@
 package org.telran.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
 import org.telran.web.converter.FavoritCreateConverter;
@@ -33,6 +34,7 @@ public class FavoritesController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     private FavoritesResponseDto create(@RequestBody FavoritesCreateDto favoritesCreateDto) {
         return converter.toDto(favoritesService.create(converter.toEntity(favoritesCreateDto)));
     }

@@ -37,6 +37,12 @@ public class OrderItems {
         this.orders = orders;
     }
 
+    public OrderItems(Long id, Long quantity, BigDecimal priceAtPurchase) {
+        this.id = id;
+        this.quantity = quantity;
+        this.priceAtPurchase = priceAtPurchase;
+    }
+
     public OrderItems(Long quantity, BigDecimal priceAtPurchase, Product product, Orders orders) {
         this.quantity = quantity;
         this.priceAtPurchase = priceAtPurchase;

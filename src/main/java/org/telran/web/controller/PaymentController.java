@@ -1,6 +1,7 @@
 package org.telran.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.PaymentCreateDto;
@@ -18,6 +19,7 @@ public class PaymentController {
     @Autowired
     private Converter<Payment, PaymentCreateDto, PaymentResponseDto> paymentConverter;
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public PaymentResponseDto create(@RequestBody PaymentCreateDto paymentCreateDto){
         return paymentConverter.toDto(paymentService.createPayment(paymentConverter.toEntity(paymentCreateDto)));
     }
@@ -28,6 +30,7 @@ public class PaymentController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable(name = "id") Long id){
         paymentService.deletePayment(id);
     }
