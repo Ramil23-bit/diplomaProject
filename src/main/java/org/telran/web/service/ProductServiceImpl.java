@@ -30,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductJpaRepository productJpaRepository;
 
     private static final List<String> validColumnName = Arrays.asList("price", "createdAt", "productTitle");
-
+    @Override
     public List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Product> cq = cb.createQuery(Product.class);
@@ -63,20 +63,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getAllDiscount(BigDecimal discount) {
-        return productJpaRepository.getAllProductByDiscount(discount);
+    public List<Product> getAllProducts() {
+        return productJpaRepository.findAll();
     }
-
-    @Override
-    public List<Product> getAllProductByPrice(BigDecimal minPrice, BigDecimal maxPrice) {
-        return productJpaRepository.findAllProductByMinMaxPrice(minPrice, maxPrice);
-    }
-
-    @Override
-    public List<Product> getAllProductByCategoryTitle(String categoryTitle) {
-        return productJpaRepository.findAllProductByCategoryTitle(categoryTitle);
-    }
-
 
     @Override
     public Product getById(Long id) {
@@ -122,14 +111,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProductsById(Long id) {
         productJpaRepository.deleteById(id);
-    }
-
-    @Override
-    public List<Product> getProductsSortedByColumnsAscOrDesc(boolean asc, String column) {
-        if(!validColumnName.contains(column)) {
-            throw new IllegalArgumentException("Invalid column name: " + column);
-        }
-        return productJpaRepository.findAll(Sort.by(asc ? Sort.Direction.ASC : Sort.Direction.DESC, column));
     }
 
 }

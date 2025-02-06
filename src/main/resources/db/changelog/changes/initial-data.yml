@@ -9,6 +9,18 @@ databaseChangeLog:
               - column:
                   name: category_title
                   value: 'вода'
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: category_title
+                  value: 'инвентарь'
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: category_title
+                  value: 'земля'
   - changeSet:
       id: 12
       author: team_diploma_project
@@ -19,6 +31,18 @@ databaseChangeLog:
               - column:
                   name: amount
                   value: 500
+        - insert:
+            tableName: storage
+            columns:
+              - column:
+                  name: amount
+                  value: 100
+        - insert:
+            tableName: storage
+            columns:
+              - column:
+                  name: amount
+                  value: 200
   - changeSet:
       id: 13
       author: team_diploma_project
@@ -44,6 +68,48 @@ databaseChangeLog:
               - column:
                   name: discount
                   valueNumeric: 10.0
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: product_title
+                  value: 'грабли'
+              - column:
+                  name: price
+                  valueNumeric: 250.0
+              - column:
+                  name: product_info
+                  value: 'уборочный инвентарь'
+              - column:
+                  name: category_id
+                  valueNumeric: 2
+              - column:
+                  name: storage_id
+                  valueNumeric: 2
+              - column:
+                  name: discount
+                  valueNumeric: 5.0
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: product_title
+                  value: 'чернозем'
+              - column:
+                  name: price
+                  valueNumeric: 150.0
+              - column:
+                  name: product_info
+                  value: 'удобрение'
+              - column:
+                  name: category_id
+                  valueNumeric: 3
+              - column:
+                  name: storage_id
+                  valueNumeric: 3
+              - column:
+                  name: discount
+                  valueNumeric: 15.0
   - changeSet:
       id: 14
       author: team_diploma_project
@@ -53,8 +119,13 @@ databaseChangeLog:
             sql: |
               INSERT INTO shop_users (username, email, password, phone_number, role)
               VALUES ('testuser', 'test@example.com', 'securepassword', '+1234567890', 'ROLE_USER')
-              ON CONFLICT (email) DO NOTHING; 
-
+              ON CONFLICT (email) DO NOTHING;
+        - sql:
+            dbms: postgresql
+            sql: |
+              INSERT INTO shop_users (username, email, password, phone_number, role)
+              VALUES ('userTest', 'user@user.com', 'password', '+89765432109', 'ROLE_USER')
+              ON CONFLICT (email) DO NOTHING;
   - changeSet:
       id: 15
       author: team_diploma_project
@@ -68,6 +139,24 @@ databaseChangeLog:
               - column:
                   name: product_id
                   valueNumeric: 1
+        - insert:
+            tableName: favoriter
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 2
+              - column:
+                  name: product_id
+                  valueNumeric: 2
+        - insert:
+            tableName: favoriter
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: product_id
+                  valueNumeric: 3
   - changeSet:
       id: 16
       author: team_diploma_project
@@ -78,6 +167,12 @@ databaseChangeLog:
               - column:
                   name: user_id
                   valueNumeric: 1
+        - insert:
+            tableName: cart
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 2
   - changeSet:
       id: 17
       author: team_diploma_project
@@ -94,6 +189,18 @@ databaseChangeLog:
               - column:
                   name: order_status
                   value: 'COMPLETED'
+        - insert:
+            tableName: payment
+            columns:
+              - column:
+                  name: amount
+                  valueNumeric: 2000
+              - column:
+                  name: user_id
+                  valueNumeric: 2
+              - column:
+                  name: order_status
+                  value: 'CREATED'
   - changeSet:
       id: 18
       author: team_diploma_project
@@ -107,6 +214,42 @@ databaseChangeLog:
               - column:
                   name: delivery_address
                   value: 'Main Street 10'
+              - column:
+                  name: contact_phone
+                  value: '+1234567890'
+              - column:
+                  name: delivery_method
+                  value: 'Courier'
+              - column:
+                  name: status
+                  value: 'CREATED'
+        - insert:
+            tableName: orders
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 2
+              - column:
+                  name: delivery_address
+                  value: 'Package Street 21'
+              - column:
+                  name: contact_phone
+                  value: '+89765432109'
+              - column:
+                  name: delivery_method
+                  value: 'Courier'
+              - column:
+                  name: status
+                  value: 'CREATED'
+        - insert:
+            tableName: orders
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: delivery_address
+                  value: 'File Street 89'
               - column:
                   name: contact_phone
                   value: '+1234567890'
@@ -135,6 +278,36 @@ databaseChangeLog:
               - column:
                   name: order_id
                   valueNumeric: 1
+        - insert:
+            tableName: order_items
+            columns:
+              - column:
+                  name: quantity
+                  valueNumeric: 5
+              - column:
+                  name: price_at_purchase
+                  valueNumeric: 200.0
+              - column:
+                  name: order_item_product_id
+                  valueNumeric: 2
+              - column:
+                  name: order_id
+                  valueNumeric: 2
+        - insert:
+            tableName: order_items
+            columns:
+              - column:
+                  name: quantity
+                  valueNumeric: 10
+              - column:
+                  name: price_at_purchase
+                  valueNumeric: 300.0
+              - column:
+                  name: order_item_product_id
+                  valueNumeric: 3
+              - column:
+                  name: order_id
+                  valueNumeric: 3
   - changeSet:
       id: 20
       author: team_diploma_project
@@ -145,6 +318,30 @@ databaseChangeLog:
               - column:
                   name: quantity
                   valueNumeric: 5
+              - column:
+                  name: cart_id
+                  valueNumeric: 1
+              - column:
+                  name: cart_product_id
+                  valueNumeric: 1
+        - insert:
+            tableName: cart_items
+            columns:
+              - column:
+                  name: quantity
+                  valueNumeric: 10
+              - column:
+                  name: cart_id
+                  valueNumeric: 2
+              - column:
+                  name: cart_product_id
+                  valueNumeric: 2
+        - insert:
+            tableName: cart_items
+            columns:
+              - column:
+                  name: quantity
+                  valueNumeric: 15
               - column:
                   name: cart_id
                   valueNumeric: 1
