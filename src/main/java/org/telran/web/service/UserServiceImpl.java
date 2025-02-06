@@ -48,4 +48,9 @@ public class UserServiceImpl implements UserService {
         }
         repository.deleteById(id);
     }
+
+    @Override
+    public User getByEmail(String email) {
+        return repository.getByEmail(email);
+    }
 }

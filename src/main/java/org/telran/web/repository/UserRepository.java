@@ -6,4 +6,5 @@ import org.telran.web.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    User getByEmail(String email);
 }
