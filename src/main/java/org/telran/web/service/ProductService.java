@@ -12,11 +12,7 @@ public interface ProductService {
 
     List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount);
 
-    List<Product> getAllDiscount(BigDecimal discount);
-
-    List<Product> getAllProductByPrice(BigDecimal minPrice, BigDecimal maxPrice);
-
-    List<Product> getAllProductByCategoryTitle(String categoryTitle);
+    List<Product> getAllProducts();
 
     Product getById(Long id);
 
@@ -27,7 +23,5 @@ public interface ProductService {
     void deleteProductsById(Long id);
 
     Product create(Product product);
-
-    List<Product> getProductsSortedByColumnsAscOrDesc(boolean asc, String column);
 
 }
