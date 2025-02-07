@@ -46,12 +46,22 @@ public class JwtService {
                 .compact();
     }
 
-    public String extractUserName(String jwt) {
-        return extractClaim(jwt, Claims::getSubject);
+    public String extractUserEmail(String jwt) {
+        return extractClaim(jwt, claims -> {
+            String subject = claims.getSubject();
+            String email = claims.get("email", String.class);
+
+            if (subject == null || subject.isBlank()) {
+                throw new IllegalStateException("JWT does not contain a valid subject");
+            }
+
+            return (email != null && !email.isBlank()) ? email : subject;
+        });
     }
 
+
     public boolean isTokenValid(String jwt, UserDetails userDetails) {
-        String userName = extractUserName(jwt);
+        String userName = extractUserEmail(jwt);
         return userDetails.getUsername().equals(userName) && !isExpired(jwt);
     }
 

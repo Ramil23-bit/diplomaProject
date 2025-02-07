@@ -1,30 +1,26 @@
 package org.telran.web.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-
 public class UserCreateDto {
 
-    private String username;
+    private String name;
     private String email;
+    private String phone;
     private String password;
-    private String phoneNumber;
 
-    public UserCreateDto(String username, String email, String password, String phoneNumber) {
-        this.username = username;
+
+    public UserCreateDto(String name, String email, String password, String phone) {
+        this.name = name;
         this.email = email;
         this.password = password;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -43,11 +39,11 @@ public class UserCreateDto {
         this.password = password;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
