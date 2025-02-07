@@ -1,19 +1,23 @@
 package org.telran.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.telran.web.entity.Product;
 
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class StorageCreateDto {
 
     private Long amount;
 
-    private List<Product> productList;
-
-    public StorageCreateDto(Long amount, List<Product> productList) {
+    public StorageCreateDto(Long amount) {
         this.amount = amount;
-        this.productList = productList;
     }
+
+    public StorageCreateDto() {
+        //
+    }
+
 
     public Long getAmount() {
         return amount;
@@ -23,11 +27,4 @@ public class StorageCreateDto {
         this.amount = amount;
     }
 
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
-    }
 }

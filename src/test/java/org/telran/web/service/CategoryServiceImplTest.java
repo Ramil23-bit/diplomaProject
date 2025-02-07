@@ -108,7 +108,7 @@ class CategoryServiceImplTest {
         Long productId = 100L;
 
         Category category = new Category(categoryId, "Test Category", null);
-        Storage storage = new Storage(1L, 100L, new ArrayList<>());
+        Storage storage = new Storage(1L, 100L); // Убрали `new ArrayList<>()`
         Product product = new Product(productId, "Test Product", BigDecimal.valueOf(100), "Test Description", category, storage, BigDecimal.ZERO, null, null);
 
         when(productService.getById(productId)).thenReturn(product);
@@ -125,13 +125,14 @@ class CategoryServiceImplTest {
         verify(categoryJpaRepository, times(1)).findById(categoryId);
     }
 
+
     @Test
     void editListOfProductsRemoveProductShouldRemoveProductFromCategory() {
         Long categoryId = 1L;
         Long productId = 100L;
 
         Category category = new Category(categoryId, "Test Category", null);
-        Storage storage = new Storage(1L, 100L, new ArrayList<>());
+        Storage storage = new Storage(1L, 100L); // Убрали `new ArrayList<>()`
         Product product = new Product(productId, "Test Product", BigDecimal.valueOf(100), "Test Description", category, storage, BigDecimal.ZERO, null, null);
 
         when(categoryJpaRepository.findById(categoryId)).thenReturn(Optional.of(category));
@@ -147,4 +148,5 @@ class CategoryServiceImplTest {
         verify(productService, times(1)).getById(productId);
         verify(productService, times(1)).setCategory(productId, null);
     }
+
 }

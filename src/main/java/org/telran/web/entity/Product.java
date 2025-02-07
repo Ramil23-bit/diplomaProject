@@ -1,6 +1,7 @@
 package org.telran.web.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -40,7 +41,7 @@ public class Product {
     @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
     @JoinColumn(name = "storage_id")
-    @JsonBackReference
+    @JsonIgnore
     private Storage storage;
 
     @Column(name = "discount")

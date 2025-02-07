@@ -1,5 +1,9 @@
 package org.telran.web.dto;
 
+import org.telran.web.entity.Product;
+
+import java.util.List;
+
 public class StorageResponseDto {
 
     private Long id;
@@ -9,6 +13,7 @@ public class StorageResponseDto {
         this.id = id;
         this.amount = amount;
     }
+
 
     public Long getAmount() {
         return amount;
@@ -25,4 +30,5 @@ public class StorageResponseDto {
     public void setId(Long id) {
         this.id = id;
     }
+
 }

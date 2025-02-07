@@ -55,7 +55,7 @@ class ProductServiceImplTest {
 
     }
 
-    private static final Storage storage = new Storage(1L, 1L, new ArrayList<>());
+    private static final Storage storage = new Storage(1L, 1L);
     private static final List<Product> PRODUCTS = Arrays.asList(
             new Product(
                     3L,

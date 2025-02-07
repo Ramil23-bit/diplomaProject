@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+
 
 @ExtendWith(MockitoExtension.class)
 class StorageServiceImplTest {
@@ -27,15 +29,17 @@ class StorageServiceImplTest {
     @Test
     public void testGetAllStorages() {
         List<Storage> storages = Arrays.asList(
-                new Storage(100L, 1L, null),
-                new Storage(200L, 2L, null));
+                new Storage(1L, 100L),
+                new Storage(2L, 200L));
+
         when(storageJpaRepository.findAll()).thenReturn(storages);
 
         List<Storage> result = storageService.getAllStorage();
         assertEquals(2, result.size());
-        assertEquals(1L, result.get(0).getAmount());
-        assertEquals(2L, result.get(1).getAmount());
+        assertEquals(100L, result.get(0).getAmount());
+        assertEquals(200L, result.get(1).getAmount());
     }
+
 
     @Test
     public void getByIdWhenStorageExists() {
@@ -65,16 +69,17 @@ class StorageServiceImplTest {
 
     @Test
     void createStorage() {
-        Storage newStorage = new Storage(null, 300L, new ArrayList<>());
-        Storage savedStorage = new Storage(1L, null, new ArrayList<>());
+        Storage newStorage = new Storage(null, 300L);
+        Storage savedStorage = new Storage(1L, 300L);
 
-        when(storageJpaRepository.save(newStorage)).thenReturn(savedStorage);
+        when(storageJpaRepository.save(any(Storage.class))).thenReturn(savedStorage);
 
         Storage result = storageService.createStorage(newStorage);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
-        assertEquals(null, result.getAmount());
+        assertEquals(300L, result.getAmount());
     }
+
 
 }

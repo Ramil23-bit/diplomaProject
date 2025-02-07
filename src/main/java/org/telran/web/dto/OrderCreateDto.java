@@ -17,6 +17,10 @@ public class OrderCreateDto {
         this.deliveryAddress = deliveryAddress;
         this.deliveryMethod = deliveryMethod;
     }
+    public OrderCreateDto() {
+        //
+    }
+
 
     public Long getUserId() {
         return userId;

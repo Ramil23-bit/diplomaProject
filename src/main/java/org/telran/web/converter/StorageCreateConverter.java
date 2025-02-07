@@ -11,8 +11,11 @@ public class StorageCreateConverter implements Converter<Storage, StorageCreateD
         return new StorageResponseDto(storage.getId(), storage.getAmount());
     }
 
+
     @Override
     public Storage toEntity(StorageCreateDto storageCreateDto) {
-        return new Storage(storageCreateDto.getAmount(), storageCreateDto.getProductList());
+        Storage storage = new Storage(storageCreateDto.getAmount());
+        return storage;
     }
+
 }
