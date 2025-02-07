@@ -1,15 +1,19 @@
 package org.telran.web.service;
 
 import jakarta.transaction.Transactional;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.telran.web.dto.UserCreateDto;
 import org.telran.web.entity.User;
+import org.telran.web.exception.BadArgumentsException;
+import org.telran.web.exception.UserAlreadyExistsException;
 import org.telran.web.exception.UserNotFoundException;
 import org.telran.web.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -36,7 +40,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
-        return repository.save(user);
+        if(repository.existsByEmail(user.getEmail())){
+            throw new UserAlreadyExistsException("User with email " + user.getEmail() + " already exists");
+        }
+        try {
+            return repository.save(user);
+        } catch (Exception e) {
+            throw new BadArgumentsException("Form is not completed correctly");
+        }
     }
 
     @Override
