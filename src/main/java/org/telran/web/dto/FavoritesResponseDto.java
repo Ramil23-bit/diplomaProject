@@ -6,14 +6,14 @@ import org.telran.web.entity.User;
 public class FavoritesResponseDto {
 
     private Long favoriteId;
-    private User user;
+    private UserResponseDto user;
     private Product product;
 
     public FavoritesResponseDto() {
         //
     }
 
-    public FavoritesResponseDto(Long favoriteId, User user, Product product) {
+    public FavoritesResponseDto(Long favoriteId, UserResponseDto user, Product product) {
         this.favoriteId = favoriteId;
         this.user = user;
         this.product = product;
@@ -27,11 +27,11 @@ public class FavoritesResponseDto {
         this.favoriteId = favoriteId;
     }
 
-    public User getUser() {
+    public UserResponseDto getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserResponseDto user) {
         this.user = user;
     }
 

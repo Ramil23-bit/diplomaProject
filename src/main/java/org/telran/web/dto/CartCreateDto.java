@@ -4,28 +4,27 @@ import org.telran.web.entity.User;
 
 public class CartCreateDto {
 
-    private Long id;
+    private Long productId;
+    private Long quantity;
 
-    private Long userId;
-
-    public CartCreateDto(Long id, Long userId) {
-        this.id = id;
-        this.userId = userId;
+    public CartCreateDto(Long productId, Long quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
     }
 
-    public Long getUser() {
-        return userId;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setUser(Long userId) {
-        this.userId = userId;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
-    public Long getId() {
-        return id;
+    public Long getQuantity() {
+        return quantity;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
     }
 }

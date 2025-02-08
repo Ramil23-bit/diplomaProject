@@ -22,6 +22,10 @@ public class Favorites {
 
     }
 
+    public Favorites(Product product) {
+        this.product = product;
+    }
+
     public Favorites(Long id) {
         this.id = id;
     }

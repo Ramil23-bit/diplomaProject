@@ -25,6 +25,8 @@ public class CartItems {
         this.product = product;
     }
 
+
+
     public CartItems(Cart cart, Product product) {
         this.cart = cart;
         this.product = product;

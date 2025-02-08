@@ -17,13 +17,18 @@ public class FavoritCreateConverter implements Converter<Favorites, FavoritesCre
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private UserCreateConverter userCreateConverter;
+
     @Override
     public FavoritesResponseDto toDto(Favorites favorites) {
-        return new FavoritesResponseDto(favorites.getId(), favorites.getUser(), favorites.getProduct());
+        return new FavoritesResponseDto(favorites.getId(), userCreateConverter.toDto(favorites.getUser()), favorites.getProduct());
     }
 
     @Override
     public Favorites toEntity(FavoritesCreateDto dto) {
-        return new Favorites(userService.getById(dto.getUserId()), productService.getById(dto.getProductId()));
+        Favorites favorites = new Favorites(productService.getById(dto.getProductId()));
+        favorites.setUser(userService.getById(userService.getCurrentUserId()));
+        return favorites;
     }
 }
