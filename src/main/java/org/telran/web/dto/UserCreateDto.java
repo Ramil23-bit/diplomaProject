@@ -7,11 +7,19 @@ public class UserCreateDto {
     private String phone;
     private String password;
 
+    public UserCreateDto() {
+        //
+    }
 
     public UserCreateDto(String name, String email, String password, String phone) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.phone = phone;
+    }
+
+    public UserCreateDto(String name, String phone) {
+        this.name = name;
         this.phone = phone;
     }
 

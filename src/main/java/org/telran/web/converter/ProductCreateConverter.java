@@ -4,11 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.dto.ProductResponseDto;
-import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
-import org.telran.web.entity.Storage;
-import org.telran.web.exception.CategoryNotFoundException;
-import org.telran.web.repository.CategoryJpaRepository;
 import org.telran.web.service.CategoryService;
 import org.telran.web.service.StorageService;
 
@@ -35,12 +31,10 @@ public class ProductCreateConverter implements Converter<Product, ProductCreateD
     @Override
     public Product toEntity(ProductCreateDto productCreateDto) {
         return new Product(
-                productCreateDto.getProductTitle(),
+                productCreateDto.getName(),
+                productCreateDto.getDescription(),
                 productCreateDto.getPrice(),
-                productCreateDto.getProductInfo(),
-                categoryService.getById(productCreateDto.getCategoryId()),
-                storageService.getByIdStorage(productCreateDto.getStorageId()),
-                productCreateDto.getDiscount()
+                categoryService.getByName(productCreateDto.getCategory())
         );
     }
 }

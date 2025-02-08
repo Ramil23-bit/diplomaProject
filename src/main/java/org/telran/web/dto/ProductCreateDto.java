@@ -7,14 +7,16 @@ import java.time.LocalDateTime;
 
 public class ProductCreateDto {
 
-    private String productTitle;
+    private String name;
     private BigDecimal price;
-    private String productInfo;
+    private String description;
     private Long categoryId;
+    private String category;
     private Long storageId;
     private BigDecimal discount;
     private Storage storageList;
     private LocalDateTime updateAt;
+    private String image;
 
     public Storage getStorageList() {
         return storageList;
@@ -28,11 +30,11 @@ public class ProductCreateDto {
         //
     }
 
-    public ProductCreateDto(String productTitle, BigDecimal price, String productInfo, Long categoryId,
+    public ProductCreateDto(String name, BigDecimal price, String description, Long categoryId,
                             Long storageId, BigDecimal discount, Storage storageList) {
-        this.productTitle = productTitle;
+        this.name = name;
         this.price = price;
-        this.productInfo = productInfo;
+        this.description = description;
         this.categoryId = categoryId;
         this.storageId = storageId;
         this.discount = discount;
@@ -40,13 +42,36 @@ public class ProductCreateDto {
     }
 
 
-
-    public String getProductTitle() {
-        return productTitle;
+    public ProductCreateDto(String name, String description, BigDecimal price, String category, String image) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.image = image;
     }
 
-    public void setProductTitle(String productTitle) {
-        this.productTitle = productTitle;
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public BigDecimal getPrice() {
@@ -57,12 +82,12 @@ public class ProductCreateDto {
         this.price = price;
     }
 
-    public String getProductInfo() {
-        return productInfo;
+    public String getDescription() {
+        return description;
     }
 
-    public void setProductInfo(String productInfo) {
-        this.productInfo = productInfo;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Long getCategoryId() {

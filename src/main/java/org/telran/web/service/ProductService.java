@@ -20,6 +20,8 @@ public interface ProductService {
 
     Product editProducts(Long id, ProductCreateDto product);
 
+    Product getByName(String name);
+
     void deleteProductsById(Long id);
 
     Product create(Product product);

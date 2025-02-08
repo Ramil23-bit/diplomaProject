@@ -3,6 +3,8 @@ package org.telran.web.service;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.telran.web.dto.UserCreateDto;
@@ -51,14 +53,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long id, UserCreateDto dto) {
-        User existingUser = repository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
+    public User updateUser(Long userId, UserCreateDto dto) {
+        User existingUser = repository.getById(userId);
         existingUser.setUsername(dto.getName());
-        existingUser.setEmail(dto.getEmail());
         existingUser.setPhoneNumber(dto.getPhone());
-        existingUser.setPassword(dto.getPassword());
-        return repository.save(existingUser);
+        try {
+            return repository.save(existingUser);
+        } catch (Exception e) {
+            throw new BadArgumentsException("Form is not completed correctly");
+        }
     }
 
     @Override
@@ -75,6 +78,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByEmail(String email) {
         return repository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
+    }
+
+    @Override
+    public String getCurrentUserRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            return authentication.getAuthorities().toString();
+        }
+        return null;
+    }
+
+    @Override
+    public Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            String name = authentication.getName();
+            User userEntity = getByEmail(name);
+            return userEntity.getId();
+        }
+        return null;
+    }
+
+    @Override
+    public String getCurrentEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            return authentication.getName();
+        }
+        return null;
     }
 }

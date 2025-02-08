@@ -33,14 +33,12 @@ public class User {
     private String password;
 
     @NotBlank
-    //@Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "The phone number must be valid")
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_USER;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Favorites> favorites = new ArrayList<>();
 
     public User() {
