@@ -3,6 +3,7 @@ package org.telran.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -14,16 +15,21 @@ import org.telran.web.converter.Converter;
 import org.telran.web.dto.CartCreateDto;
 import org.telran.web.dto.CartResponseDto;
 import org.telran.web.entity.Cart;
+import org.telran.web.security.AuthenticationService;
 import org.telran.web.service.CartService;
 
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(CartController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class CartControllerTest {
     @MockBean
     private CartService cartService;
     @MockBean
     private Converter<Cart, CartCreateDto, CartResponseDto> converter;
+    @MockBean
+    private AuthenticationService authenticationService;
+
     @Autowired
     private MockMvc mockMvc;
 

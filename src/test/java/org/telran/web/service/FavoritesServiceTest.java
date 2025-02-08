@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.telran.web.entity.*;
 import org.telran.web.repository.FavoritesRepository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +22,9 @@ class FavoritesServiceTest {
     @Mock
     private FavoritesRepository favoritesRepository;
 
+    @Mock
+    private UserService userService;
+
     @InjectMocks
     private FavoritesServiceImpl favoritesService;
 
@@ -30,6 +33,8 @@ class FavoritesServiceTest {
         Favorites favoritesOne = createFavoritesList().get(0);
         Favorites favoritesTwo = createFavoritesList().get(1);
         List<Favorites> favoritesListFromMock = Arrays.asList(favoritesOne, favoritesTwo);
+
+        when(userService.getCurrentUserId()).thenReturn(1L);
 
         when(favoritesRepository.findAll()).thenReturn(favoritesListFromMock);
         List<Favorites> favoritesList = favoritesService.getAll();

@@ -8,7 +8,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
-import org.telran.web.dto.CategoryResponseDto;
 import org.telran.web.dto.UserCreateDto;
 import org.telran.web.dto.UserResponseDto;
 import org.telran.web.entity.User;
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     @Autowired
-    private UserService service;
+    private UserService userService;
 
     @Autowired
     private Converter<User, UserCreateDto, UserResponseDto> converter;
@@ -44,7 +43,7 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponseDto> getAll() {
-        return service.getAll().stream()
+        return userService.getAll().stream()
                 .map(user -> converter.toDto(user))
                 .collect(Collectors.toList());
     }
@@ -52,28 +51,39 @@ public class UserController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponseDto get(@PathVariable("id") Long id) {
-        return converter.toDto(service.getById(id));
+        return converter.toDto(userService.getById(id));
     }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserCreateDto dto) {
         User user = converter.toEntity(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User savedUser = service.create(user);
+
+        User savedUser = userService.create(user);
         UserResponseDto responseDto = converter.toDto(savedUser);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> update(@PathVariable Long id, @RequestBody @Valid UserCreateDto dto) {
-        User updatedUser = service.updateUser(id, dto);
+        User updatedUser = userService.updateUser(id, dto);
         UserResponseDto responseDto = converter.toDto(updatedUser);
         return ResponseEntity.ok(responseDto);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public void deleteUser(@PathVariable(name = "id") Long id){
-        service.deleteUserById(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable(name = "id") Long id) {
+        userService.deleteUserById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    public UserService getUserService() {
+        return userService;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 }

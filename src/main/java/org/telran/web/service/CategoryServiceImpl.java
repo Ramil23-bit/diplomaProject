@@ -7,12 +7,9 @@ import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
 import org.telran.web.exception.BadArgumentsException;
 import org.telran.web.exception.CategoryNotFoundException;
-import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.CategoryJpaRepository;
-import org.telran.web.repository.ProductJpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -47,10 +44,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void editTitle(Long id, String title) {
         try {
-            if (0 == categoryJpaRepository.updateTitle(id, title)) {
+            if (categoryJpaRepository.updateTitle(id, title) == 0) {
                 throw new CategoryNotFoundException("Category with id " + id + " not found");
             }
-        } catch (Exception exception) {
+        } catch (IllegalArgumentException ex) {
             throw new BadArgumentsException("Entered data is not corrected");
         }
     }
