@@ -99,7 +99,7 @@ class CategoryServiceImplTest {
         String newTitle = "Updated Title";
 
         when(categoryJpaRepository.updateTitle(categoryId, newTitle)).thenReturn(0);
-        assertThrows(CategoryNotFoundException.class, () -> categoryService.editTitle(categoryId, newTitle)); // ✅ Исправлено
+        assertThrows(CategoryNotFoundException.class, () -> categoryService.editTitle(categoryId, newTitle));
         verify(categoryJpaRepository, times(1)).updateTitle(categoryId, newTitle);
     }
 
