@@ -2,7 +2,6 @@ package org.telran.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,13 +14,10 @@ import org.telran.web.converter.Converter;
 import org.telran.web.dto.OrderItemsCreateDto;
 import org.telran.web.dto.OrderItemsResponseDto;
 import org.telran.web.entity.OrderItems;
-import org.telran.web.entity.Payment;
-import org.telran.web.enums.OrderStatus;
 import org.telran.web.exception.BadArgumentsException;
 import org.telran.web.service.OrderItemsService;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
