@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
+import org.telran.web.exception.BadArgumentsException;
 import org.telran.web.exception.CategoryNotFoundException;
 import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.CategoryJpaRepository;
@@ -24,7 +25,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category create(Category category) {
-        return categoryJpaRepository.save(category);
+        try {
+            return categoryJpaRepository.save(category);
+        } catch (Exception exception) {
+            throw new BadArgumentsException("Entered data is not corrected");
+        }
     }
 
     @Override
@@ -41,8 +46,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void editTitle(Long id, String title) {
-        if (0 == categoryJpaRepository.updateTitle(id, title)) {
-            throw new CategoryNotFoundException("Category with id " + id + " not found");
+        try {
+            if (0 == categoryJpaRepository.updateTitle(id, title)) {
+                throw new CategoryNotFoundException("Category with id " + id + " not found");
+            }
+        } catch (Exception exception) {
+            throw new BadArgumentsException("Entered data is not corrected");
         }
     }
 
@@ -80,6 +89,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void delete(Long id) {
-        categoryJpaRepository.deleteById(id);
+        try {
+            categoryJpaRepository.deleteById(id);
+        } catch (Exception exception) {
+            throw new CategoryNotFoundException("Category by " + id + " not found");
+        }
     }
 }
