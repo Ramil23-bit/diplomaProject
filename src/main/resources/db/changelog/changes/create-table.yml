@@ -168,15 +168,25 @@ databaseChangeLog:
                   type: BIGINT
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_favoriter_user
-                    references: shop_users(id)
               - column:
                   name: product_id
-                  type: bigint
+                  type: BIGINT
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_favoriter_product
-                    references: products(id)
+        - addForeignKeyConstraint:
+            baseTableName: favoriter
+            baseColumnNames: user_id
+            constraintName: fk_favoriter_user
+            referencedTableName: shop_users
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: favoriter
+            baseColumnNames: product_id
+            constraintName: fk_favoriter_product
+            referencedTableName: products
+            referencedColumnNames: id
+
   - changeSet:
       id: 6
       author: team_diploma_project
@@ -206,6 +216,7 @@ databaseChangeLog:
             constraintName: fk_cart_user
             referencedTableName: shop_users
             referencedColumnNames: id
+            onDelete: CASCADE
   - changeSet:
       id: 7
       author: team_diploma_project
@@ -246,6 +257,7 @@ databaseChangeLog:
             constraintName: fk_payment_user
             referencedTableName: shop_users
             referencedColumnNames: id
+            onDelete: CASCADE
   - changeSet:
       id: 8
       author: team_diploma_project
@@ -300,6 +312,7 @@ databaseChangeLog:
             constraintName: fk_orders_user
             referencedTableName: shop_users
             referencedColumnNames: id
+            onDelete: CASCADE
   - changeSet:
       id: 9
       author: team_diploma_project
@@ -377,24 +390,28 @@ databaseChangeLog:
             constraintName: FK_CART_ITEMS_CART_ID
             referencedTableName: cart
             referencedColumnNames: id
+            onDelete: CASCADE
         - addForeignKeyConstraint:
             baseTableName: cart_items
             baseColumnNames: cart_product_id
             constraintName: FK_CART_ITEMS_CART_PRODUCT_ID
             referencedTableName: products
             referencedColumnNames: id
+            onDelete: CASCADE
         - addForeignKeyConstraint:
             baseTableName: order_items
             baseColumnNames: order_item_product_id
             constraintName: FK_ORDER_ITEMS_PRODUCT
             referencedTableName: products
             referencedColumnNames: id
+            onDelete: CASCADE
         - addForeignKeyConstraint:
             baseTableName: order_items
             baseColumnNames: order_id
             constraintName: FK_ORDER_ITEMS_ORDER
             referencedTableName: orders
             referencedColumnNames: id
+            onDelete: CASCADE
 
 
 

@@ -10,11 +10,11 @@ public class UserCreateConverter implements Converter<User, UserCreateDto, UserR
 
     @Override
     public UserResponseDto toDto(User user) {
-        return new UserResponseDto(user.getId(), user.getUsername(), user.getPassword(), user.getEmail());
+        return new UserResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getPhoneNumber());
     }
 
     @Override
     public User toEntity(UserCreateDto userCreateDto) {
-        return new User(userCreateDto.getUsername(), userCreateDto.getEmail(), userCreateDto.getPassword(), userCreateDto.getPhoneNumber());
+        return new User(userCreateDto.getName(), userCreateDto.getEmail(), userCreateDto.getPassword(), userCreateDto.getPhone());
     }
 }

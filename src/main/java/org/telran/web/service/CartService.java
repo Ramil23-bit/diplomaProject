@@ -5,6 +5,6 @@ import org.telran.web.entity.Cart;
 public interface CartService {
 
     Cart createCart(Cart cart);
-
+    void deleteByUser(Long userId);
     Cart getByIdCart(Long id);
 }

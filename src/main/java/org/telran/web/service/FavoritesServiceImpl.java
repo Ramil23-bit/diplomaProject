@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.web.entity.Favorites;
+import org.telran.web.entity.User;
 import org.telran.web.repository.FavoritesRepository;
 
 import java.util.List;
@@ -27,5 +28,10 @@ public class FavoritesServiceImpl implements FavoritesService {
         List<Favorites> all = repository.findAll();
         log.info("All{}", all);
         return all;
+    }
+
+    @Override
+    public void deleteByUser(Long user) {
+        repository.deleteByUser(user);
     }
 }

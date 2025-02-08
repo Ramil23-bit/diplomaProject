@@ -22,4 +22,9 @@ public class CartServiceImpl implements CartService{
         return cartJpaRepository.findById(id)
                 .orElseThrow(() -> new CartNotFoundException("Cart by " + id + " not Found"));
     }
+
+    @Override
+    public void deleteByUser(Long userId) {
+        cartJpaRepository.deleteByUser(userId);
+    }
 }
