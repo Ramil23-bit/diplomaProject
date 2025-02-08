@@ -12,14 +12,13 @@ import org.springframework.stereotype.Service;
 import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
-import org.telran.web.entity.Storage;
-import org.telran.web.exception.BadArgumentsException;
 import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.ProductJpaRepository;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -81,12 +80,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product create(Product product) {
-        product.setStorage(new Storage());
-        try {
-            return productJpaRepository.save(product);
-        } catch (Exception e) {
-            throw new BadArgumentsException("Form is not completed correctly");
-        }
+        return productJpaRepository.save(product);
     }
 
     @Override
@@ -108,33 +102,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getByName(String name) {
-        return productJpaRepository.findByName(name)
-                .orElseThrow(() -> new ProductNotFoundException("Product with name " + name + " not found"));
-    }
-
-    @Override
     public Product editProducts(Long id, ProductCreateDto productDto) {
         Product actualProduct = getById(id);
-
         actualProduct.setProductTitle(productDto.getName());
         actualProduct.setProductInfo(productDto.getDescription());
         actualProduct.setPrice(productDto.getPrice());
-        actualProduct.setCategory(categoryService.getByName(productDto.getCategory()));
-//        actualProduct.setImage(productDto.getImage());
+        actualProduct.getCategory().setCategoryTitle(productDto.getCategory());
+        actualProduct.setDiscount(productDto.getDiscount());
+        actualProduct.setUpdatedAt(productDto.getUpdateAt());
 
-        try {
-            return productJpaRepository.save(actualProduct);
-        } catch (Exception e) {
-            throw new BadArgumentsException("Form is not completed correctly");
-        }
+        return productJpaRepository.save(actualProduct);
 
+    }
+
+    @Override
+    public Optional<Product> getByName(String name) {
+        return productJpaRepository.findByName(name);
     }
 
     @Override
     public void deleteProductsById(Long id) {
-        Product product = getById(id);
-        productJpaRepository.deleteById(product.getId());
+        productJpaRepository.deleteById(id);
     }
 
 }

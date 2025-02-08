@@ -1,12 +1,12 @@
 package org.telran.web.service;
 
-import org.springframework.data.domain.Sort;
 import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductService {
 
@@ -20,7 +20,7 @@ public interface ProductService {
 
     Product editProducts(Long id, ProductCreateDto product);
 
-    Product getByName(String name);
+    Optional<Product> getByName(String name);
 
     void deleteProductsById(Long id);
 

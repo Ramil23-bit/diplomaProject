@@ -71,6 +71,11 @@ public class UserController {
         return ResponseEntity.ok(responseDto);
     }
 
+    @PutMapping("/role/{id}")
+    public void updateRole(@PathVariable(name = "id") Long id){
+        service.updateUserRole(id);
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public void deleteUser(@PathVariable(name = "id") Long id){

@@ -118,7 +118,7 @@ databaseChangeLog:
             dbms: postgresql
             sql: |
               INSERT INTO shop_users (username, email, password, phone_number, role)
-              VALUES ('testuser', 'test@example.com', 'securepassword', '+1234567890', 'ROLE_USER')
+              VALUES ('admin', 'admin@example.com', 'securepassword', '+1234567890', 'ROLE_ADMIN')
               ON CONFLICT (email) DO NOTHING;
         - sql:
             dbms: postgresql

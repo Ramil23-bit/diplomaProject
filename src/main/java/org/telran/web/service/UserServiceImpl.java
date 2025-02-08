@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.telran.web.dto.UserCreateDto;
 import org.telran.web.entity.User;
+import org.telran.web.enums.Role;
 import org.telran.web.exception.BadArgumentsException;
 import org.telran.web.exception.UserAlreadyExistsException;
 import org.telran.web.exception.UserNotFoundException;
@@ -62,6 +63,16 @@ public class UserServiceImpl implements UserService {
             return repository.save(existingUser);
         } catch (Exception e) {
             throw new BadArgumentsException("Form is not completed correctly");
+        }
+    }
+
+    @Override
+    public void updateUserRole(Long id) {
+        User currentUser = getById(getCurrentUserId());
+        if(currentUser.getRole().equals(Role.ROLE_ADMIN)){
+            User updateRoleUser = getById(id);
+            updateRoleUser.setRole(Role.ROLE_ADMIN);
+            repository.save(updateRoleUser);
         }
     }
 

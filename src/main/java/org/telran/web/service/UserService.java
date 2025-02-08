@@ -15,6 +15,8 @@ public interface UserService {
 
     User updateUser(Long userId, UserCreateDto dto);
 
+    void updateUserRole(Long id);
+
     void deleteUserById(Long id);
 
     String getCurrentEmail();
