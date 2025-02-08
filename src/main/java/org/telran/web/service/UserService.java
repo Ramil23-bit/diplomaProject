@@ -13,7 +13,11 @@ public interface UserService {
     User create(User user);
     User getByEmail(String email);
 
-    User updateUser(Long id, @Valid UserCreateDto dto);
+    User updateUser(Long userId, UserCreateDto dto);
 
     void deleteUserById(Long id);
+
+    String getCurrentEmail();
+    Long getCurrentUserId();
+    String getCurrentUserRole();
 }

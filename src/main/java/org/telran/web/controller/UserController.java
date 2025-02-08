@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
@@ -41,6 +42,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponseDto> getAll() {
         return service.getAll().stream()
                 .map(user -> converter.toDto(user))
@@ -48,6 +50,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponseDto get(@PathVariable("id") Long id) {
         return converter.toDto(service.getById(id));
     }
@@ -58,7 +61,7 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = service.create(user);
         UserResponseDto responseDto = converter.toDto(savedUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto); // 201 Created
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @PutMapping("/{id}")
@@ -69,6 +72,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public void deleteUser(@PathVariable(name = "id") Long id){
         service.deleteUserById(id);
     }

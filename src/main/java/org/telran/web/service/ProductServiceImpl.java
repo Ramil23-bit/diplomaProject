@@ -7,11 +7,13 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
+import org.telran.web.entity.Storage;
+import org.telran.web.exception.BadArgumentsException;
 import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.ProductJpaRepository;
 
@@ -28,6 +30,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductJpaRepository productJpaRepository;
+
+    @Lazy
+    @Autowired
+    private CategoryService categoryService;
 
     private static final List<String> validColumnName = Arrays.asList("price", "createdAt", "productTitle");
     @Override
@@ -75,7 +81,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product create(Product product) {
-        return productJpaRepository.save(product);
+        product.setStorage(new Storage());
+        try {
+            return productJpaRepository.save(product);
+        } catch (Exception e) {
+            throw new BadArgumentsException("Form is not completed correctly");
+        }
     }
 
     @Override
@@ -97,20 +108,33 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product getByName(String name) {
+        return productJpaRepository.findByName(name)
+                .orElseThrow(() -> new ProductNotFoundException("Product with name " + name + " not found"));
+    }
+
+    @Override
     public Product editProducts(Long id, ProductCreateDto productDto) {
         Product actualProduct = getById(id);
-        actualProduct.setPrice(productDto.getPrice());
-        actualProduct.setProductInfo(productDto.getProductInfo());
-        actualProduct.setDiscount(productDto.getDiscount());
-        actualProduct.setUpdatedAt(productDto.getUpdateAt());
 
-        return productJpaRepository.save(actualProduct);
+        actualProduct.setProductTitle(productDto.getName());
+        actualProduct.setProductInfo(productDto.getDescription());
+        actualProduct.setPrice(productDto.getPrice());
+        actualProduct.setCategory(categoryService.getByName(productDto.getCategory()));
+//        actualProduct.setImage(productDto.getImage());
+
+        try {
+            return productJpaRepository.save(actualProduct);
+        } catch (Exception e) {
+            throw new BadArgumentsException("Form is not completed correctly");
+        }
 
     }
 
     @Override
     public void deleteProductsById(Long id) {
-        productJpaRepository.deleteById(id);
+        Product product = getById(id);
+        productJpaRepository.deleteById(product.getId());
     }
 
 }

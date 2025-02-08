@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
 import org.telran.web.exception.CategoryNotFoundException;
+import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.CategoryJpaRepository;
 import org.telran.web.repository.ProductJpaRepository;
 
@@ -43,6 +44,12 @@ public class CategoryServiceImpl implements CategoryService {
         if (0 == categoryJpaRepository.updateTitle(id, title)) {
             throw new CategoryNotFoundException("Category with id " + id + " not found");
         }
+    }
+
+    @Override
+    public Category getByName(String name) {
+        return categoryJpaRepository.findByCategoryTitle(name)
+                .orElseThrow(() -> new CategoryNotFoundException("Product with name " + name + " not found"));
     }
 
     @Override

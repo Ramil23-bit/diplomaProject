@@ -11,6 +11,8 @@ public interface CategoryService {
 
     List<Category> getAll();
 
+    Category getByName(String name);
+
     Category getById(Long id);
 
     void editTitle(Long id, String title);

@@ -39,7 +39,7 @@ public class Product {
     private Category category;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @NotNull
+    //@NotNull
     @JoinColumn(name = "storage_id")
     @JsonIgnore
     private Storage storage;
@@ -55,12 +55,18 @@ public class Product {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany
-    //@JoinColumn(name = "product_id")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Favorites> favorites = new ArrayList<>();
 
     public Product() {
         //
+    }
+
+    public Product(String productTitle, String productInfo, BigDecimal price, Category category) {
+        this.productTitle = productTitle;
+        this.productInfo = productInfo;
+        this.price = price;
+        this.category = category;
     }
 
     public Product(Long id, String productTitle, BigDecimal price, String productInfo, Category category, Storage storage, BigDecimal discount, LocalDateTime createdAt, LocalDateTime updatedAt) {

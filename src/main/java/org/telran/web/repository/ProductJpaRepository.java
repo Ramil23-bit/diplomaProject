@@ -8,6 +8,7 @@ import org.telran.web.entity.Product;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductJpaRepository extends JpaRepository<Product, Long>{
@@ -20,4 +21,6 @@ public interface ProductJpaRepository extends JpaRepository<Product, Long>{
     @Query("SELECT p FROM Product p JOIN p.category c WHERE c.categoryTitle =:categoryTitle")
     List<Product> findAllProductByCategoryTitle(@Param("categoryTitle") String categoryTitle);
 
+    @Query("SELECT p FROM Product p WHERE p.productTitle = :name")
+    Optional<Product> findByName(String name);
 }
