@@ -2,12 +2,14 @@ package org.telran.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telran.web.entity.OrderItems;
 import org.telran.web.entity.Orders;
 import org.telran.web.exception.OrderNotFoundException;
 import org.telran.web.exception.UserNotFoundException;
 import org.telran.web.repository.OrdersRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrdersServiceImpl implements OrdersService {

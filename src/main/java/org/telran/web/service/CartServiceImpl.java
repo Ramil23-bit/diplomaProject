@@ -1,16 +1,25 @@
 package org.telran.web.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.telran.web.entity.Cart;
+import org.telran.web.entity.User;
 import org.telran.web.exception.CartNotFoundException;
 import org.telran.web.repository.CartJpaRepository;
+
+import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService{
 
     @Autowired
     private CartJpaRepository cartJpaRepository;
+
+    @Lazy
+    @Autowired
+    private UserService userService;
 
     @Override
     public Cart createCart(Cart cart) {
@@ -26,5 +35,17 @@ public class CartServiceImpl implements CartService{
     @Override
     public void deleteByUser(Long userId) {
         cartJpaRepository.deleteByUser(userId);
+    }
+
+    @Transactional
+    @Override
+    public List<Cart> getAllCart() {
+        return cartJpaRepository.findAll();
+    }
+
+    @Override
+    public Cart findByCurrentUser() {
+        return cartJpaRepository.findByUserId(userService.getCurrentUserId())
+                .orElseThrow(() -> new CartNotFoundException("Cart not Found"));
     }
 }

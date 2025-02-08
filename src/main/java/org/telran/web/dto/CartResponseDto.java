@@ -6,12 +6,12 @@ public class CartResponseDto {
 
     private Long id;
 
-    private User user;
+    private UserResponseDto user;
 
     public CartResponseDto() {
     }
 
-    public CartResponseDto(Long id, User user) {
+    public CartResponseDto(Long id, UserResponseDto user) {
         this.id = id;
         this.user = user;
     }
@@ -24,11 +24,11 @@ public class CartResponseDto {
         this.id = id;
     }
 
-    public User getUser() {
+    public UserResponseDto getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserResponseDto user) {
         this.user = user;
     }
 }

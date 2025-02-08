@@ -12,7 +12,7 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @NotNull
     @JoinColumn(name = "user_id")
     private User user;
@@ -24,6 +24,10 @@ public class Cart {
         this.id = id;
         this.user = user;
         this.cartItemsList = cartItemsList;
+    }
+
+    public Cart(User user) {
+        this.user = user;
     }
 
     public Cart(Long id, User user) {

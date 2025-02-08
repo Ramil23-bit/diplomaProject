@@ -1,19 +1,17 @@
 package org.telran.web.dto;
 
-import org.telran.web.entity.OrderItems;
-
 import java.util.List;
 
 public class OrderCreateDto {
 
     private Long userId;
-    private List<OrderItemsCreateDto> orderItems;
+    private List<OrderItemsCreateDto> items;
     private String deliveryAddress;
     private String deliveryMethod;
 
-    public OrderCreateDto(Long userId, List<OrderItemsCreateDto> orderItems, String deliveryAddress, String deliveryMethod) {
+    public OrderCreateDto(Long userId, List<OrderItemsCreateDto> items, String deliveryAddress, String deliveryMethod) {
         this.userId = userId;
-        this.orderItems = orderItems;
+        this.items = items;
         this.deliveryAddress = deliveryAddress;
         this.deliveryMethod = deliveryMethod;
     }
@@ -21,6 +19,11 @@ public class OrderCreateDto {
         //
     }
 
+    public OrderCreateDto(List<OrderItemsCreateDto> items, String deliveryAddress, String deliveryMethod) {
+        this.items = items;
+        this.deliveryAddress = deliveryAddress;
+        this.deliveryMethod = deliveryMethod;
+    }
 
     public Long getUserId() {
         return userId;
@@ -30,12 +33,12 @@ public class OrderCreateDto {
         this.userId = userId;
     }
 
-    public List<OrderItemsCreateDto> getOrderItems() {
-        return orderItems;
+    public List<OrderItemsCreateDto> getItems() {
+        return items;
     }
 
-    public void setOrderItems(List<OrderItemsCreateDto> orderItems) {
-        this.orderItems = orderItems;
+    public void setItems(List<OrderItemsCreateDto> items) {
+        this.items = items;
     }
 
     public String getDeliveryAddress() {

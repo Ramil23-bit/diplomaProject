@@ -10,7 +10,7 @@ import java.util.List;
 public class OrderResponseDto {
 
     private Long id;
-    private User user;
+    private UserResponseDto user;
     private List<OrderItems> orderItems;
     private LocalDateTime createdAt;
     private String deliveryAddress;
@@ -20,7 +20,7 @@ public class OrderResponseDto {
     private LocalDateTime updatedAt;
 
     public OrderResponseDto(Long id,
-                            User user,
+                            UserResponseDto user,
                             List<OrderItems> orderItems,
                             LocalDateTime createdAt,
                             String deliveryAddress,
@@ -47,11 +47,11 @@ public class OrderResponseDto {
         this.id = id;
     }
 
-    public User getUser() {
+    public UserResponseDto getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserResponseDto user) {
         this.user = user;
     }
 
