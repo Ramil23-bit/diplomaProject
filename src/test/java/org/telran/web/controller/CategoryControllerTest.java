@@ -3,6 +3,7 @@ package org.telran.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import org.telran.web.dto.CategoryCreateDto;
 import org.telran.web.dto.CategoryResponseDto;
 import org.telran.web.entity.Category;
 import org.telran.web.exception.BadArgumentsException;
+import org.telran.web.security.JwtService;
 import org.telran.web.service.CategoryService;
 
 import java.util.Collections;
@@ -23,12 +25,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(CategoryController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class CategoryControllerTest {
     @MockBean
     private CategoryService categoryService;
 
     @MockBean
     private Converter<Category, CategoryCreateDto, CategoryResponseDto> converter;
+
+    @MockBean
+    private JwtService jwtService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,7 +55,8 @@ public class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isCreated());
+
     }
 
 
