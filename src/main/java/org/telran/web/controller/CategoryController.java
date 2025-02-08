@@ -1,6 +1,7 @@
 package org.telran.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class CategoryController {
     private Converter<Category, CategoryCreateDto, CategoryResponseDto> categoryConverter;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public CategoryResponseDto create(@RequestBody CategoryCreateDto categoryDto) {
         return categoryConverter.toDto(categoryService.create(categoryConverter.toEntity(categoryDto)));
     }
