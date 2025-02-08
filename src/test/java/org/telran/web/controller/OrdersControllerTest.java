@@ -91,7 +91,6 @@ class OrdersControllerTest {
                 OrderStatus.CREATED, LocalDateTime.now()
         );
 
-        // Настраиваем моки
         when(converter.toEntity(Mockito.any(OrderCreateDto.class))).thenReturn(mockOrder);
         when(service.create(Mockito.any(Orders.class))).thenReturn(mockOrder);
         when(converter.toDto(Mockito.any(Orders.class))).thenReturn(mockResponse);
@@ -186,6 +185,5 @@ class OrdersControllerTest {
                 .andExpect(jsonPath("$.user.id", is(1)))
                 .andExpect(jsonPath("$.user.username", is("testUser")));
     }
-
 }
 
