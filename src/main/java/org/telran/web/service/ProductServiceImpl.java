@@ -112,8 +112,6 @@ public class ProductServiceImpl implements ProductService {
         actualProduct.setCategory(categoryService.getByName(productDto.getCategory()));
         actualProduct.setDiscount(productDto.getDiscount());
         actualProduct.setUpdatedAt(productDto.getUpdateAt());
-        actualProduct.getCategory().setCategoryTitle(productDto.getCategory());
-        actualProduct.setDiscount(productDto.getDiscount());
         actualProduct.setUpdatedAt(productDto.getUpdateAt());
 
         try {
@@ -122,9 +120,6 @@ public class ProductServiceImpl implements ProductService {
             throw new BadArgumentsException("Form is not completed correctly");
         }
     }
-        return productJpaRepository.save(actualProduct);
-
-
 
     @Override
     public Optional<Product> getByName(String name) {
@@ -136,5 +131,4 @@ public class ProductServiceImpl implements ProductService {
         Product product = getById(id);
         productJpaRepository.deleteById(product.getId());
     }
-
 }

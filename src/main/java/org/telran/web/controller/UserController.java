@@ -74,7 +74,7 @@ public class UserController {
 
     @PutMapping("/role/{id}")
     public void updateRole(@PathVariable(name = "id") Long id){
-        service.updateUserRole(id);
+        userService.updateUserRole(id);
     }
 
     @DeleteMapping("/{id}")

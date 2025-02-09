@@ -13,9 +13,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.telran.web.service.SchedulerService;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.util.logging.Logger;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -26,6 +28,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     @Lazy
     private UserDetailsService userDetailService;
+
+    private static final Logger logger = Logger.getLogger(SchedulerService.class.getName());
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -55,8 +60,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.getWriter().write("Access Denied in JWT Filter.");
             return;
         }
-
-
 
         filterChain.doFilter(request, response);
     }
