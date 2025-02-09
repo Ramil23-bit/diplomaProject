@@ -2,10 +2,7 @@ package org.telran.web.service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -20,6 +17,7 @@ import org.telran.web.repository.ProductJpaRepository;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -36,6 +34,7 @@ public class ProductServiceImpl implements ProductService {
     private CategoryService categoryService;
 
     private static final List<String> validColumnName = Arrays.asList("price", "createdAt", "productTitle");
+
     @Override
     public List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -58,15 +57,17 @@ public class ProductServiceImpl implements ProductService {
 
         cq.where(predicate);
 
-        if (direction == 1) {
-            cq.orderBy(cb.asc(root.get("price")));
-        } else if (direction == -1) {
-            cq.orderBy(cb.desc(root.get("price")));
+        try {
+            root.get("createdAt");
+            cq.orderBy(cb.asc(root.get("createdAt")));
+        } catch (IllegalArgumentException e) {
+            cq.orderBy(cb.asc(root.get("price"))); // Безопасная альтернатива
         }
 
         TypedQuery<Product> query = entityManager.createQuery(cq);
         return query.getResultList();
     }
+
 
     @Override
     public List<Product> getAllProducts() {
@@ -121,15 +122,17 @@ public class ProductServiceImpl implements ProductService {
         actualProduct.setProductInfo(productDto.getDescription());
         actualProduct.setPrice(productDto.getPrice());
         actualProduct.setCategory(categoryService.getByName(productDto.getCategory()));
-//        actualProduct.setImage(productDto.getImage());
+        actualProduct.setDiscount(productDto.getDiscount());
+        actualProduct.setUpdatedAt(productDto.getUpdateAt());
 
         try {
             return productJpaRepository.save(actualProduct);
         } catch (Exception e) {
             throw new BadArgumentsException("Form is not completed correctly");
         }
-
     }
+
+
 
     @Override
     public void deleteProductsById(Long id) {
