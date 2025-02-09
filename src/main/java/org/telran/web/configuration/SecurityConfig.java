@@ -3,6 +3,7 @@ package org.telran.web.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -25,6 +26,7 @@ import org.telran.web.security.JwtAuthenticationFilter;
 public class SecurityConfig {
 
     @Autowired
+    @Lazy
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired

@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
+import org.telran.web.exception.BadArgumentsException;
 import org.telran.web.exception.CategoryNotFoundException;
 import org.telran.web.repository.CategoryJpaRepository;
 import org.telran.web.entity.Storage;
@@ -101,6 +102,8 @@ class CategoryServiceImplTest {
         assertThrows(CategoryNotFoundException.class, () -> categoryService.editTitle(categoryId, newTitle));
         verify(categoryJpaRepository, times(1)).updateTitle(categoryId, newTitle);
     }
+
+
 
     @Test
     void editListOfProductsAddProductShouldAddProductToCategory() {

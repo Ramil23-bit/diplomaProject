@@ -2,6 +2,7 @@ package org.telran.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
@@ -26,9 +27,13 @@ public class CartController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CartResponseDto create(@RequestBody CartCreateDto cartCreateDto){
-        return cartConverter.toDto(cartService.createCart(cartConverter.toEntity(cartCreateDto)));
+    public ResponseEntity<CartResponseDto> create(@RequestBody CartCreateDto cartCreateDto) {
+        CartResponseDto response = cartConverter.toDto(cartService.createCart(cartConverter.toEntity(cartCreateDto)));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .body(response);
     }
+
 
     @GetMapping("/current")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")

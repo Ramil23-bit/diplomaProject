@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.telran.web.dto.PaymentResponseDto;
 import org.telran.web.entity.Payment;
 import org.telran.web.enums.OrderStatus;
 import org.telran.web.exception.BadArgumentsException;
+import org.telran.web.security.JwtService;
 import org.telran.web.service.PaymentService;
 
 import java.time.LocalDateTime;
@@ -25,11 +27,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(PaymentController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class PaymentControllerTest {
     @MockBean
     private PaymentService paymentService;
     @MockBean
     private Converter<Payment, PaymentCreateDto, PaymentResponseDto> converter;
+    @MockBean
+    private JwtService jwtService;
     @Autowired
     private MockMvc mockMvc;
 

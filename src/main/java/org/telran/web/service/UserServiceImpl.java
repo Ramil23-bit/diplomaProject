@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.telran.web.dto.UserCreateDto;
 import org.telran.web.entity.User;
@@ -30,6 +31,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAll() {
@@ -56,15 +60,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(Long userId, UserCreateDto dto) {
-        User existingUser = repository.getById(userId);
+        User existingUser = repository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
+
         existingUser.setUsername(dto.getName());
         existingUser.setPhoneNumber(dto.getPhone());
+        existingUser.setEmail(dto.getEmail());
+        existingUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+
         try {
             return repository.save(existingUser);
         } catch (Exception e) {
             throw new BadArgumentsException("Form is not completed correctly");
         }
     }
+
+
+
 
     @Override
     public void updateUserRole(Long id) {
@@ -107,11 +119,13 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             String name = authentication.getName();
-            User userEntity = getByEmail(name);
-            return userEntity.getId();
+            return repository.findByEmail(name)
+                    .map(User::getId)
+                    .orElseThrow(() -> new UserNotFoundException("User with email " + name + " not found"));
         }
-        return null;
+        throw new UserNotFoundException("No authenticated user found");
     }
+
 
     @Override
     public String getCurrentEmail() {

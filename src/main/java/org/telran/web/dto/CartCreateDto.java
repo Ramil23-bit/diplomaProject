@@ -1,10 +1,14 @@
 package org.telran.web.dto;
 
 import org.telran.web.entity.User;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CartCreateDto {
 
+    @JsonProperty("product_id")
     private Long productId;
+
+    @JsonProperty("quantity")
     private Long quantity;
 
     public CartCreateDto(Long productId, Long quantity) {

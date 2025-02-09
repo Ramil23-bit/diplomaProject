@@ -9,7 +9,6 @@ import org.telran.web.entity.*;
 import org.telran.web.repository.FavoritesRepository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +21,9 @@ class FavoritesServiceTest {
     @Mock
     private FavoritesRepository favoritesRepository;
 
+    @Mock
+    private UserService userService;
+
     @InjectMocks
     private FavoritesServiceImpl favoritesService;
 
@@ -31,7 +33,9 @@ class FavoritesServiceTest {
         Favorites favoritesTwo = createFavoritesList().get(1);
         List<Favorites> favoritesListFromMock = Arrays.asList(favoritesOne, favoritesTwo);
 
-        when(favoritesRepository.findAll()).thenReturn(favoritesListFromMock);
+        when(userService.getCurrentUserId()).thenReturn(1L);
+        when(favoritesRepository.findAllByUserId(1L)).thenReturn(favoritesListFromMock);
+
         List<Favorites> favoritesList = favoritesService.getAll();
 
         assertNotNull(favoritesList);

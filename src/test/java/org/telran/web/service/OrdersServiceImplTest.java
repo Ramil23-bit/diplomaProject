@@ -57,7 +57,7 @@ class OrdersServiceImplTest {
 
     @Test
     void testGetAllOrders_Success() {
-        // Мокируем список заказов
+
         List<Orders> ordersList = Arrays.asList(order1, order2);
         when(ordersRepository.findAll()).thenReturn(ordersList);
 
