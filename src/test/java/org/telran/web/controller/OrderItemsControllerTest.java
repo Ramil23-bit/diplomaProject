@@ -3,6 +3,7 @@ package org.telran.web.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -15,6 +16,8 @@ import org.telran.web.dto.OrderItemsCreateDto;
 import org.telran.web.dto.OrderItemsResponseDto;
 import org.telran.web.entity.OrderItems;
 import org.telran.web.exception.BadArgumentsException;
+import org.telran.web.security.JwtAuthenticationFilter;
+import org.telran.web.security.JwtService;
 import org.telran.web.service.OrderItemsService;
 
 import java.math.BigDecimal;
@@ -24,11 +27,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @WebMvcTest(OrderItemsController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class OrderItemsControllerTest {
     @MockBean
     private OrderItemsService orderItemsService;
     @MockBean
     private Converter<OrderItems, OrderItemsCreateDto, OrderItemsResponseDto> converter;
+    @MockBean
+    private JwtService jwtService;
+    @MockBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
     private MockMvc mockMvc;

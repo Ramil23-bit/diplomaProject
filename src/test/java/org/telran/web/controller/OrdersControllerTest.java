@@ -106,7 +106,8 @@ class OrdersControllerTest {
                 .andExpect(jsonPath("$.user.id", is(1)))
                 .andExpect(jsonPath("$.user.username", is("testUser")))
                 .andExpect(jsonPath("$.user.email", is("test@example.com")))
-                .andExpect(jsonPath("$.user.phoneNumber", is("+1234567890")));
+                .andExpect(jsonPath("$.user.phone_number", is("+1234567890")));
+
     }
 
 

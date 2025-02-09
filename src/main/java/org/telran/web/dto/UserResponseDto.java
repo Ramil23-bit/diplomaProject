@@ -1,10 +1,19 @@
 package org.telran.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UserResponseDto {
 
+    @JsonProperty("id")
     private Long id;
+
+    @JsonProperty("username")
     private String username;
+
+    @JsonProperty("email")
     private String email;
+
+    @JsonProperty("phone_number")
     private String phoneNumber;
 
     public UserResponseDto(Long id, String username, String email, String phoneNumber) {
