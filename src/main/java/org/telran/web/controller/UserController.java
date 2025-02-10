@@ -17,6 +17,7 @@ import org.telran.web.security.model.SignInRequest;
 import org.telran.web.service.UserService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,6 +39,12 @@ public class UserController {
     @PostMapping("/login")
     public JwtAuthenticationResponse login(@RequestBody SignInRequest request){
         return authenticationService.authenticate(request);
+    }
+
+    @GetMapping("/me")
+    public Map<String, String> getCurrentUserRole(){
+        String role = userService.getCurrentUserRole();
+        return Map.of("role", role);
     }
 
     @GetMapping

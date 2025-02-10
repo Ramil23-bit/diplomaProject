@@ -56,7 +56,11 @@ public class Product {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<Favorites> favorites = new ArrayList<>();
+
+    @Column(name = "image_url")
+    private String imageUrl;
 
     public Product() {
         //
@@ -67,6 +71,14 @@ public class Product {
         this.productInfo = productInfo;
         this.price = price;
         this.category = category;
+    }
+
+    public Product(String productTitle, String productInfo, BigDecimal price, Category category, String imageUrl) {
+        this.productTitle = productTitle;
+        this.productInfo = productInfo;
+        this.price = price;
+        this.category = category;
+        this.imageUrl = imageUrl;
     }
 
     public Product(Long id, String productTitle, BigDecimal price, String productInfo, Category category, Storage storage, BigDecimal discount, LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -82,6 +94,22 @@ public class Product {
         this.discount = discount;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public List<Favorites> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<Favorites> favorites) {
+        this.favorites = favorites;
     }
 
     public Product(Long id, String productTitle, BigDecimal price, String productInfo, Category category, Storage storage, BigDecimal discount) {
