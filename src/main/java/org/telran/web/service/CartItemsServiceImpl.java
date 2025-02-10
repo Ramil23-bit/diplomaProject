@@ -2,6 +2,7 @@ package org.telran.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telran.web.entity.Cart;
 import org.telran.web.entity.CartItems;
 import org.telran.web.exception.CartItemsNotFoundException;
 import org.telran.web.repository.CartItemsJpaRepository;
@@ -13,6 +14,9 @@ public class CartItemsServiceImpl implements CartItemsService {
 
     @Autowired
     private CartItemsJpaRepository cartItemsJpaRepository;
+
+    @Autowired
+    private CartService cartService;
     @Override
     public List<CartItems> getAllCartItems() {
         return cartItemsJpaRepository.findAll();
@@ -28,4 +32,5 @@ public class CartItemsServiceImpl implements CartItemsService {
     public CartItems createCartItems(CartItems cartItems) {
         return cartItemsJpaRepository.save(cartItems);
     }
+
 }

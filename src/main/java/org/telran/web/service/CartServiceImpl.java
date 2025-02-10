@@ -34,10 +34,12 @@ public class CartServiceImpl implements CartService{
 
     @Override
     public Cart addItemToCart(Cart cart) {
-        Cart save = cartJpaRepository.save(cart);
-//        cartItemsService.createCartItems(cart.getCartItemsList())
-        return save;
+        Cart currentCart = findByCurrentUser();
+        CartItems cartItem = cart.getCartItemsList().get(0);
+        currentCart.getCartItemsList().add(cartItem);
+        return currentCart;
     }
+
 
     @Override
     public Cart getByIdCart(Long id) {

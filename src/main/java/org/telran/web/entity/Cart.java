@@ -10,10 +10,11 @@ import java.util.List;
 @Table(name = "cart")
 public class Cart {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
     @NotNull
-    @MapsId
+//    @MapsId
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany
@@ -61,6 +62,7 @@ public class Cart {
     public List<CartItems> getCartItemsList() {
         return cartItemsList;
     }
+    public void addCartItem(CartItems cartItems) { this.cartItemsList.add(cartItems); }
 
     public void setCartItemsList(List<CartItems> cartItemsList) {
         this.cartItemsList = cartItemsList;

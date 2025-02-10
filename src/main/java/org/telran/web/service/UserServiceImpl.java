@@ -47,6 +47,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
 
+    @Transactional
     @Override
     public User create(User user) {
         if(repository.existsByEmail(user.getEmail())){
