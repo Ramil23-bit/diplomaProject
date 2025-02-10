@@ -1,6 +1,7 @@
 package org.telran.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.telran.web.enums.Role;
 
 public class UserResponseDto {
 
@@ -16,11 +17,21 @@ public class UserResponseDto {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
+    private Role role;
+
     public UserResponseDto(Long id, String username, String email, String phoneNumber) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.phoneNumber = phoneNumber;
+    }
+
+    public UserResponseDto(Long id, String username, String email, String phoneNumber, Role role) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
     }
 
     public Long getId() {
