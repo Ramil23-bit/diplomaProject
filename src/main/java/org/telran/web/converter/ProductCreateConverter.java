@@ -24,7 +24,8 @@ public class ProductCreateConverter implements Converter<Product, ProductCreateD
                 product.getProductTitle(),
                 product.getPrice(),
                 product.getDiscount(),
-                product.getCategoryId()
+                product.getCategoryId(),
+                product.getImageUrl()
         );
     }
 
@@ -34,7 +35,8 @@ public class ProductCreateConverter implements Converter<Product, ProductCreateD
                 productCreateDto.getName(),
                 productCreateDto.getDescription(),
                 productCreateDto.getPrice(),
-                categoryService.getByName(productCreateDto.getCategory())
+                categoryService.getByName(productCreateDto.getCategory()),
+                productCreateDto.getImage()
         );
     }
 }

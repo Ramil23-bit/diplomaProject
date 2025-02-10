@@ -39,4 +39,10 @@ public class FavoritesController {
         return converter.toDto(favoritesService.create(converter.toEntity(favoritesCreateDto)));
     }
 
+    @DeleteMapping("/{favoriteId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFavorite(@PathVariable Long favoriteId) {
+        favoritesService.deleteById(favoriteId);
+    }
+
 }

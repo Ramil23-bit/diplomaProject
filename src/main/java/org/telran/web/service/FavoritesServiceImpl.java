@@ -40,4 +40,9 @@ public class FavoritesServiceImpl implements FavoritesService {
     public void deleteByUser(Long user) {
         repository.deleteByUser(user);
     }
+
+    @Override
+    public void deleteById(Long favoriteId) {
+        repository.deleteById(favoriteId);
+    }
 }

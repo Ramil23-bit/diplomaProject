@@ -13,6 +13,7 @@ public class ProductResponseDto {
     private BigDecimal discount;
 
     private Long categoryId;
+    private String imageUrl;
 
     public ProductResponseDto(Long id, String productTitle, BigDecimal price, BigDecimal discount, Long categoryId) {
         this.id = id;
@@ -20,6 +21,23 @@ public class ProductResponseDto {
         this.price = price;
         this.discount = discount;
         this.categoryId = categoryId;
+    }
+
+    public ProductResponseDto(Long id, String productTitle, BigDecimal price, BigDecimal discount, Long categoryId, String imageUrl) {
+        this.id = id;
+        this.productTitle = productTitle;
+        this.price = price;
+        this.discount = discount;
+        this.categoryId = categoryId;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.telran.web.dto.UserCreateDto;
+import org.telran.web.entity.Cart;
 import org.telran.web.entity.User;
 import org.telran.web.exception.BadArgumentsException;
 import org.telran.web.exception.UserAlreadyExistsException;
@@ -51,7 +52,9 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistsException("User with email " + user.getEmail() + " already exists");
         }
         try {
-            return repository.save(user);
+            User savedUser = repository.save(user);
+            cartService.createCart(new Cart(savedUser));
+            return savedUser;
         } catch (Exception e) {
             throw new BadArgumentsException("Form is not completed correctly");
         }

@@ -1,17 +1,21 @@
 package org.telran.web.dto;
 
+import org.telran.web.enums.Role;
+
 public class UserResponseDto {
 
     private Long id;
     private String username;
     private String email;
     private String phoneNumber;
+    private Role role;
 
-    public UserResponseDto(Long id, String username, String email, String phoneNumber) {
+    public UserResponseDto(Long id, String username, String email, String phoneNumber, Role role) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.role = role;
     }
 
     public Long getId() {
@@ -44,5 +48,13 @@ public class UserResponseDto {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

@@ -24,11 +24,11 @@ public class CartController {
     @Autowired
     private Converter<Cart, CartCreateDto, CartResponseDto> cartConverter;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CartResponseDto create(@RequestBody CartCreateDto cartCreateDto){
-        return cartConverter.toDto(cartService.createCart(cartConverter.toEntity(cartCreateDto)));
-    }
+//    @PostMapping
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public CartResponseDto create(@RequestBody CartCreateDto cartCreateDto){
+//        return cartConverter.toDto(cartService.createCart(cartConverter.toEntity(cartCreateDto)));
+//    }
 
     @GetMapping("/current")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")

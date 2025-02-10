@@ -10,7 +10,7 @@ public class UserCreateConverter implements Converter<User, UserCreateDto, UserR
 
     @Override
     public UserResponseDto toDto(User user) {
-        return new UserResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getPhoneNumber());
+        return new UserResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getPhoneNumber(), user.getRole());
     }
 
     @Override
