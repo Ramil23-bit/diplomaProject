@@ -29,7 +29,7 @@ public class FavoritesController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    private List<FavoritesResponseDto> getAllByCurrentUser() {
+    private List<FavoritesResponseDto> getAll() {
         return favoritesService.getAll().stream()
                 .map(favorites -> converter.toDto(favorites))
                 .collect(Collectors.toList());
