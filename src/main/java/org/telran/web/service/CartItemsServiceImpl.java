@@ -2,6 +2,7 @@ package org.telran.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telran.web.dto.CartItemsResponseDto;
 import org.telran.web.entity.Cart;
 import org.telran.web.entity.CartItems;
 import org.telran.web.exception.CartItemsNotFoundException;
@@ -17,6 +18,10 @@ public class CartItemsServiceImpl implements CartItemsService {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private UserService userService;
+
     @Override
     public List<CartItems> getAllCartItems() {
         return cartItemsJpaRepository.findAll();
@@ -33,4 +38,9 @@ public class CartItemsServiceImpl implements CartItemsService {
         return cartItemsJpaRepository.save(cartItems);
     }
 
+//    @Override
+//    public List<CartItems> getAllByCurrentUser() {
+//        Long currentUserId = userService.getCurrentUserId();
+//        return cartItemsJpaRepository.findAllByUserId(currentUserId);
+//    }
 }

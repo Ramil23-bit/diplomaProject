@@ -1,5 +1,6 @@
 package org.telran.web.service;
 
+import org.telran.web.dto.CartItemsResponseDto;
 import org.telran.web.entity.CartItems;
 
 import java.util.List;
@@ -12,5 +13,5 @@ public interface CartItemsService {
 
     CartItems createCartItems(CartItems cartItems);
 
-
+//    List<CartItems> getAllByCurrentUser();
 }

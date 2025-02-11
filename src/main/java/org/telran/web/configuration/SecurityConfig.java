@@ -44,6 +44,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/categories/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/categories/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/cart_items/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/storage/**").hasRole("ADMIN")
                         .anyRequest().permitAll())
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(customAccessDeniedHandler))

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.telran.web.entity.Favorites;
 import org.telran.web.entity.User;
+import org.telran.web.exception.FavoritesNotFoundException;
 import org.telran.web.repository.FavoritesRepository;
 
 import java.util.List;
@@ -43,6 +44,11 @@ public class FavoritesServiceImpl implements FavoritesService {
 
     @Override
     public void deleteById(Long favoriteId) {
-        repository.deleteById(favoriteId);
+        Favorites favorites = repository.findById(favoriteId).orElseThrow(() -> new FavoritesNotFoundException("Not found"));
+        if (favorites.getUser().getId() == userService.getCurrentUserId()){
+            repository.deleteById(favoriteId);
+        }else{
+            throw new FavoritesNotFoundException("Not found");
+        }
     }
 }

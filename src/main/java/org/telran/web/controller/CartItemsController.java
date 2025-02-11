@@ -1,6 +1,7 @@
 package org.telran.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.CartItemsCreateDto;
@@ -27,6 +28,7 @@ public class CartItemsController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<CartItemsResponseDto> getAll(){
         return cartItemsService.getAllCartItems().stream()
                 .map(cartItems -> cartItemsConverter.toDto(cartItems))
@@ -34,7 +36,16 @@ public class CartItemsController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public CartItemsResponseDto getById(@PathVariable(name = "id") Long id){
         return cartItemsConverter.toDto(cartItemsService.getByIdCartItems(id));
     }
+
+//    @GetMapping("/current")
+//    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+//    public List<CartItemsResponseDto> getCurrent(){
+//        return cartItemsService.getAllByCurrentUser().stream()
+//                .map(cartItems -> cartItemsConverter.toDto(cartItems))
+//                .collect(Collectors.toList());
+//    }
 }

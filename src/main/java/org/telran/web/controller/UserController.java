@@ -42,6 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public Map<String, String> getCurrentUserRole(){
         String role = userService.getCurrentUserRole();
         return Map.of("role", role);
@@ -61,6 +62,12 @@ public class UserController {
         return converter.toDto(userService.getById(id));
     }
 
+    @GetMapping("/current")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public UserResponseDto get() {
+        return converter.toDto(userService.getById(userService.getCurrentUserId()));
+    }
+
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserCreateDto dto) {
         User user = converter.toEntity(dto);
@@ -73,29 +80,38 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDto> update(@PathVariable Long id, @RequestBody @Valid UserCreateDto dto) {
         User updatedUser = userService.updateUser(id, dto);
         UserResponseDto responseDto = converter.toDto(updatedUser);
         return ResponseEntity.ok(responseDto);
     }
 
+    @PutMapping
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<UserResponseDto> update(@RequestBody @Valid UserCreateDto dto) {
+        User updatedUser = userService.updateUser(userService.getCurrentUserId(), dto);
+        UserResponseDto responseDto = converter.toDto(updatedUser);
+        return ResponseEntity.ok(responseDto);
+    }
+
     @PutMapping("/role/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateRole(@PathVariable(name = "id") Long id){
         userService.updateUserRole(id);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable(name = "id") Long id) {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
     }
 
-    public UserService getUserService() {
-        return userService;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    @DeleteMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<Void> deleteUser() {
+        userService.deleteUserById(userService.getCurrentUserId());
+        return ResponseEntity.noContent().build();
     }
 }

@@ -27,6 +27,7 @@ public class CartController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<CartResponseDto> create(@RequestBody CartCreateDto cartCreateDto) {
         CartResponseDto response = cartConverter.toDto(cartService.createCart(cartConverter.toEntity(cartCreateDto)));
         return ResponseEntity.status(HttpStatus.CREATED)
