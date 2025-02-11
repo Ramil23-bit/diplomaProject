@@ -42,13 +42,18 @@ public class FavoritesServiceImpl implements FavoritesService {
         repository.deleteByUser(user);
     }
 
+//    @Override
+//    public void deleteById(Long favoriteId) {
+//        Favorites favorites = repository.findById(favoriteId).orElseThrow(() -> new FavoritesNotFoundException("Not found"));
+//        if (favorites.getUser().getId() == userService.getCurrentUserId()){
+//            repository.deleteById(favoriteId);
+//        }else{
+//            throw new FavoritesNotFoundException("Not found");
+//        }
+//    }
+
     @Override
     public void deleteById(Long favoriteId) {
-        Favorites favorites = repository.findById(favoriteId).orElseThrow(() -> new FavoritesNotFoundException("Not found"));
-        if (favorites.getUser().getId() == userService.getCurrentUserId()){
-            repository.deleteById(favoriteId);
-        }else{
-            throw new FavoritesNotFoundException("Not found");
-        }
+        repository.deleteById(favoriteId);
     }
 }
