@@ -41,7 +41,7 @@ public class FavoritesController {
     }
 
     @DeleteMapping("/{favoriteId}")
-//    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteFavorite(@PathVariable Long favoriteId) {
         favoritesService.deleteById(favoriteId);
