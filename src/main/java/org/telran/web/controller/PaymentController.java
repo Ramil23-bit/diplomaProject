@@ -2,6 +2,7 @@ package org.telran.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.PaymentCreateDto;
@@ -25,11 +26,13 @@ public class PaymentController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public PaymentResponseDto getById(@PathVariable(name = "id") Long id){
         return paymentConverter.toDto(paymentService.getByIdPayment(id));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable(name = "id") Long id){
         paymentService.deletePayment(id);

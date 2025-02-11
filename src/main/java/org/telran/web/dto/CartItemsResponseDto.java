@@ -8,11 +8,11 @@ public class CartItemsResponseDto {
 
     private Long quantity;
 
-    private Product product;
+    private ProductResponseDto product;
 
-    private User user;
+    private UserResponseDto user;
 
-    public CartItemsResponseDto(Long id, Long quantity, Product product, User user) {
+    public CartItemsResponseDto(Long id, Long quantity, ProductResponseDto product, UserResponseDto user) {
         this.id = id;
         this.quantity = quantity;
         this.product = product;
@@ -35,19 +35,19 @@ public class CartItemsResponseDto {
         this.quantity = quantity;
     }
 
-    public Product getProduct() {
+    public ProductResponseDto getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(ProductResponseDto product) {
         this.product = product;
     }
 
-    public User getUser() {
+    public UserResponseDto getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserResponseDto user) {
         this.user = user;
     }
 }

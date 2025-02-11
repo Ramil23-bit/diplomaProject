@@ -17,9 +17,18 @@ public class CartItemsConverter implements Converter<CartItems, CartItemsCreateD
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductCreateConverter productCreateConverter;
+
+    @Autowired
+    private UserCreateConverter userCreateConverter;
+
     @Override
     public CartItemsResponseDto toDto(CartItems cartItems) {
-        return new CartItemsResponseDto(cartItems.getId(), cartItems.getQuantity(), cartItems.getProduct(), cartItems.getCart().getUser());
+        return new CartItemsResponseDto(cartItems.getId(), cartItems.getQuantity(),
+                productCreateConverter.toDto(cartItems.getProduct()),
+                userCreateConverter.toDto(cartItems.getCart().getUser()));
     }
 
     @Override

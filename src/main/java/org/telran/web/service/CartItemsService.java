@@ -13,5 +13,7 @@ public interface CartItemsService {
 
     CartItems createCartItems(CartItems cartItems);
 
-//    List<CartItems> getAllByCurrentUser();
+    List<CartItems> getAllByCurrentUser();
+
+    void deleteById(Long CartItemsId);
 }

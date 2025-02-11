@@ -38,9 +38,14 @@ public class CartItemsServiceImpl implements CartItemsService {
         return cartItemsJpaRepository.save(cartItems);
     }
 
-//    @Override
-//    public List<CartItems> getAllByCurrentUser() {
-//        Long currentUserId = userService.getCurrentUserId();
-//        return cartItemsJpaRepository.findAllByUserId(currentUserId);
-//    }
+    @Override
+    public List<CartItems> getAllByCurrentUser() {
+        Long currentUserCartId = cartService.findByCurrentUser().getId();
+        return cartItemsJpaRepository.findAllByCartId(currentUserCartId);
+    }
+
+    @Override
+    public void deleteById(Long CartItemsId) {
+        cartItemsJpaRepository.deleteById(CartItemsId);
+    }
 }
