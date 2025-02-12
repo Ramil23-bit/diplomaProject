@@ -38,9 +38,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_USER;
 
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-////    @PrimaryKeyJoinColumn
-//    private Cart cart;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Favorites> favorites = new ArrayList<>();

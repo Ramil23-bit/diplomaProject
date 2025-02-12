@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.OrderCreateConverter;
 import org.telran.web.converter.OrderItemsConverter;
@@ -31,6 +32,7 @@ public class OrdersController {
     private OrderItemsConverter itemsConverter;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER' ,'ADMIN')")
     public ResponseEntity<OrderResponseDto> create(@Valid @RequestBody OrderCreateDto dto) {
         Orders order = service.create(converter.toEntity(dto));
         List<OrderItemsCreateDto> orderItemsDto = Optional.ofNullable(dto.getItems())
@@ -46,13 +48,23 @@ public class OrdersController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<OrderResponseDto> getAll() {
         return service.getAll().stream()
                 .map(order -> converter.toDto(order))
                 .collect(Collectors.toList());
     }
 
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<OrderResponseDto> checkStatus(){
+        return service.checkOrderStatus().stream()
+                .map(orders -> converter.toDto(orders))
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public OrderResponseDto getById(@PathVariable Long id) {
         return converter.toDto(service.getById(id));
     }

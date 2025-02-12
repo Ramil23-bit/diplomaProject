@@ -2,6 +2,7 @@ package org.telran.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.OrderItemsCreateDto;
@@ -23,14 +24,15 @@ public class OrderItemsController {
     private Converter<OrderItems, OrderItemsCreateDto, OrderItemsResponseDto> orderItemsConverter;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderItemsResponseDto create(@RequestBody OrderItemsCreateDto orderItemsCreateDto){
+    public OrderItemsResponseDto create(@RequestBody OrderItemsCreateDto orderItemsCreateDto) {
         return orderItemsConverter.toDto(
-                orderItemsService.createOrderItems(
-                        orderItemsConverter.toEntity(orderItemsCreateDto)));
+                orderItemsService.createOrderItems(orderItemsConverter.toEntity(orderItemsCreateDto)));
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<OrderItemsResponseDto> getAll(){
         return orderItemsService.getAllOrderItems().stream()
                 .map(orderItem -> orderItemsConverter.toDto(orderItem))
@@ -38,11 +40,13 @@ public class OrderItemsController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public OrderItemsResponseDto getById(@PathVariable(name = "id") Long id){
         return orderItemsConverter.toDto(orderItemsService.getByIdOrderItems(id));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {
         orderItemsService.deleteOrderItems(id);
