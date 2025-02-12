@@ -8,6 +8,10 @@ import org.telran.web.entity.Product;
 import org.telran.web.service.CategoryService;
 import org.telran.web.service.StorageService;
 
+/**
+ * Converter class for transforming Product entities to DTOs and vice versa.
+ * Handles the conversion between Product, ProductCreateDto, and ProductResponseDto.
+ */
 @Component
 public class ProductCreateConverter implements Converter<Product, ProductCreateDto, ProductResponseDto> {
 
@@ -17,6 +21,12 @@ public class ProductCreateConverter implements Converter<Product, ProductCreateD
     @Autowired
     private StorageService storageService;
 
+    /**
+     * Converts a Product entity to a ProductResponseDto.
+     *
+     * @param product The Product entity to convert.
+     * @return A ProductResponseDto representing the product.
+     */
     @Override
     public ProductResponseDto toDto(Product product) {
         return new ProductResponseDto(
@@ -29,6 +39,12 @@ public class ProductCreateConverter implements Converter<Product, ProductCreateD
         );
     }
 
+    /**
+     * Converts a ProductCreateDto to a Product entity.
+     *
+     * @param productCreateDto The DTO containing product creation data.
+     * @return The created Product entity.
+     */
     @Override
     public Product toEntity(ProductCreateDto productCreateDto) {
         return new Product(
