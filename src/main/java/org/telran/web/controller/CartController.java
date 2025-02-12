@@ -1,5 +1,8 @@
 package org.telran.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +19,7 @@ import java.util.stream.Collectors;
 
 /**
  * Controller for managing shopping carts.
- * Provides endpoints for creating, retrieving, and listing carts.
+ * Provides endpoints to create, retrieve, and list carts.
  */
 @RestController
 @RequestMapping("/api/v1/cart")
@@ -29,11 +32,16 @@ public class CartController {
     private Converter<Cart, CartCreateDto, CartResponseDto> cartConverter;
 
     /**
-     * Creates a new shopping cart.
+     * Creates a new cart.
      *
-     * @param cartCreateDto DTO containing the cart details.
-     * @return ResponseEntity with the created cart details.
+     * @param cartCreateDto The DTO containing cart details.
+     * @return The created cart response DTO.
      */
+    @Operation(summary = "Create a new cart", description = "Creates a new shopping cart for a user.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Cart successfully created"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body")
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
@@ -45,10 +53,15 @@ public class CartController {
     }
 
     /**
-     * Retrieves the current user's active cart.
+     * Retrieves the current user's cart.
      *
-     * @return CartResponseDto representing the current user's cart.
+     * @return The cart response DTO.
      */
+    @Operation(summary = "Get current user's cart", description = "Retrieves the shopping cart of the logged-in user.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cart successfully retrieved"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized access")
+    })
     @GetMapping("/current")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public CartResponseDto getCurrentCart() {
@@ -56,10 +69,15 @@ public class CartController {
     }
 
     /**
-     * Retrieves all shopping carts. Available only for admins.
+     * Retrieves all carts (Admin only).
      *
-     * @return List of CartResponseDto representing all carts.
+     * @return List of cart response DTOs.
      */
+    @Operation(summary = "Get all carts", description = "Retrieves a list of all shopping carts. Accessible by ADMIN users only.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Carts successfully retrieved"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient privileges")
+    })
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<CartResponseDto> getCarts() {

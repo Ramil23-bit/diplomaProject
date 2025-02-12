@@ -1,5 +1,8 @@
 package org.telran.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +25,7 @@ import java.util.stream.Collectors;
 
 /**
  * Controller for managing users.
- * Provides endpoints for authentication, user retrieval, creation, updating, and deletion.
+ * Provides endpoints for authentication, user registration, and user management.
  */
 @RestController
 @RequestMapping("/api/v1/users")
@@ -41,33 +44,48 @@ public class UserController {
     private AuthenticationService authenticationService;
 
     /**
-     * Authenticates a user and returns a JWT token.
+     * Authenticates a user and generates a JWT token.
      *
-     * @param request SignInRequest containing user credentials.
-     * @return JwtAuthenticationResponse containing the authentication token.
+     * @param request The authentication request containing email and password.
+     * @return JWT authentication response.
      */
+    @Operation(summary = "User login", description = "Authenticates a user and returns a JWT token.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User successfully authenticated"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid credentials")
+    })
     @PostMapping("/login")
-    public JwtAuthenticationResponse login(@RequestBody SignInRequest request){
+    public JwtAuthenticationResponse login(@RequestBody SignInRequest request) {
         return authenticationService.authenticate(request);
     }
 
     /**
-     * Retrieves the role of the currently authenticated user.
+     * Retrieves the current logged-in user's role.
      *
-     * @return Map containing the user's role.
+     * @return A map containing the user's role.
      */
+    @Operation(summary = "Get current user's role", description = "Retrieves the role of the currently authenticated user.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User role successfully retrieved"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized access")
+    })
     @GetMapping("/me")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public Map<String, String> getCurrentUserRole(){
+    public Map<String, String> getCurrentUserRole() {
         String role = userService.getCurrentUserRole();
         return Map.of("role", role);
     }
 
     /**
-     * Retrieves all users. Only accessible by admins.
+     * Retrieves all registered users (Admin only).
      *
-     * @return List of UserResponseDto representing all users.
+     * @return List of user response DTOs.
      */
+    @Operation(summary = "Get all users", description = "Retrieves a list of all registered users. Accessible by ADMIN users only.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Users successfully retrieved"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient privileges")
+    })
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponseDto> getAll() {
@@ -77,103 +95,33 @@ public class UserController {
     }
 
     /**
-     * Retrieves a user by their ID. Only accessible by admins.
-     *
-     * @param id ID of the user.
-     * @return UserResponseDto representing the found user.
-     */
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public UserResponseDto get(@PathVariable("id") Long id) {
-        return converter.toDto(userService.getById(id));
-    }
-
-    /**
-     * Retrieves the currently authenticated user.
-     *
-     * @return UserResponseDto representing the current user.
-     */
-    @GetMapping("/current")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public UserResponseDto get() {
-        return converter.toDto(userService.getById(userService.getCurrentUserId()));
-    }
-
-    /**
      * Registers a new user.
      *
-     * @param dto UserCreateDto containing the user details.
-     * @return ResponseEntity with the created user details.
+     * @param dto The DTO containing user details.
+     * @return The created user response DTO.
      */
+    @Operation(summary = "Register a new user", description = "Creates a new user account.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User successfully registered"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body")
+    })
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserCreateDto dto) {
         User user = converter.toEntity(dto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         User savedUser = userService.create(user);
         UserResponseDto responseDto = converter.toDto(savedUser);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     /**
-     * Updates a user by their ID. Only accessible by admins.
-     *
-     * @param id ID of the user to update.
-     * @param dto UserCreateDto containing updated user details.
-     * @return ResponseEntity with the updated UserResponseDto.
-     */
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserResponseDto> update(@PathVariable Long id, @RequestBody @Valid UserCreateDto dto) {
-        User updatedUser = userService.updateUser(id, dto);
-        UserResponseDto responseDto = converter.toDto(updatedUser);
-        return ResponseEntity.ok(responseDto);
-    }
-
-    /**
-     * Updates the currently authenticated user.
-     *
-     * @param dto UserCreateDto containing updated user details.
-     * @return ResponseEntity with the updated UserResponseDto.
-     */
-    @PutMapping
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public ResponseEntity<UserResponseDto> update(@RequestBody @Valid UserCreateDto dto) {
-        User updatedUser = userService.updateUser(userService.getCurrentUserId(), dto);
-        UserResponseDto responseDto = converter.toDto(updatedUser);
-        return ResponseEntity.ok(responseDto);
-    }
-
-    /**
-     * Updates the role of a user by their ID. Only accessible by admins.
-     *
-     * @param id ID of the user whose role will be updated.
-     */
-    @PutMapping("/role/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public void updateRole(@PathVariable(name = "id") Long id){
-        userService.updateUserRole(id);
-    }
-
-    /**
-     * Deletes a user by their ID. Only accessible by admins.
-     *
-     * @param id ID of the user to delete.
-     * @return ResponseEntity with no content.
-     */
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteUser(@PathVariable(name = "id") Long id) {
-        userService.deleteUserById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    /**
      * Deletes the currently authenticated user.
-     *
-     * @return ResponseEntity with no content.
      */
+    @Operation(summary = "Delete current user", description = "Removes the currently authenticated user account.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User successfully deleted"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized access")
+    })
     @DeleteMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> deleteUser() {

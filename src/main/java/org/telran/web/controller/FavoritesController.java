@@ -1,7 +1,9 @@
 package org.telran.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Controller for managing favorite items.
- * Provides endpoints for retrieving, creating, and deleting favorites.
+ * Controller for managing favorite products.
+ * Provides endpoints to add, retrieve, and delete favorites.
  */
 @RestController
 @RequestMapping("/api/v1/favorites")
@@ -26,14 +28,18 @@ public class FavoritesController {
     private FavoritesService favoritesService;
 
     @Autowired
-    @Qualifier("favoritCreateConverter")
     private Converter<Favorites, FavoritesCreateDto, FavoritesResponseDto> converter;
 
     /**
-     * Retrieves all favorite items.
+     * Retrieves all favorite products of the current user.
      *
-     * @return List of FavoritesResponseDto representing all favorites.
+     * @return List of favorite products response DTOs.
      */
+    @Operation(summary = "Get all favorite products", description = "Retrieves a list of all favorite products for the current user.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Favorites successfully retrieved"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized access")
+    })
     @GetMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<FavoritesResponseDto> getAll() {
@@ -43,11 +49,17 @@ public class FavoritesController {
     }
 
     /**
-     * Creates a new favorite item.
+     * Adds a product to the user's favorites.
      *
-     * @param favoritesCreateDto DTO containing the favorite details.
-     * @return FavoritesResponseDto representing the created favorite.
+     * @param favoritesCreateDto The DTO containing favorite product details.
+     * @return The created favorite response DTO.
      */
+    @Operation(summary = "Add product to favorites", description = "Adds a product to the user's favorite list.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Product successfully added to favorites"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized access")
+    })
     @PostMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
@@ -56,15 +68,19 @@ public class FavoritesController {
     }
 
     /**
-     * Deletes a favorite item by its ID.
+     * Deletes a product from the user's favorites by its ID.
      *
-     * @param favoriteId ID of the favorite to delete.
+     * @param favoriteId The ID of the favorite product to delete.
      */
+    @Operation(summary = "Delete favorite product by ID", description = "Removes a specific product from the user's favorite list by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Favorite successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Favorite not found")
+    })
     @DeleteMapping("/{favoriteId}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteFavorite(@PathVariable Long favoriteId) {
         favoritesService.deleteById(favoriteId);
     }
-
 }

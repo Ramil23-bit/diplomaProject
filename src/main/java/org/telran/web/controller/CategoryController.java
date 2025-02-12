@@ -1,5 +1,8 @@
 package org.telran.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +17,7 @@ import java.util.stream.Collectors;
 
 /**
  * Controller for managing product categories.
- * Provides endpoints for creating, retrieving, updating, and deleting categories.
+ * Provides endpoints to create, retrieve, update, and delete categories.
  */
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -27,11 +30,16 @@ public class CategoryController {
     private Converter<Category, CategoryCreateDto, CategoryResponseDto> categoryConverter;
 
     /**
-     * Creates a new category.
+     * Creates a new product category.
      *
-     * @param categoryDto DTO containing the category details.
-     * @return CategoryResponseDto representing the created category.
+     * @param categoryDto The DTO containing category details.
+     * @return The created category response DTO.
      */
+    @Operation(summary = "Create a new category", description = "Creates a new product category.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Category successfully created"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body")
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryResponseDto create(@RequestBody CategoryCreateDto categoryDto) {
@@ -39,10 +47,14 @@ public class CategoryController {
     }
 
     /**
-     * Retrieves all categories.
+     * Retrieves all product categories.
      *
-     * @return List of CategoryResponseDto representing all categories.
+     * @return List of category response DTOs.
      */
+    @Operation(summary = "Get all categories", description = "Retrieves a list of all product categories.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Categories successfully retrieved")
+    })
     @GetMapping
     public List<CategoryResponseDto> getAll() {
         return categoryService.getAll().stream()
@@ -53,9 +65,14 @@ public class CategoryController {
     /**
      * Retrieves a category by its ID.
      *
-     * @param id ID of the category.
-     * @return CategoryResponseDto representing the found category.
+     * @param id The ID of the category.
+     * @return The category response DTO.
      */
+    @Operation(summary = "Get category by ID", description = "Retrieves details of a specific category by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Category successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "Category not found")
+    })
     @GetMapping("/{id}")
     public CategoryResponseDto getById(@PathVariable(name = "id") Long id) {
         return categoryConverter.toDto(categoryService.getById(id));
@@ -64,9 +81,15 @@ public class CategoryController {
     /**
      * Deletes a category by its ID.
      *
-     * @param id ID of the category to delete.
+     * @param id The ID of the category to delete.
      */
+    @Operation(summary = "Delete category by ID", description = "Removes a specific category by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Category successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Category not found")
+    })
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable(name = "id") Long id) {
         categoryService.delete(id);
     }
@@ -74,37 +97,18 @@ public class CategoryController {
     /**
      * Updates the title of a category.
      *
-     * @param id ID of the category.
-     * @param newTitle New title for the category.
-     * @return Updated CategoryResponseDto.
+     * @param id The ID of the category.
+     * @param newTitle The new title of the category.
+     * @return The updated category response DTO.
      */
+    @Operation(summary = "Edit category title", description = "Updates the title of a category.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Category title successfully updated"),
+            @ApiResponse(responseCode = "404", description = "Category not found")
+    })
     @PutMapping("/edit/title/{id}")
     public CategoryResponseDto editTitle(@PathVariable Long id, @RequestParam String newTitle) {
         categoryService.editTitle(id, newTitle);
         return categoryConverter.toDto(categoryService.getById(id));
-    }
-
-    /**
-     * Adds a product to a category.
-     *
-     * @param id ID of the category.
-     * @param newProduct ID of the product to add.
-     * @return Updated CategoryResponseDto.
-     */
-    @PutMapping("/edit/add_product/{id}")
-    public CategoryResponseDto editAddProduct(@PathVariable Long id, @RequestParam Long newProduct) {
-        return categoryConverter.toDto(categoryService.editListOfProductsAddProduct(id, newProduct));
-    }
-
-    /**
-     * Removes a product from a category.
-     *
-     * @param id ID of the category.
-     * @param removeProduct ID of the product to remove.
-     * @return Updated CategoryResponseDto.
-     */
-    @PutMapping("/edit/remove_product/{id}")
-    public CategoryResponseDto editRemoveProduct(@PathVariable Long id, @RequestParam Long removeProduct) {
-        return categoryConverter.toDto(categoryService.editListOfProductsRemoveProduct(id, removeProduct));
     }
 }

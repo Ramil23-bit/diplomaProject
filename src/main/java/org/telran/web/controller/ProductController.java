@@ -1,5 +1,8 @@
 package org.telran.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +21,7 @@ import java.util.stream.Collectors;
 
 /**
  * Controller for managing products.
- * Provides endpoints for creating, retrieving, updating, and deleting products.
+ * Provides endpoints to create, retrieve, update, and delete products.
  */
 @RestController
 @RequestMapping("/api/v1/products")
@@ -33,9 +36,14 @@ public class ProductController {
     /**
      * Creates a new product.
      *
-     * @param productDto DTO containing the product details.
-     * @return ProductResponseDto representing the created product.
+     * @param productDto The DTO containing product details.
+     * @return The created product response DTO.
      */
+    @Operation(summary = "Create a new product", description = "Registers a new product in the system.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Product successfully created"),
+            @ApiResponse(responseCode = "400", description = "Invalid request body")
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductResponseDto create(@Valid @RequestBody ProductCreateDto productDto) {
@@ -43,15 +51,19 @@ public class ProductController {
     }
 
     /**
-     * Retrieves all products with optional filters.
+     * Retrieves all products with optional filtering and sorting.
      *
-     * @param categoryId Optional category ID to filter products.
-     * @param direction Sorting direction (0 for ascending, 1 for descending).
+     * @param categoryId Optional category ID filter.
+     * @param direction Sorting direction.
      * @param minPrice Minimum price filter.
      * @param maxPrice Maximum price filter.
-     * @param discount Discount percentage filter.
-     * @return List of ProductResponseDto representing the filtered products.
+     * @param discount Optional discount filter.
+     * @return List of product response DTOs.
      */
+    @Operation(summary = "Get all products", description = "Retrieves a list of all available products with optional filtering and sorting.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Products successfully retrieved")
+    })
     @GetMapping
     public List<ProductResponseDto> getAll(
             @RequestParam(name = "category_id", required = false) Optional<Long> categoryId,
@@ -77,9 +89,14 @@ public class ProductController {
     /**
      * Retrieves a product by its ID.
      *
-     * @param id ID of the product.
-     * @return ProductResponseDto representing the found product.
+     * @param id The ID of the product.
+     * @return The product response DTO.
      */
+    @Operation(summary = "Get product by ID", description = "Retrieves details of a specific product by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "Product not found")
+    })
     @GetMapping("/{id}")
     public ProductResponseDto getById(@PathVariable Long id) {
         return createConverter.toDto(productService.getById(id));
@@ -88,10 +105,15 @@ public class ProductController {
     /**
      * Updates an existing product.
      *
-     * @param id ID of the product to update.
-     * @param product DTO containing updated product details.
-     * @return ResponseEntity with the updated ProductResponseDto.
+     * @param id The ID of the product to update.
+     * @param product The updated product details.
+     * @return The updated product response DTO.
      */
+    @Operation(summary = "Update product details", description = "Updates the details of an existing product.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product successfully updated"),
+            @ApiResponse(responseCode = "404", description = "Product not found")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDto> update(@PathVariable Long id, @RequestBody @Valid ProductCreateDto product) {
         Product productUpdate = productService.editProducts(id, product);
@@ -102,9 +124,13 @@ public class ProductController {
     /**
      * Deletes a product by its ID.
      *
-     * @param id ID of the product to delete.
-     * @return ResponseEntity with no content.
+     * @param id The ID of the product to delete.
      */
+    @Operation(summary = "Delete product by ID", description = "Removes a specific product by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Product successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Product not found")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
         productService.deleteProductsById(id);
