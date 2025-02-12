@@ -4,12 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telran.web.dto.CartItemsCreateDto;
 import org.telran.web.dto.CartItemsResponseDto;
-import org.telran.web.dto.UserResponseDto;
 import org.telran.web.entity.CartItems;
-import org.telran.web.entity.User;
 import org.telran.web.service.CartService;
 import org.telran.web.service.ProductService;
+import org.telran.web.service.UserService;
 
+/**
+ * Converter class for transforming CartItems entities to DTOs and vice versa.
+ * Handles the conversion between CartItems, CartItemsCreateDto, and CartItemsResponseDto.
+ */
 @Component
 public class CartItemsConverter implements Converter<CartItems, CartItemsCreateDto, CartItemsResponseDto> {
 
@@ -18,16 +21,36 @@ public class CartItemsConverter implements Converter<CartItems, CartItemsCreateD
 
     @Autowired
     private ProductService productService;
+
     @Autowired
-    private Converter<User, ?, UserResponseDto> userConverter;
+    private ProductCreateConverter productCreateConverter;
+
+    @Autowired
+    private UserCreateConverter userCreateConverter;
+
+    /**
+     * Converts a CartItems entity to a CartItemsResponseDto.
+     *
+     * @param cartItems The CartItems entity to convert.
+     * @return A CartItemsResponseDto representing the cart item.
+     */
     @Override
     public CartItemsResponseDto toDto(CartItems cartItems) {
-        UserResponseDto userResponseDto = userConverter.toDto(cartItems.getCart().getUser());
-        return new CartItemsResponseDto(cartItems.getId(), cartItems.getQuantity(), cartItems.getProduct(), userResponseDto);
+        return new CartItemsResponseDto(cartItems.getId(), cartItems.getQuantity(),
+                productCreateConverter.toDto(cartItems.getProduct()),
+                userCreateConverter.toDto(cartItems.getCart().getUser()));
     }
 
+    /**
+     * Converts a CartItemsCreateDto to a CartItems entity.
+     *
+     * @param cartItemsCreateDto The DTO containing cart item creation data.
+     * @return The created CartItems entity.
+     */
     @Override
     public CartItems toEntity(CartItemsCreateDto cartItemsCreateDto) {
-        return new CartItems(cartItemsCreateDto.getQuantity(), cartService.getByIdCart(cartItemsCreateDto.getCartId()), productService.getById(cartItemsCreateDto.getProductId()));
+        return new CartItems(cartItemsCreateDto.getQuantity(),
+                cartService.getByIdCart(cartItemsCreateDto.getCartId()),
+                productService.getById(cartItemsCreateDto.getProductId()));
     }
 }

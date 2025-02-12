@@ -14,10 +14,14 @@ import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.ProductJpaRepository;
 
 import java.math.BigDecimal;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of ProductService.
+ * Handles business logic for managing products, including retrieval, filtering, updating, and deletion.
+ */
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -31,6 +35,18 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private CategoryService categoryService;
 
+    private static final List<String> validColumnName = Arrays.asList("price", "createdAt", "productTitle");
+
+    /**
+     * Retrieves all products with optional filters for category, price range, and discount.
+     *
+     * @param categoryId ID of the category to filter products.
+     * @param direction Sorting direction (ascending or descending).
+     * @param minPrice Minimum price filter.
+     * @param maxPrice Maximum price filter.
+     * @param discount Discount percentage filter.
+     * @return List of filtered Product entities.
+     */
     @Override
     public List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -58,51 +74,74 @@ public class ProductServiceImpl implements ProductService {
         return query.getResultList();
     }
 
+    /**
+     * Retrieves all products without filters.
+     *
+     * @return List of all Product entities.
+     */
     @Override
     public List<Product> getAllProducts() {
         return productJpaRepository.findAll();
     }
 
+    /**
+     * Retrieves a product by its ID.
+     *
+     * @param id ID of the product.
+     * @return The found Product entity.
+     * @throws ProductNotFoundException if the product is not found.
+     */
     @Override
     public Product getById(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Product ID cannot be null");
-        }
         return productJpaRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
     }
 
+    /**
+     * Creates a new product and saves it in the repository.
+     *
+     * @param product Product entity containing product details.
+     * @return The created Product entity.
+     */
     @Override
     public Product create(Product product) {
         return productJpaRepository.save(product);
     }
 
-    @Override
-    public void add(Product product) {
-        productJpaRepository.save(product);
-    }
-
-    @Override
-    public List<Product> findByIds(List<Long> productIds) {
-        if (productIds == null || productIds.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return productJpaRepository.findAllById(productIds);
-    }
-
+    /**
+     * Assigns a category to a product.
+     *
+     * @param productId ID of the product.
+     * @param category Category entity to assign.
+     * @return The updated Product entity.
+     * @throws IllegalStateException if the product already belongs to a different category.
+     */
     @Override
     public Product setCategory(Long productId, Category category) {
         Product product = getById(productId);
-
         if (category == null) {
-            product.setCategory(null);
-        } else {
-            product.setCategory(category);
+            if (product.getCategory() != null) {
+                product.setCategory(null);
+                return productJpaRepository.save(product);
+            } else {
+                return product;
+            }
         }
-
+        if (product.getCategory() != null && !product.getCategory().equals(category)) {
+            throw new IllegalStateException("Product already belongs to a Category");
+        }
+        product.setCategory(category);
         return productJpaRepository.save(product);
     }
 
+    /**
+     * Updates an existing product.
+     *
+     * @param id ID of the product to update.
+     * @param productDto DTO containing updated product details.
+     * @return The updated Product entity.
+     * @throws BadArgumentsException if the product update fails due to invalid data.
+     */
     @Override
     public Product editProducts(Long id, ProductCreateDto productDto) {
         Product actualProduct = getById(id);
@@ -120,19 +159,25 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    /**
+     * Retrieves a product by its name.
+     *
+     * @param name Name of the product.
+     * @return An Optional containing the found Product entity, or empty if not found.
+     */
     @Override
     public Optional<Product> getByName(String name) {
         return productJpaRepository.findByName(name);
     }
 
+    /**
+     * Deletes a product by its ID.
+     *
+     * @param id ID of the product to delete.
+     */
     @Override
     public void deleteProductsById(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Product ID cannot be null");
-        }
-        if (!productJpaRepository.existsById(id)) {
-            throw new ProductNotFoundException("Product with id " + id + " not found");
-        }
-        productJpaRepository.deleteById(id);
+        Product product = getById(id);
+        productJpaRepository.deleteById(product.getId());
     }
 }

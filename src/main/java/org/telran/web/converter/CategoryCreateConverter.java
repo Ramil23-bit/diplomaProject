@@ -4,35 +4,33 @@ import org.springframework.stereotype.Component;
 import org.telran.web.dto.CategoryCreateDto;
 import org.telran.web.dto.CategoryResponseDto;
 import org.telran.web.entity.Category;
-import org.telran.web.entity.Product;
-import org.telran.web.service.ProductService;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+/**
+ * Converter class for transforming Category entities to DTOs and vice versa.
+ * Handles the conversion between Category, CategoryCreateDto, and CategoryResponseDto.
+ */
 @Component
 public class CategoryCreateConverter implements Converter<Category, CategoryCreateDto, CategoryResponseDto> {
 
-    private final ProductService productService;
-
-    public CategoryCreateConverter(ProductService productService) {
-        this.productService = productService;
-    }
-
+    /**
+     * Converts a Category entity to a CategoryResponseDto.
+     *
+     * @param category The Category entity to convert.
+     * @return A CategoryResponseDto representing the category.
+     */
     @Override
     public CategoryResponseDto toDto(Category category) {
         return new CategoryResponseDto(category.getId(), category.getCategoryTitle());
     }
 
+    /**
+     * Converts a CategoryCreateDto to a Category entity.
+     *
+     * @param categoryCreateDto The DTO containing category creation data.
+     * @return The created Category entity.
+     */
     @Override
     public Category toEntity(CategoryCreateDto categoryCreateDto) {
-        List<Long> productIds = categoryCreateDto.getProductIds();
-
-        List<Product> products = (productIds == null || productIds.isEmpty())
-                ? List.of()
-                : productService.findByIds(productIds);
-
-        return new Category(categoryCreateDto.getCategoryTitle(), products);
+        return new Category(categoryCreateDto.getCategoryTitle(), categoryCreateDto.getProducts());
     }
 }
-

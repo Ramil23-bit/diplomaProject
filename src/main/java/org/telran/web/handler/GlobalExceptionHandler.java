@@ -27,7 +27,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                         CartItemsNotFoundException.class,
                         CartNotFoundException.class,
                         PaymentNotFoundException.class,
-                        OrderNotFoundException.class,})
+                        OrderNotFoundException.class,
+                        FavoritesNotFoundException.class})
     public ResponseEntity<Object> handleNotFoundException(Exception exception){
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
