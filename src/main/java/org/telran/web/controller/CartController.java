@@ -5,13 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.CartCreateDto;
 import org.telran.web.dto.CartResponseDto;
 import org.telran.web.entity.Cart;
-import org.telran.web.repository.CartJpaRepository;
 import org.telran.web.service.CartService;
 
 import java.util.List;
@@ -49,7 +47,6 @@ public class CartController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<CartResponseDto> getCarts(){
-        System.out.println("🔐 Проверка роли в getCarts(): " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         return cartService.getAllCart().stream()
                 .map(cart -> cartConverter.toDto(cart))
                 .collect(Collectors.toList());
