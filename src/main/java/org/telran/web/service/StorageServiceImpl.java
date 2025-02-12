@@ -1,5 +1,7 @@
 package org.telran.web.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.web.entity.Storage;
@@ -15,6 +17,8 @@ import java.util.List;
 @Service
 public class StorageServiceImpl implements StorageService {
 
+    private static final Logger logger = LoggerFactory.getLogger(StorageServiceImpl.class);
+
     @Autowired
     private StorageJpaRepository storageJpaRepository;
 
@@ -25,7 +29,10 @@ public class StorageServiceImpl implements StorageService {
      */
     @Override
     public List<Storage> getAllStorage() {
-        return storageJpaRepository.findAll();
+        logger.info("Fetching all storage items");
+        List<Storage> storages = storageJpaRepository.findAll();
+        logger.info("Total storage items retrieved: {}", storages.size());
+        return storages;
     }
 
     /**
@@ -37,8 +44,12 @@ public class StorageServiceImpl implements StorageService {
      */
     @Override
     public Storage getByIdStorage(Long id) {
+        logger.info("Fetching storage item with ID: {}", id);
         return storageJpaRepository.findById(id)
-                .orElseThrow(() -> new StorageNotFoundException("Storage by " + id + " not Found"));
+                .orElseThrow(() -> {
+                    logger.error("Storage item with ID {} not found", id);
+                    return new StorageNotFoundException("Storage by " + id + " not found");
+                });
     }
 
     /**
@@ -49,6 +60,9 @@ public class StorageServiceImpl implements StorageService {
      */
     @Override
     public Storage createStorage(Storage storage) {
-        return storageJpaRepository.save(storage);
+        logger.info("Creating new storage item");
+        Storage savedStorage = storageJpaRepository.save(storage);
+        logger.info("Storage item created successfully with ID: {}", savedStorage.getId());
+        return savedStorage;
     }
 }

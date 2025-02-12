@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class FavoritesServiceImpl implements FavoritesService {
 
-    private Logger log = LoggerFactory.getLogger(FavoritesServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(FavoritesServiceImpl.class);
 
     @Autowired
     private FavoritesRepository repository;
@@ -36,7 +36,10 @@ public class FavoritesServiceImpl implements FavoritesService {
      */
     @Override
     public Favorites create(Favorites favorites) {
-        return repository.save(favorites);
+        logger.info("Creating a new favorite entry for user ID: {}", favorites.getUser().getId());
+        Favorites savedFavorite = repository.save(favorites);
+        logger.info("Favorite entry created successfully with ID: {}", savedFavorite.getId());
+        return savedFavorite;
     }
 
     /**
@@ -47,9 +50,10 @@ public class FavoritesServiceImpl implements FavoritesService {
     @Override
     public List<Favorites> getAll() {
         Long userId = userService.getCurrentUserId();
-        List<Favorites> all = repository.findAllByUserId(userId);
-        log.info("All{}", all);
-        return all;
+        logger.info("Fetching all favorites for user ID: {}", userId);
+        List<Favorites> allFavorites = repository.findAllByUserId(userId);
+        logger.info("Total favorite entries found: {}", allFavorites.size());
+        return allFavorites;
     }
 
     /**
@@ -59,7 +63,9 @@ public class FavoritesServiceImpl implements FavoritesService {
      */
     @Override
     public void deleteByUser(Long user) {
+        logger.info("Deleting all favorites for user ID: {}", user);
         repository.deleteByUser(user);
+        logger.info("All favorites deleted for user ID: {}", user);
     }
 
     /**
@@ -71,11 +77,18 @@ public class FavoritesServiceImpl implements FavoritesService {
      */
     @Override
     public void deleteById(Long favoriteId) {
+        logger.info("Attempting to delete favorite entry with ID: {}", favoriteId);
         Favorites favorites = repository.findById(favoriteId)
-                .orElseThrow(() -> new FavoritesNotFoundException("Not found"));
+                .orElseThrow(() -> {
+                    logger.error("Favorite entry with ID {} not found", favoriteId);
+                    return new FavoritesNotFoundException("Not found");
+                });
+
         if (userService.getCurrentUserId().equals(favorites.getUser().getId())) {
             repository.deleteById(favoriteId);
+            logger.info("Favorite entry with ID {} deleted successfully", favoriteId);
         } else {
+            logger.error("Unauthorized attempt to delete favorite entry with ID: {}", favoriteId);
             throw new FavoritesNotFoundException("Not found");
         }
     }

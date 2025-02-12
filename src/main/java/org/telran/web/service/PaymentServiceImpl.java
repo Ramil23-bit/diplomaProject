@@ -1,5 +1,7 @@
 package org.telran.web.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.web.entity.Payment;
@@ -13,6 +15,8 @@ import org.telran.web.repository.PaymentJpaRepository;
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
+    private static final Logger logger = LoggerFactory.getLogger(PaymentServiceImpl.class);
+
     @Autowired
     private PaymentJpaRepository paymentJpaRepository;
 
@@ -25,8 +29,12 @@ public class PaymentServiceImpl implements PaymentService {
      */
     @Override
     public Payment getByIdPayment(Long id) {
+        logger.info("Fetching payment with ID: {}", id);
         return paymentJpaRepository.findById(id)
-                .orElseThrow(() -> new PaymentNotFoundException("Payment by ID " + id + " not found"));
+                .orElseThrow(() -> {
+                    logger.error("Payment with ID {} not found", id);
+                    return new PaymentNotFoundException("Payment by ID " + id + " not found");
+                });
     }
 
     /**
@@ -37,7 +45,10 @@ public class PaymentServiceImpl implements PaymentService {
      */
     @Override
     public Payment createPayment(Payment payment) {
-        return paymentJpaRepository.save(payment);
+        logger.info("Creating new payment for user ID: {}", payment.getUser().getId());
+        Payment savedPayment = paymentJpaRepository.save(payment);
+        logger.info("Payment created successfully with ID: {}", savedPayment.getId());
+        return savedPayment;
     }
 
     /**
@@ -47,6 +58,8 @@ public class PaymentServiceImpl implements PaymentService {
      */
     @Override
     public void deletePayment(Long id) {
+        logger.info("Deleting payment with ID: {}", id);
         paymentJpaRepository.deleteById(id);
+        logger.info("Payment with ID {} deleted successfully", id);
     }
 }

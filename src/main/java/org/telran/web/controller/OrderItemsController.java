@@ -3,6 +3,8 @@ package org.telran.web.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/order_items")
 public class OrderItemsController {
 
+    private static final Logger logger = LoggerFactory.getLogger(OrderItemsController.class);
+
     @Autowired
     private OrderItemsService orderItemsService;
 
@@ -35,7 +39,7 @@ public class OrderItemsController {
      * @param orderItemsCreateDto The DTO containing order item details.
      * @return The created order item response DTO.
      */
-    @Operation(summary = "Create a new order item", description = "Adds an item to an order.")
+    @Operation(summary = "Create a new order item", description = "Adds a new item to an order.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Order item successfully created"),
             @ApiResponse(responseCode = "400", description = "Invalid request body")
@@ -43,15 +47,17 @@ public class OrderItemsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderItemsResponseDto create(@RequestBody OrderItemsCreateDto orderItemsCreateDto) {
-        return orderItemsConverter.toDto(
-                orderItemsService.createOrderItems(
-                        orderItemsConverter.toEntity(orderItemsCreateDto)));
+        logger.info("Received request to create order item: {}", orderItemsCreateDto);
+        OrderItemsResponseDto response = orderItemsConverter.toDto(
+                orderItemsService.createOrderItems(orderItemsConverter.toEntity(orderItemsCreateDto)));
+        logger.info("Order item created successfully with ID: {}", response.getId());
+        return response;
     }
 
     /**
      * Retrieves all order items.
      *
-     * @return List of order items response DTOs.
+     * @return List of order item response DTOs.
      */
     @Operation(summary = "Get all order items", description = "Retrieves a list of all order items.")
     @ApiResponses(value = {
@@ -59,9 +65,12 @@ public class OrderItemsController {
     })
     @GetMapping
     public List<OrderItemsResponseDto> getAll() {
-        return orderItemsService.getAllOrderItems().stream()
+        logger.info("Fetching all order items");
+        List<OrderItemsResponseDto> orderItems = orderItemsService.getAllOrderItems().stream()
                 .map(orderItemsConverter::toDto)
                 .collect(Collectors.toList());
+        logger.info("Total order items retrieved: {}", orderItems.size());
+        return orderItems;
     }
 
     /**
@@ -77,7 +86,10 @@ public class OrderItemsController {
     })
     @GetMapping("/{id}")
     public OrderItemsResponseDto getById(@PathVariable(name = "id") Long id) {
-        return orderItemsConverter.toDto(orderItemsService.getByIdOrderItems(id));
+        logger.info("Fetching order item with ID: {}", id);
+        OrderItemsResponseDto orderItem = orderItemsConverter.toDto(orderItemsService.getByIdOrderItems(id));
+        logger.info("Order item retrieved: {}", orderItem);
+        return orderItem;
     }
 
     /**
@@ -93,6 +105,8 @@ public class OrderItemsController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {
+        logger.info("Request to delete order item with ID: {}", id);
         orderItemsService.deleteOrderItems(id);
+        logger.info("Order item with ID {} successfully deleted", id);
     }
 }

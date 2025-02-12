@@ -1,6 +1,8 @@
 package org.telran.web.service;
 
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,9 @@ import java.util.List;
  * Handles business logic for managing shopping carts.
  */
 @Service
-public class CartServiceImpl implements CartService{
+public class CartServiceImpl implements CartService {
+
+    private static final Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
 
     @Autowired
     private CartJpaRepository cartJpaRepository;
@@ -39,7 +43,10 @@ public class CartServiceImpl implements CartService{
      */
     @Override
     public Cart createCart(Cart cart) {
-        return cartJpaRepository.save(cart);
+        logger.info("Creating a new cart for user ID: {}", cart.getUser().getId());
+        Cart savedCart = cartJpaRepository.save(cart);
+        logger.info("Cart created successfully with ID: {}", savedCart.getId());
+        return savedCart;
     }
 
     /**
@@ -50,9 +57,11 @@ public class CartServiceImpl implements CartService{
      */
     @Override
     public Cart addItemToCart(Cart cart) {
+        logger.info("Adding item to the current user's cart");
         Cart currentCart = findByCurrentUser();
         CartItems cartItem = cart.getCartItemsList().get(0);
         currentCart.getCartItemsList().add(cartItem);
+        logger.info("Item added to cart successfully, cart ID: {}", currentCart.getId());
         return currentCart;
     }
 
@@ -65,8 +74,12 @@ public class CartServiceImpl implements CartService{
      */
     @Override
     public Cart getByIdCart(Long id) {
+        logger.info("Fetching cart with ID: {}", id);
         return cartJpaRepository.findById(id)
-                .orElseThrow(() -> new CartNotFoundException("Cart by " + id + " not Found"));
+                .orElseThrow(() -> {
+                    logger.error("Cart with ID {} not found", id);
+                    return new CartNotFoundException("Cart by " + id + " not Found");
+                });
     }
 
     /**
@@ -76,7 +89,9 @@ public class CartServiceImpl implements CartService{
      */
     @Override
     public void deleteByUser(Long userId) {
+        logger.info("Deleting cart for user ID: {}", userId);
         cartJpaRepository.deleteByUser(userId);
+        logger.info("Cart for user ID {} deleted successfully", userId);
     }
 
     /**
@@ -87,7 +102,10 @@ public class CartServiceImpl implements CartService{
     @Transactional
     @Override
     public List<Cart> getAllCart() {
-        return cartJpaRepository.findAll();
+        logger.info("Fetching all carts");
+        List<Cart> carts = cartJpaRepository.findAll();
+        logger.info("Total carts retrieved: {}", carts.size());
+        return carts;
     }
 
     /**
@@ -98,7 +116,11 @@ public class CartServiceImpl implements CartService{
      */
     @Override
     public Cart findByCurrentUser() {
+        logger.info("Fetching cart for current user ID: {}", userService.getCurrentUserId());
         return cartJpaRepository.findByUserId(userService.getCurrentUserId())
-                .orElseThrow(() -> new CartNotFoundException("Cart not Found"));
+                .orElseThrow(() -> {
+                    logger.error("Cart for current user not found");
+                    return new CartNotFoundException("Cart not Found");
+                });
     }
 }

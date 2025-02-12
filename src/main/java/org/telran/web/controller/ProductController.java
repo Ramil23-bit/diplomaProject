@@ -3,7 +3,8 @@ package org.telran.web.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/products")
 public class ProductController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+
     @Autowired
     private ProductService productService;
 
@@ -39,28 +42,26 @@ public class ProductController {
      * @param productDto The DTO containing product details.
      * @return The created product response DTO.
      */
-    @Operation(summary = "Create a new product", description = "Registers a new product in the system.")
+    @Operation(summary = "Create a new product", description = "Registers a new product.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Product successfully created"),
             @ApiResponse(responseCode = "400", description = "Invalid request body")
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponseDto create(@Valid @RequestBody ProductCreateDto productDto) {
-        return createConverter.toDto(productService.create(createConverter.toEntity(productDto)));
+    public ProductResponseDto create(@RequestBody ProductCreateDto productDto) {
+        logger.info("Received request to create product: {}", productDto);
+        ProductResponseDto response = createConverter.toDto(productService.create(createConverter.toEntity(productDto)));
+        logger.info("Product created successfully with ID: {}", response.getId());
+        return response;
     }
 
     /**
      * Retrieves all products with optional filtering and sorting.
      *
-     * @param categoryId Optional category ID filter.
-     * @param direction Sorting direction.
-     * @param minPrice Minimum price filter.
-     * @param maxPrice Maximum price filter.
-     * @param discount Optional discount filter.
      * @return List of product response DTOs.
      */
-    @Operation(summary = "Get all products", description = "Retrieves a list of all available products with optional filtering and sorting.")
+    @Operation(summary = "Get all products", description = "Retrieves a list of all products, with optional filters and sorting.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Products successfully retrieved")
     })
@@ -71,16 +72,15 @@ public class ProductController {
             @RequestParam(name = "minPrice", required = false) BigDecimal minPrice,
             @RequestParam(name = "maxPrice", required = false) BigDecimal maxPrice,
             @RequestParam(name = "discount", required = false) BigDecimal discount) {
-        BigDecimal defaultMinPrice = BigDecimal.ZERO;
-        BigDecimal defaultMaxPrice = BigDecimal.valueOf(Long.MAX_VALUE);
-
+        logger.info("Fetching all products with filters - category: {}, minPrice: {}, maxPrice: {}, discount: {}",
+                categoryId.orElse(null), minPrice, maxPrice, discount);
         List<Product> products = productService.getAll(
                 categoryId.orElse(null),
                 direction != null ? direction : 0,
-                minPrice != null ? minPrice : defaultMinPrice,
-                maxPrice != null ? maxPrice : defaultMaxPrice,
+                minPrice != null ? minPrice : BigDecimal.ZERO,
+                maxPrice != null ? maxPrice : BigDecimal.valueOf(Long.MAX_VALUE),
                 discount);
-
+        logger.info("Total products retrieved: {}", products.size());
         return products.stream()
                 .map(createConverter::toDto)
                 .collect(Collectors.toList());
@@ -99,25 +99,30 @@ public class ProductController {
     })
     @GetMapping("/{id}")
     public ProductResponseDto getById(@PathVariable Long id) {
-        return createConverter.toDto(productService.getById(id));
+        logger.info("Fetching product with ID: {}", id);
+        ProductResponseDto product = createConverter.toDto(productService.getById(id));
+        logger.info("Product retrieved: {}", product);
+        return product;
     }
 
     /**
      * Updates an existing product.
      *
-     * @param id The ID of the product to update.
+     * @param id The ID of the product.
      * @param product The updated product details.
      * @return The updated product response DTO.
      */
-    @Operation(summary = "Update product details", description = "Updates the details of an existing product.")
+    @Operation(summary = "Update product", description = "Updates an existing product.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Product successfully updated"),
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> update(@PathVariable Long id, @RequestBody @Valid ProductCreateDto product) {
+    public ResponseEntity<ProductResponseDto> update(@PathVariable Long id, @RequestBody ProductCreateDto product) {
+        logger.info("Received request to update product with ID: {}", id);
         Product productUpdate = productService.editProducts(id, product);
         ProductResponseDto productResponseDto = createConverter.toDto(productUpdate);
+        logger.info("Product updated successfully: {}", productResponseDto);
         return ResponseEntity.ok(productResponseDto);
     }
 
@@ -133,7 +138,9 @@ public class ProductController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
+        logger.info("Request to delete product with ID: {}", id);
         productService.deleteProductsById(id);
+        logger.info("Product with ID {} successfully deleted", id);
         return ResponseEntity.noContent().build();
     }
 }

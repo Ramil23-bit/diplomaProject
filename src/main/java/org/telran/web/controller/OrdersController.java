@@ -3,7 +3,8 @@ package org.telran.web.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,13 @@ import java.util.stream.Collectors;
 
 /**
  * Controller for managing orders.
- * Provides endpoints to create, retrieve, and manage orders.
+ * Provides endpoints to create, retrieve, and list orders.
  */
 @RestController
 @RequestMapping("/api/v1/orders")
 public class OrdersController {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrdersController.class);
 
     @Autowired
     private OrdersService service;
@@ -37,15 +40,17 @@ public class OrdersController {
      * @param dto The DTO containing order details.
      * @return The created order response DTO.
      */
-    @Operation(summary = "Create a new order", description = "Creates an order with the given details.")
+    @Operation(summary = "Create a new order", description = "Places a new order for the user.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Order successfully created"),
             @ApiResponse(responseCode = "400", description = "Invalid request body")
     })
     @PostMapping
-    public ResponseEntity<OrderResponseDto> create(@Valid @RequestBody OrderCreateDto dto) {
+    public ResponseEntity<OrderResponseDto> create(@RequestBody OrderCreateDto dto) {
+        logger.info("Received request to create order: {}", dto);
         Orders order = service.create(converter.toEntity(dto));
         OrderResponseDto responseDto = converter.toDto(order);
+        logger.info("Order created successfully with ID: {}", responseDto.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
@@ -60,9 +65,12 @@ public class OrdersController {
     })
     @GetMapping
     public List<OrderResponseDto> getAll() {
-        return service.getAll().stream()
+        logger.info("Fetching all orders");
+        List<OrderResponseDto> orders = service.getAll().stream()
                 .map(converter::toDto)
                 .collect(Collectors.toList());
+        logger.info("Total orders retrieved: {}", orders.size());
+        return orders;
     }
 
     /**
@@ -78,6 +86,9 @@ public class OrdersController {
     })
     @GetMapping("/{id}")
     public OrderResponseDto getById(@PathVariable Long id) {
-        return converter.toDto(service.getById(id));
+        logger.info("Fetching order with ID: {}", id);
+        OrderResponseDto order = converter.toDto(service.getById(id));
+        logger.info("Order retrieved: {}", order);
+        return order;
     }
 }

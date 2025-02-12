@@ -1,6 +1,8 @@
 package org.telran.web.service;
 
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +27,8 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Autowired
     private UserRepository repository;
 
@@ -44,6 +48,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> getAll() {
+        logger.info("Fetching all users");
         return repository.findAll();
     }
 
@@ -56,8 +61,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User getById(Long id) {
+        logger.info("Fetching user with ID: {}", id);
         return repository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
+                .orElseThrow(() -> {
+                    logger.error("User with ID {} not found", id);
+                    return new UserNotFoundException("User with id " + id + " not found");
+                });
     }
 
     /**
@@ -71,14 +80,17 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User create(User user) {
-        if(repository.existsByEmail(user.getEmail())){
+        logger.info("Creating new user: {}", user.getEmail());
+        if (repository.existsByEmail(user.getEmail())) {
             throw new UserAlreadyExistsException("User with email " + user.getEmail() + " already exists");
         }
         try {
             User savedUser = repository.save(user);
             cartService.createCart(new Cart(savedUser));
+            logger.info("User created successfully with ID: {}", savedUser.getId());
             return savedUser;
         } catch (Exception e) {
+            logger.error("Failed to create user: {}", e.getMessage());
             throw new BadArgumentsException("Form is not completed correctly");
         }
     }
@@ -93,15 +105,18 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User updateUser(Long userId, UserCreateDto dto) {
-        User existingUser = repository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
+        logger.info("Updating user with ID: {}", userId);
+        User existingUser = getById(userId);
         existingUser.setUsername(dto.getName());
         existingUser.setPhoneNumber(dto.getPhone());
         existingUser.setEmail(dto.getEmail());
         existingUser.setPassword(passwordEncoder.encode(dto.getPassword()));
         try {
-            return repository.save(existingUser);
+            User updatedUser = repository.save(existingUser);
+            logger.info("User with ID: {} updated successfully", userId);
+            return updatedUser;
         } catch (Exception e) {
+            logger.error("Failed to update user with ID: {}", userId);
             throw new BadArgumentsException("Form is not completed correctly");
         }
     }
@@ -113,11 +128,13 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void updateUserRole(Long id) {
+        logger.info("Updating user role for ID: {}", id);
         User currentUser = getById(getCurrentUserId());
-        if(currentUser.getRole().equals(Role.ROLE_ADMIN)){
+        if (currentUser.getRole().equals(Role.ROLE_ADMIN)) {
             User updateRoleUser = getById(id);
             updateRoleUser.setRole(Role.ROLE_ADMIN);
             repository.save(updateRoleUser);
+            logger.info("User role updated successfully for ID: {}", id);
         }
     }
 
@@ -127,15 +144,17 @@ public class UserServiceImpl implements UserService {
      * @param id ID of the user to delete.
      * @throws UserNotFoundException if the user is not found.
      */
-    @Override
     @Transactional
+    @Override
     public void deleteUserById(Long id) {
+        logger.info("Deleting user with ID: {}", id);
         if (!repository.existsById(id)) {
             throw new UserNotFoundException("User with id " + id + " not found");
         }
         favoritesService.deleteByUser(id);
         cartService.deleteByUser(id);
         repository.deleteById(id);
+        logger.info("User with ID: {} deleted successfully", id);
     }
 
     /**
