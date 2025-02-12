@@ -57,7 +57,6 @@ public class CategoryControllerTest {
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void createCategoryTest() throws Exception {
         CategoryCreateDto categoryCreateDto = new CategoryCreateDto("Electronics", null);
-
         Category category = new Category(1L, "Electronics");
         CategoryResponseDto categoryResponseDto = new CategoryResponseDto(1L, "Electronics");
 
@@ -67,7 +66,7 @@ public class CategoryControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/categories")
                         .content(asJsonString(categoryCreateDto))
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -147,14 +146,15 @@ public class CategoryControllerTest {
         when(categoryService.editListOfProductsAddProduct(1L, 100L)).thenReturn(category);
         when(categoryConverter.toDto(any(Category.class))).thenReturn(categoryResponseDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/categories/edit/add_product/1")
-                        .param("newProduct", "100"))
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/categories/edit/add_product/1") // исправил путь
+                        .param("newProduct", "100")) // исправил параметр
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.categoryTitle").value("Electronics"));
     }
+
 
     private static String asJsonString(final Object obj) {
         try {
@@ -164,3 +164,4 @@ public class CategoryControllerTest {
         }
     }
 }
+
