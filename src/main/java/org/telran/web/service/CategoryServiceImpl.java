@@ -11,6 +11,10 @@ import org.telran.web.repository.CategoryJpaRepository;
 
 import java.util.List;
 
+/**
+ * Implementation of CategoryService.
+ * Handles business logic for managing product categories.
+ */
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -20,6 +24,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private ProductService productService;
 
+    /**
+     * Creates a new category and saves it in the repository.
+     *
+     * @param category Category entity containing category details.
+     * @return The created Category entity.
+     * @throws BadArgumentsException if provided data is invalid.
+     */
     @Override
     public Category create(Category category) {
         try {
@@ -29,17 +40,37 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    /**
+     * Retrieves all categories from the repository.
+     *
+     * @return List of all Category entities.
+     */
     @Override
     public List<Category> getAll() {
         return categoryJpaRepository.findAll();
     }
 
+    /**
+     * Retrieves a category by its ID.
+     *
+     * @param id ID of the category.
+     * @return The found Category entity.
+     * @throws CategoryNotFoundException if the category is not found.
+     */
     @Override
     public Category getById(Long id) {
         return categoryJpaRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category with id " + id + " not found"));
     }
 
+    /**
+     * Updates the title of a category.
+     *
+     * @param id ID of the category.
+     * @param title New title for the category.
+     * @throws CategoryNotFoundException if the category is not found.
+     * @throws BadArgumentsException if provided data is invalid.
+     */
     @Override
     @Transactional
     public void editTitle(Long id, String title) {
@@ -52,23 +83,43 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    /**
+     * Retrieves a category by its name.
+     *
+     * @param name Name of the category.
+     * @return The found Category entity.
+     * @throws CategoryNotFoundException if the category is not found.
+     */
     @Override
     public Category getByName(String name) {
         return categoryJpaRepository.findByCategoryTitle(name)
                 .orElseThrow(() -> new CategoryNotFoundException("Product with name " + name + " not found"));
     }
 
+    /**
+     * Adds a product to a category.
+     *
+     * @param categoryId ID of the category.
+     * @param productId ID of the product to add.
+     * @return The updated Category entity.
+     */
     @Override
     @Transactional
     public Category editListOfProductsAddProduct(Long categoryId, Long productId) {
         Category category = getById(categoryId);
         Product product = productService.getById(productId);
         productService.setCategory(productId, category);
-        //productService.save(product);
-        //category.getProducts().add(product);
         return category;
     }
 
+    /**
+     * Removes a product from a category.
+     *
+     * @param categoryId ID of the category.
+     * @param productId ID of the product to remove.
+     * @return The updated Category entity.
+     * @throws IllegalArgumentException if the product does not belong to the category.
+     */
     @Override
     @Transactional
     public Category editListOfProductsRemoveProduct(Long categoryId, Long productId) {
@@ -78,11 +129,15 @@ public class CategoryServiceImpl implements CategoryService {
             throw new IllegalArgumentException("Product does not belong to the category");
         }
         productService.setCategory(productId, null);
-        //productService.save(product);
-        //category.getProducts().remove(productId);
         return category;
     }
 
+    /**
+     * Deletes a category by its ID.
+     *
+     * @param id ID of the category to delete.
+     * @throws CategoryNotFoundException if the category is not found.
+     */
     @Override
     @Transactional
     public void delete(Long id) {
