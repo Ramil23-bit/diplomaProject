@@ -3,6 +3,8 @@ package org.telran.web.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/categories")
 public class CategoryController {
 
+    private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
+
     @Autowired
     private CategoryService categoryService;
 
@@ -30,12 +34,12 @@ public class CategoryController {
     private Converter<Category, CategoryCreateDto, CategoryResponseDto> categoryConverter;
 
     /**
-     * Creates a new product category.
+     * Creates a new category.
      *
      * @param categoryDto The DTO containing category details.
      * @return The created category response DTO.
      */
-    @Operation(summary = "Create a new category", description = "Creates a new product category.")
+    @Operation(summary = "Create a new category", description = "Registers a new product category.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Category successfully created"),
             @ApiResponse(responseCode = "400", description = "Invalid request body")
@@ -43,11 +47,14 @@ public class CategoryController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryResponseDto create(@RequestBody CategoryCreateDto categoryDto) {
-        return categoryConverter.toDto(categoryService.create(categoryConverter.toEntity(categoryDto)));
+        logger.info("Received request to create category: {}", categoryDto);
+        CategoryResponseDto response = categoryConverter.toDto(categoryService.create(categoryConverter.toEntity(categoryDto)));
+        logger.info("Category created successfully with ID: {}", response.getId());
+        return response;
     }
 
     /**
-     * Retrieves all product categories.
+     * Retrieves all categories.
      *
      * @return List of category response DTOs.
      */
@@ -57,9 +64,12 @@ public class CategoryController {
     })
     @GetMapping
     public List<CategoryResponseDto> getAll() {
-        return categoryService.getAll().stream()
+        logger.info("Fetching all categories");
+        List<CategoryResponseDto> categories = categoryService.getAll().stream()
                 .map(categoryConverter::toDto)
                 .collect(Collectors.toList());
+        logger.info("Total categories retrieved: {}", categories.size());
+        return categories;
     }
 
     /**
@@ -75,7 +85,10 @@ public class CategoryController {
     })
     @GetMapping("/{id}")
     public CategoryResponseDto getById(@PathVariable(name = "id") Long id) {
-        return categoryConverter.toDto(categoryService.getById(id));
+        logger.info("Fetching category with ID: {}", id);
+        CategoryResponseDto category = categoryConverter.toDto(categoryService.getById(id));
+        logger.info("Category retrieved: {}", category);
+        return category;
     }
 
     /**
@@ -89,26 +102,9 @@ public class CategoryController {
             @ApiResponse(responseCode = "404", description = "Category not found")
     })
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable(name = "id") Long id) {
+        logger.info("Request to delete category with ID: {}", id);
         categoryService.delete(id);
-    }
-
-    /**
-     * Updates the title of a category.
-     *
-     * @param id The ID of the category.
-     * @param newTitle The new title of the category.
-     * @return The updated category response DTO.
-     */
-    @Operation(summary = "Edit category title", description = "Updates the title of a category.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Category title successfully updated"),
-            @ApiResponse(responseCode = "404", description = "Category not found")
-    })
-    @PutMapping("/edit/title/{id}")
-    public CategoryResponseDto editTitle(@PathVariable Long id, @RequestParam String newTitle) {
-        categoryService.editTitle(id, newTitle);
-        return categoryConverter.toDto(categoryService.getById(id));
+        logger.info("Category with ID {} successfully deleted", id);
     }
 }

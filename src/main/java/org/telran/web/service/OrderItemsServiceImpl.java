@@ -1,5 +1,7 @@
 package org.telran.web.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,8 @@ import java.util.Collection;
 @Service
 public class OrderItemsServiceImpl implements OrderItemsService {
 
+    private static final Logger logger = LoggerFactory.getLogger(OrderItemsServiceImpl.class);
+
     @Autowired
     private OrderItemsJpaRepository orderItemsJpaRepository;
 
@@ -27,7 +31,10 @@ public class OrderItemsServiceImpl implements OrderItemsService {
     @Override
     @Transactional
     public OrderItems createOrderItems(OrderItems entity) {
-        return orderItemsJpaRepository.save(entity);
+        logger.info("Creating new order item");
+        OrderItems savedOrderItem = orderItemsJpaRepository.save(entity);
+        logger.info("Order item created successfully with ID: {}", savedOrderItem.getId());
+        return savedOrderItem;
     }
 
     /**
@@ -37,7 +44,10 @@ public class OrderItemsServiceImpl implements OrderItemsService {
      */
     @Override
     public Collection<OrderItems> getAllOrderItems() {
-        return orderItemsJpaRepository.findAll();
+        logger.info("Fetching all order items");
+        Collection<OrderItems> orderItems = orderItemsJpaRepository.findAll();
+        logger.info("Total order items retrieved: {}", orderItems.size());
+        return orderItems;
     }
 
     /**
@@ -49,8 +59,12 @@ public class OrderItemsServiceImpl implements OrderItemsService {
      */
     @Override
     public OrderItems getByIdOrderItems(Long id) {
+        logger.info("Fetching order item with ID: {}", id);
         return orderItemsJpaRepository.findById(id)
-                .orElseThrow(() -> new OrderItemsNotFoundException("OrderItem with id " + id + " not found"));
+                .orElseThrow(() -> {
+                    logger.error("Order item with ID {} not found", id);
+                    return new OrderItemsNotFoundException("OrderItem with id " + id + " not found");
+                });
     }
 
     /**
@@ -62,9 +76,12 @@ public class OrderItemsServiceImpl implements OrderItemsService {
     @Override
     @Transactional
     public void deleteOrderItems(Long id) {
+        logger.info("Attempting to delete order item with ID: {}", id);
         if (!orderItemsJpaRepository.existsById(id)) {
+            logger.error("Order item with ID {} not found", id);
             throw new OrderItemsNotFoundException("OrderItem with id " + id + " not found");
         }
         orderItemsJpaRepository.deleteById(id);
+        logger.info("Order item with ID {} deleted successfully", id);
     }
 }

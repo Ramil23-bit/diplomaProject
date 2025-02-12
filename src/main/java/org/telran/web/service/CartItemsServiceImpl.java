@@ -1,5 +1,7 @@
 package org.telran.web.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.web.dto.CartItemsResponseDto;
@@ -17,6 +19,8 @@ import java.util.List;
 @Service
 public class CartItemsServiceImpl implements CartItemsService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CartItemsServiceImpl.class);
+
     @Autowired
     private CartItemsJpaRepository cartItemsJpaRepository;
 
@@ -33,7 +37,10 @@ public class CartItemsServiceImpl implements CartItemsService {
      */
     @Override
     public List<CartItems> getAllCartItems() {
-        return cartItemsJpaRepository.findAll();
+        logger.info("Fetching all cart items");
+        List<CartItems> cartItemsList = cartItemsJpaRepository.findAll();
+        logger.info("Total cart items retrieved: {}", cartItemsList.size());
+        return cartItemsList;
     }
 
     /**
@@ -45,8 +52,12 @@ public class CartItemsServiceImpl implements CartItemsService {
      */
     @Override
     public CartItems getByIdCartItems(Long id) {
+        logger.info("Fetching cart item with ID: {}", id);
         return cartItemsJpaRepository.findById(id)
-                .orElseThrow(() -> new CartItemsNotFoundException("Cart Items by " + id + " not Found"));
+                .orElseThrow(() -> {
+                    logger.error("Cart item with ID {} not found", id);
+                    return new CartItemsNotFoundException("Cart Items by " + id + " not Found");
+                });
     }
 
     /**
@@ -57,7 +68,10 @@ public class CartItemsServiceImpl implements CartItemsService {
      */
     @Override
     public CartItems createCartItems(CartItems cartItems) {
-        return cartItemsJpaRepository.save(cartItems);
+        logger.info("Creating new cart item for cart ID: {}", cartItems.getCart().getId());
+        CartItems savedCartItem = cartItemsJpaRepository.save(cartItems);
+        logger.info("Cart item created successfully with ID: {}", savedCartItem.getId());
+        return savedCartItem;
     }
 
     /**
@@ -68,7 +82,10 @@ public class CartItemsServiceImpl implements CartItemsService {
     @Override
     public List<CartItems> getAllByCurrentUser() {
         Long currentUserCartId = cartService.findByCurrentUser().getId();
-        return cartItemsJpaRepository.findAllByCartId(currentUserCartId);
+        logger.info("Fetching all cart items for current user, cart ID: {}", currentUserCartId);
+        List<CartItems> cartItemsList = cartItemsJpaRepository.findAllByCartId(currentUserCartId);
+        logger.info("Total cart items for current user: {}", cartItemsList.size());
+        return cartItemsList;
     }
 
     /**
@@ -78,6 +95,12 @@ public class CartItemsServiceImpl implements CartItemsService {
      */
     @Override
     public void deleteById(Long CartItemsId) {
+        logger.info("Deleting cart item with ID: {}", CartItemsId);
+        if (!cartItemsJpaRepository.existsById(CartItemsId)) {
+            logger.error("Cart item with ID {} not found, cannot delete", CartItemsId);
+            throw new CartItemsNotFoundException("Cart Items by " + CartItemsId + " not Found");
+        }
         cartItemsJpaRepository.deleteById(CartItemsId);
+        logger.info("Cart item with ID {} successfully deleted", CartItemsId);
     }
 }

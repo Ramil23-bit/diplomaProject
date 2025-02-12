@@ -1,6 +1,8 @@
 package org.telran.web.service;
 
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telran.web.entity.Category;
@@ -18,6 +20,8 @@ import java.util.List;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
+
     @Autowired
     private CategoryJpaRepository categoryJpaRepository;
 
@@ -33,10 +37,14 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public Category create(Category category) {
+        logger.info("Creating new category: {}", category.getCategoryTitle());
         try {
-            return categoryJpaRepository.save(category);
+            Category savedCategory = categoryJpaRepository.save(category);
+            logger.info("Category created successfully with ID: {}", savedCategory.getId());
+            return savedCategory;
         } catch (Exception exception) {
-            throw new BadArgumentsException("Entered data is not corrected");
+            logger.error("Error creating category: {}", exception.getMessage());
+            throw new BadArgumentsException("Entered data is not correct");
         }
     }
 
@@ -47,7 +55,10 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public List<Category> getAll() {
-        return categoryJpaRepository.findAll();
+        logger.info("Fetching all categories");
+        List<Category> categories = categoryJpaRepository.findAll();
+        logger.info("Total categories retrieved: {}", categories.size());
+        return categories;
     }
 
     /**
@@ -59,28 +70,12 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public Category getById(Long id) {
+        logger.info("Fetching category with ID: {}", id);
         return categoryJpaRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("Category with id " + id + " not found"));
-    }
-
-    /**
-     * Updates the title of a category.
-     *
-     * @param id ID of the category.
-     * @param title New title for the category.
-     * @throws CategoryNotFoundException if the category is not found.
-     * @throws BadArgumentsException if provided data is invalid.
-     */
-    @Override
-    @Transactional
-    public void editTitle(Long id, String title) {
-        try {
-            if (categoryJpaRepository.updateTitle(id, title) == 0) {
-                throw new CategoryNotFoundException("Category with id " + id + " not found");
-            }
-        } catch (IllegalArgumentException ex) {
-            throw new BadArgumentsException("Entered data is not corrected");
-        }
+                .orElseThrow(() -> {
+                    logger.error("Category with ID {} not found", id);
+                    return new CategoryNotFoundException("Category with id " + id + " not found");
+                });
     }
 
     /**
@@ -92,8 +87,12 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public Category getByName(String name) {
+        logger.info("Fetching category by name: {}", name);
         return categoryJpaRepository.findByCategoryTitle(name)
-                .orElseThrow(() -> new CategoryNotFoundException("Product with name " + name + " not found"));
+                .orElseThrow(() -> {
+                    logger.error("Category with name {} not found", name);
+                    return new CategoryNotFoundException("Category with name " + name + " not found");
+                });
     }
 
     /**
@@ -106,9 +105,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public Category editListOfProductsAddProduct(Long categoryId, Long productId) {
+        logger.info("Adding product with ID: {} to category with ID: {}", productId, categoryId);
         Category category = getById(categoryId);
         Product product = productService.getById(productId);
         productService.setCategory(productId, category);
+        logger.info("Product with ID: {} successfully added to category with ID: {}", productId, categoryId);
         return category;
     }
 
@@ -123,27 +124,53 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public Category editListOfProductsRemoveProduct(Long categoryId, Long productId) {
+        logger.info("Removing product with ID: {} from category with ID: {}", productId, categoryId);
         Category category = getById(categoryId);
         Product product = productService.getById(productId);
         if (!product.getCategory().equals(category)) {
+            logger.error("Product with ID: {} does not belong to category with ID: {}", productId, categoryId);
             throw new IllegalArgumentException("Product does not belong to the category");
         }
         productService.setCategory(productId, null);
+        logger.info("Product with ID: {} successfully removed from category with ID: {}", productId, categoryId);
         return category;
+    }
+
+    /**
+     * Updates the title of a category.
+     *
+     * @param id ID of the category.
+     * @param title New title for the category.
+     */
+    @Override
+    @Transactional
+    public void editTitle(Long id, String title) {
+        logger.info("Updating category title for ID: {}", id);
+        try {
+            if (categoryJpaRepository.updateTitle(id, title) == 0) {
+                throw new CategoryNotFoundException("Category with id " + id + " not found");
+            }
+            logger.info("Category title updated successfully for ID: {}", id);
+        } catch (IllegalArgumentException ex) {
+            logger.error("Invalid category title update for ID: {}", id);
+            throw new BadArgumentsException("Entered data is not correct");
+        }
     }
 
     /**
      * Deletes a category by its ID.
      *
      * @param id ID of the category to delete.
-     * @throws CategoryNotFoundException if the category is not found.
      */
     @Override
     @Transactional
     public void delete(Long id) {
+        logger.info("Deleting category with ID: {}", id);
         try {
             categoryJpaRepository.deleteById(id);
+            logger.info("Category with ID {} successfully deleted", id);
         } catch (Exception exception) {
+            logger.error("Error deleting category with ID: {}", id);
             throw new CategoryNotFoundException("Category by " + id + " not found");
         }
     }

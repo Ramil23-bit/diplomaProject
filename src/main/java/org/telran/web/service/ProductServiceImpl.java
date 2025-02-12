@@ -3,6 +3,8 @@ package org.telran.web.service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ import java.util.Optional;
  */
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Autowired
     private EntityManager entityManager;
@@ -49,6 +53,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount) {
+        logger.info("Fetching all products with filters - categoryId: {}, minPrice: {}, maxPrice: {}, discount: {}", categoryId, minPrice, maxPrice, discount);
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         Root<Product> root = cq.from(Product.class);
@@ -93,8 +98,12 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Product getById(Long id) {
+        logger.info("Fetching product with ID: {}", id);
         return productJpaRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
+                .orElseThrow(() -> {
+                    logger.error("Product with ID {} not found", id);
+                    return new ProductNotFoundException("Product with id " + id + " not found");
+                });
     }
 
     /**
@@ -105,7 +114,10 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Product create(Product product) {
-        return productJpaRepository.save(product);
+        logger.info("Creating new product: {}", product.getProductTitle());
+        Product savedProduct = productJpaRepository.save(product);
+        logger.info("Product created successfully with ID: {}", savedProduct.getId());
+        return savedProduct;
     }
 
     /**
@@ -144,6 +156,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Product editProducts(Long id, ProductCreateDto productDto) {
+        logger.info("Updating product with ID: {}", id);
         Product actualProduct = getById(id);
         actualProduct.setProductTitle(productDto.getName());
         actualProduct.setProductInfo(productDto.getDescription());
@@ -153,8 +166,11 @@ public class ProductServiceImpl implements ProductService {
         actualProduct.setUpdatedAt(productDto.getUpdateAt());
 
         try {
-            return productJpaRepository.save(actualProduct);
+            Product updatedProduct = productJpaRepository.save(actualProduct);
+            logger.info("Product with ID: {} updated successfully", id);
+            return updatedProduct;
         } catch (Exception e) {
+            logger.error("Failed to update product with ID: {}", id);
             throw new BadArgumentsException("Form is not completed correctly");
         }
     }
@@ -177,7 +193,9 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public void deleteProductsById(Long id) {
+        logger.info("Deleting product with ID: {}", id);
         Product product = getById(id);
         productJpaRepository.deleteById(product.getId());
+        logger.info("Product with ID: {} deleted successfully", id);
     }
 }
