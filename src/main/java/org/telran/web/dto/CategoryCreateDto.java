@@ -1,18 +1,14 @@
 package org.telran.web.dto;
 
-import org.telran.web.entity.Product;
-
 import java.util.List;
 
 public class CategoryCreateDto {
-
     private String categoryTitle;
+    private List<Long> productIds; // Список ID продуктов
 
-    private List<Product> products;
-
-    public CategoryCreateDto(String categoryTitle, List<Product> products) {
+    public CategoryCreateDto(String categoryTitle, List<Long> productIds) { // Принимаем список Long ID
         this.categoryTitle = categoryTitle;
-        this.products = products;
+        this.productIds = productIds; // Теперь правильно сохраняем productIds
     }
 
     public String getCategoryTitle() {
@@ -23,11 +19,11 @@ public class CategoryCreateDto {
         this.categoryTitle = categoryTitle;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<Long> getProductIds() { // Исправлено название метода (camelCase)
+        return productIds;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setProductIds(List<Long> productIds) { // Исправлено название метода (camelCase)
+        this.productIds = productIds; // Теперь правильно обновляется productIds
     }
 }

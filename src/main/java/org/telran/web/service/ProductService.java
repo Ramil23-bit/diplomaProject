@@ -1,6 +1,7 @@
 package org.telran.web.service;
 
 import org.telran.web.dto.ProductCreateDto;
+
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
 
@@ -26,4 +27,11 @@ public interface ProductService {
 
     Product create(Product product);
 
+    void add(Product product);
+
+    /**
+     * 🔹 Новый метод для поиска списка продуктов по ID
+     */
+    List<Product> findByIds(List<Long> productIds);
 }
+

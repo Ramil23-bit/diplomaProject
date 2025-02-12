@@ -9,16 +9,14 @@ import org.springframework.stereotype.Service;
 import org.telran.web.dto.ProductCreateDto;
 import org.telran.web.entity.Category;
 import org.telran.web.entity.Product;
-import org.telran.web.entity.Storage;
 import org.telran.web.exception.BadArgumentsException;
 import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.ProductJpaRepository;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -32,8 +30,6 @@ public class ProductServiceImpl implements ProductService {
     @Lazy
     @Autowired
     private CategoryService categoryService;
-
-    private static final List<String> validColumnName = Arrays.asList("price", "createdAt", "productTitle");
 
     @Override
     public List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount) {
@@ -56,18 +52,11 @@ public class ProductServiceImpl implements ProductService {
         }
 
         cq.where(predicate);
-
-        try {
-            root.get("createdAt");
-            cq.orderBy(cb.asc(root.get("createdAt")));
-        } catch (IllegalArgumentException e) {
-            cq.orderBy(cb.asc(root.get("price"))); // Безопасная альтернатива
-        }
+        cq.orderBy(cb.asc(root.get("createdAt")));
 
         TypedQuery<Product> query = entityManager.createQuery(cq);
         return query.getResultList();
     }
-
 
     @Override
     public List<Product> getAllProducts() {
@@ -76,6 +65,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Product ID cannot be null");
+        }
         return productJpaRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found"));
     }
@@ -86,20 +78,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void add(Product product) {
+        productJpaRepository.save(product);
+    }
+
+    @Override
+    public List<Product> findByIds(List<Long> productIds) {
+        if (productIds == null || productIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return productJpaRepository.findAllById(productIds);
+    }
+
+    @Override
     public Product setCategory(Long productId, Category category) {
         Product product = getById(productId);
-        if(category == null) {
-            if(product.getCategory() != null) {
-                product.setCategory(null);
-                return productJpaRepository.save(product);
-            }else{
-                return product;
-            }
+
+        if (category == null) {
+            product.setCategory(null);
+        } else {
+            product.setCategory(category);
         }
-        if(product.getCategory() != null && !product.getCategory().equals(category)) {
-            throw new IllegalStateException("Product already belongs to Category");
-        }
-        product.setCategory(category);
+
         return productJpaRepository.save(product);
     }
 
@@ -111,7 +111,6 @@ public class ProductServiceImpl implements ProductService {
         actualProduct.setPrice(productDto.getPrice());
         actualProduct.setCategory(categoryService.getByName(productDto.getCategory()));
         actualProduct.setDiscount(productDto.getDiscount());
-        actualProduct.setUpdatedAt(productDto.getUpdateAt());
         actualProduct.setUpdatedAt(productDto.getUpdateAt());
 
         try {
@@ -128,7 +127,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProductsById(Long id) {
-        Product product = getById(id);
-        productJpaRepository.deleteById(product.getId());
+        if (id == null) {
+            throw new IllegalArgumentException("Product ID cannot be null");
+        }
+        if (!productJpaRepository.existsById(id)) {
+            throw new ProductNotFoundException("Product with id " + id + " not found");
+        }
+        productJpaRepository.deleteById(id);
     }
 }

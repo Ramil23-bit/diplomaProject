@@ -2,17 +2,14 @@ package org.telran.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import org.telran.web.converter.Converter;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.CategoryCreateDto;
 import org.telran.web.dto.CategoryResponseDto;
 import org.telran.web.entity.Category;
 import org.telran.web.service.CategoryService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,33 +26,32 @@ public class CategoryController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryResponseDto create(@RequestBody CategoryCreateDto categoryDto) {
-        return categoryConverter.toDto(categoryService.create(categoryConverter.toEntity(categoryDto)));
+        Category category = categoryConverter.toEntity(categoryDto);
+        return categoryConverter.toDto(categoryService.create(category));
     }
 
+
     @GetMapping
-    public List<CategoryResponseDto>getAll() {
+    public List<CategoryResponseDto> getAll() {
         return categoryService.getAll().stream()
-                .map(category -> categoryConverter.toDto(category))
+                .map(categoryConverter::toDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public CategoryResponseDto getById(@PathVariable(name = "id") Long id) {
+    public CategoryResponseDto getById(@PathVariable Long id) {
         return categoryConverter.toDto(categoryService.getById(id));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable(name = "id") Long id) {categoryService.delete(id);}
+    public void deleteById(@PathVariable Long id) {
+        categoryService.delete(id);
+    }
 
     @PutMapping("/edit/title/{id}")
     public CategoryResponseDto editTitle(@PathVariable Long id, @RequestParam String newTitle) {
         categoryService.editTitle(id, newTitle);
         return categoryConverter.toDto(categoryService.getById(id));
-    }
-
-    @PutMapping("/edit/add_product/{id}")
-    public CategoryResponseDto editAddProduct(@PathVariable Long id, @RequestParam Long newProduct) {
-        return categoryConverter.toDto(categoryService.editListOfProductsAddProduct(id, newProduct));
     }
 
     @PutMapping("/edit/remove_product/{id}")

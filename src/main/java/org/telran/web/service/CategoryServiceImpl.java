@@ -25,7 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             return categoryJpaRepository.save(category);
         } catch (Exception exception) {
-            throw new BadArgumentsException("Entered data is not corrected");
+            throw new BadArgumentsException("Entered data is not correct");
         }
     }
 
@@ -43,19 +43,22 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void editTitle(Long id, String title) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new BadArgumentsException("Title cannot be null or empty");
+        }
         try {
             if (categoryJpaRepository.updateTitle(id, title) == 0) {
                 throw new CategoryNotFoundException("Category with id " + id + " not found");
             }
         } catch (IllegalArgumentException ex) {
-            throw new BadArgumentsException("Entered data is not corrected");
+            throw new BadArgumentsException("Entered data is not correct");
         }
     }
 
     @Override
     public Category getByName(String name) {
         return categoryJpaRepository.findByCategoryTitle(name)
-                .orElseThrow(() -> new CategoryNotFoundException("Product with name " + name + " not found"));
+                .orElseThrow(() -> new CategoryNotFoundException("Category with name " + name + " not found"));
     }
 
     @Override
@@ -63,10 +66,14 @@ public class CategoryServiceImpl implements CategoryService {
     public Category editListOfProductsAddProduct(Long categoryId, Long productId) {
         Category category = getById(categoryId);
         Product product = productService.getById(productId);
+
+        if (product.getCategory() != null && !product.getCategory().equals(category)) {
+            throw new IllegalStateException("Product already belongs to another category");
+        }
+
         productService.setCategory(productId, category);
-        //productService.save(product);
-        //category.getProducts().add(product);
-        return category;
+        category.getProducts().add(product);
+        return categoryJpaRepository.save(category);
     }
 
     @Override
@@ -74,22 +81,23 @@ public class CategoryServiceImpl implements CategoryService {
     public Category editListOfProductsRemoveProduct(Long categoryId, Long productId) {
         Category category = getById(categoryId);
         Product product = productService.getById(productId);
-        if (!product.getCategory().equals(category)) {
+
+        if (!category.getProducts().contains(product)) {
             throw new IllegalArgumentException("Product does not belong to the category");
         }
+
         productService.setCategory(productId, null);
-        //productService.save(product);
-        //category.getProducts().remove(productId);
-        return category;
+        category.getProducts().remove(product);
+        return categoryJpaRepository.save(category);
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        try {
-            categoryJpaRepository.deleteById(id);
-        } catch (Exception exception) {
-            throw new CategoryNotFoundException("Category by " + id + " not found");
+        if (!categoryJpaRepository.existsById(id)) {
+            throw new CategoryNotFoundException("Category with id " + id + " not found");
         }
+        categoryJpaRepository.deleteById(id);
     }
 }
+
