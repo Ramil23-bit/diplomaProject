@@ -17,6 +17,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for managing orders.
+ * Provides endpoints for creating, retrieving, and listing orders.
+ */
 @RestController
 @RequestMapping("/api/v1/orders")
 public class OrdersController {
@@ -30,6 +34,12 @@ public class OrdersController {
     @Autowired
     private OrderItemsConverter itemsConverter;
 
+    /**
+     * Creates a new order.
+     *
+     * @param dto OrderCreateDto containing the order details.
+     * @return ResponseEntity with the created order details.
+     */
     @PostMapping
     public ResponseEntity<OrderResponseDto> create(@Valid @RequestBody OrderCreateDto dto) {
         Orders order = service.create(converter.toEntity(dto));
@@ -38,23 +48,33 @@ public class OrdersController {
                 .stream()
                 .peek(a -> a.setOrderId(order.getId()))
                 .collect(Collectors.toList());
-        List<OrderItems> orderItems = orderItemsDto.stream().map(a -> itemsConverter.toEntity(a)).collect(Collectors.toList());
+        List<OrderItems> orderItems = orderItemsDto.stream().map(itemsConverter::toEntity).collect(Collectors.toList());
         orderItems.forEach(oI -> oI.setPriceAtPurchase(oI.getProduct().getPrice()));
         order.setOrderItems(orderItems);
         OrderResponseDto responseDto = converter.toDto(service.create(order));
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
+    /**
+     * Retrieves all orders.
+     *
+     * @return List of OrderResponseDto representing all orders.
+     */
     @GetMapping
     public List<OrderResponseDto> getAll() {
         return service.getAll().stream()
-                .map(order -> converter.toDto(order))
+                .map(converter::toDto)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves an order by its ID.
+     *
+     * @param id ID of the order.
+     * @return OrderResponseDto representing the found order.
+     */
     @GetMapping("/{id}")
     public OrderResponseDto getById(@PathVariable Long id) {
         return converter.toDto(service.getById(id));
     }
-
 }
