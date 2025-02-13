@@ -68,23 +68,30 @@ public class ProductController {
     @GetMapping
     public List<ProductResponseDto> getAll(
             @RequestParam(name = "category_id", required = false) Optional<Long> categoryId,
-            @RequestParam(name = "sort", required = false) Integer direction,
+            @RequestParam(name = "sort", required = false, defaultValue = "createdAt") String sortBy,
+            @RequestParam(name = "direction", required = false, defaultValue = "1") int direction,
             @RequestParam(name = "minPrice", required = false) BigDecimal minPrice,
             @RequestParam(name = "maxPrice", required = false) BigDecimal maxPrice,
             @RequestParam(name = "discount", required = false) BigDecimal discount) {
-        logger.info("Fetching all products with filters - category: {}, minPrice: {}, maxPrice: {}, discount: {}",
-                categoryId.orElse(null), minPrice, maxPrice, discount);
+
+        logger.info("Fetching all products with filters - category: {}, minPrice: {}, maxPrice: {}, discount: {}, sortBy: {}, direction: {}",
+                categoryId.orElse(null), minPrice, maxPrice, discount, sortBy, direction);
+
         List<Product> products = productService.getAll(
                 categoryId.orElse(null),
-                direction != null ? direction : 0,
+                direction,
                 minPrice != null ? minPrice : BigDecimal.ZERO,
                 maxPrice != null ? maxPrice : BigDecimal.valueOf(Long.MAX_VALUE),
-                discount);
+                discount,
+                sortBy);
+
         logger.info("Total products retrieved: {}", products.size());
+
         return products.stream()
                 .map(createConverter::toDto)
                 .collect(Collectors.toList());
     }
+
 
     /**
      * Retrieves a product by its ID.
