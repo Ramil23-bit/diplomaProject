@@ -24,7 +24,7 @@ public interface ProductService {
      * @param discount Discount percentage filter.
      * @return List of filtered Product entities.
      */
-    List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount);
+    List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount, String sortBy);
 
     /**
      * Retrieves all products without filters.

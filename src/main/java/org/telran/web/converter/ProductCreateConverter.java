@@ -35,7 +35,9 @@ public class ProductCreateConverter implements Converter<Product, ProductCreateD
                 product.getPrice(),
                 product.getDiscount(),
                 product.getCategoryId(),
-                product.getImageUrl()
+                product.getCategory() != null ? product.getCategory().getCategoryTitle() : "No Category",
+                product.getProductInfo() != null ? product.getProductInfo() : "No Description",
+                product.getImageUrl() != null ? product.getImageUrl() : ""
         );
     }
 

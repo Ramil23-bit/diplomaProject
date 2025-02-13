@@ -87,7 +87,7 @@ databaseChangeLog:
                   name: storage_id
                   type: bigint
                   constraints:
-                    nullable: false
+                    nullable: true
                     foreignKeyName: fk_products_storage
                     references: storage(id)
               - column:

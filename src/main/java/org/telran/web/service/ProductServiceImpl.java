@@ -16,6 +16,7 @@ import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.ProductJpaRepository;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -52,32 +53,54 @@ public class ProductServiceImpl implements ProductService {
      * @return List of filtered Product entities.
      */
     @Override
-    public List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount) {
-        logger.info("Fetching all products with filters - categoryId: {}, minPrice: {}, maxPrice: {}, discount: {}", categoryId, minPrice, maxPrice, discount);
+    public List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount, String sortBy) {
+        logger.info("Fetching all products with filters - categoryId: {}, minPrice: {}, maxPrice: {}, discount: {}, sortBy: {}, direction: {}",
+                categoryId, minPrice, maxPrice, discount, sortBy, direction);
+
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Product> cq = cb.createQuery(Product.class);
         Root<Product> root = cq.from(Product.class);
 
-        Predicate predicate = cb.conjunction();
+        List<Predicate> predicates = new ArrayList<>();
+
         if (categoryId != null) {
-            predicate = cb.and(predicate, cb.equal(root.get("category").get("id"), categoryId));
+            predicates.add(cb.equal(root.get("category").get("id"), categoryId));
         }
         if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) > 0) {
-            predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("price"), minPrice));
+            predicates.add(cb.greaterThanOrEqualTo(root.get("price"), minPrice));
         }
         if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) > 0) {
-            predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("price"), maxPrice));
+            predicates.add(cb.lessThanOrEqualTo(root.get("price"), maxPrice));
         }
-        if (discount != null) {
-            predicate = cb.and(predicate, cb.equal(root.get("discount"), discount));
+        if (discount != null && discount.compareTo(BigDecimal.ZERO) > 0) {
+            predicates.add(cb.greaterThan(root.get("discount"), BigDecimal.ZERO));
         }
 
-        cq.where(predicate);
-        cq.orderBy(cb.asc(root.get("createdAt")));
+        cq.where(cb.and(predicates.toArray(new Predicate[0])));
+
+        // Sortare în funcție de parametru
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "price":
+                    cq.orderBy(direction == 1 ? cb.asc(root.get("price")) : cb.desc(root.get("price")));
+                    break;
+                case "createdAt":
+                    cq.orderBy(direction == 1 ? cb.asc(root.get("createdAt")) : cb.desc(root.get("createdAt")));
+                    break;
+                case "productTitle":
+                    cq.orderBy(direction == 1 ? cb.asc(root.get("productTitle")) : cb.desc(root.get("productTitle")));
+                    break;
+                default:
+                    cq.orderBy(cb.desc(root.get("createdAt"))); // Implicit sortare după dată
+            }
+        } else {
+            cq.orderBy(cb.desc(root.get("createdAt"))); // Sortare implicită după data creării
+        }
 
         TypedQuery<Product> query = entityManager.createQuery(cq);
         return query.getResultList();
     }
+
 
     /**
      * Retrieves all products without filters.
@@ -164,6 +187,7 @@ public class ProductServiceImpl implements ProductService {
         actualProduct.setCategory(categoryService.getByName(productDto.getCategory()));
         actualProduct.setDiscount(productDto.getDiscount());
         actualProduct.setUpdatedAt(productDto.getUpdateAt());
+        actualProduct.setImageUrl(productDto.getImage());
 
         try {
             Product updatedProduct = productJpaRepository.save(actualProduct);
@@ -194,8 +218,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProductsById(Long id) {
         logger.info("Deleting product with ID: {}", id);
-        Product product = getById(id);
-        productJpaRepository.deleteById(product.getId());
+        productJpaRepository.deleteById(id);
         logger.info("Product with ID: {} deleted successfully", id);
     }
 }
