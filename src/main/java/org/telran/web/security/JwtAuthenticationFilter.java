@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.telran.web.service.SchedulerService;
+import org.telran.web.service.OrdersSchedulerService;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;

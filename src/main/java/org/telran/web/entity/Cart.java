@@ -14,7 +14,6 @@ public class Cart {
     private Long id;
     @OneToOne
     @NotNull
-//    @MapsId
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany

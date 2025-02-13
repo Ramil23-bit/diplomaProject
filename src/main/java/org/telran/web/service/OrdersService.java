@@ -17,6 +17,7 @@ public interface OrdersService {
      * @return The created Orders entity.
      */
     Orders create(Orders orders);
+    List<Orders> checkOrderStatus();
 
     /**
      * Retrieves all orders.

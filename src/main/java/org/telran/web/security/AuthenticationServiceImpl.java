@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.telran.web.security.model.JwtAuthenticationResponse;
 import org.telran.web.security.model.SignInRequest;
-import org.telran.web.service.SchedulerService;
+import org.telran.web.service.OrdersSchedulerService;
 
 import java.util.logging.Logger;
 
@@ -23,7 +23,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
     private JwtService jwtService;
-    private static final Logger logger = Logger.getLogger(SchedulerService.class.getName());
+    private static final Logger logger = Logger.getLogger(OrdersSchedulerService.class.getName());
 
 
     @Override

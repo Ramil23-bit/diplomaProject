@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.OrderItemsCreateDto;
@@ -45,6 +46,7 @@ public class OrderItemsController {
             @ApiResponse(responseCode = "400", description = "Invalid request body")
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderItemsResponseDto create(@RequestBody OrderItemsCreateDto orderItemsCreateDto) {
         logger.info("Received request to create order item: {}", orderItemsCreateDto);
@@ -103,6 +105,7 @@ public class OrderItemsController {
             @ApiResponse(responseCode = "404", description = "Order item not found")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {
         logger.info("Request to delete order item with ID: {}", id);

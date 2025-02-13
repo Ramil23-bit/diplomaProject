@@ -9,6 +9,7 @@ import org.telran.web.entity.OrderItems;
 import org.telran.web.exception.OrderItemsNotFoundException;
 import org.telran.web.repository.OrderItemsJpaRepository;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Implementation of OrderItemsService.

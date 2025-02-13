@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.OrderCreateConverter;
 import org.telran.web.dto.OrderCreateDto;
@@ -46,6 +47,8 @@ public class OrdersController {
             @ApiResponse(responseCode = "400", description = "Invalid request body")
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER' ,'ADMIN')")
+    public ResponseEntity<OrderResponseDto> create(@Valid @RequestBody OrderCreateDto dto) {
     public ResponseEntity<OrderResponseDto> create(@RequestBody OrderCreateDto dto) {
         logger.info("Received request to create order: {}", dto);
         Orders order = service.create(converter.toEntity(dto));
@@ -64,6 +67,7 @@ public class OrdersController {
             @ApiResponse(responseCode = "200", description = "Orders successfully retrieved")
     })
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<OrderResponseDto> getAll() {
         logger.info("Fetching all orders");
         List<OrderResponseDto> orders = service.getAll().stream()
@@ -71,6 +75,14 @@ public class OrdersController {
                 .collect(Collectors.toList());
         logger.info("Total orders retrieved: {}", orders.size());
         return orders;
+    }
+
+    @GetMapping("/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<OrderResponseDto> checkStatus(){
+        return service.checkOrderStatus().stream()
+                .map(orders -> converter.toDto(orders))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -85,10 +97,12 @@ public class OrdersController {
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public OrderResponseDto getById(@PathVariable Long id) {
         logger.info("Fetching order with ID: {}", id);
         OrderResponseDto order = converter.toDto(service.getById(id));
         logger.info("Order retrieved: {}", order);
         return order;
     }
+
 }

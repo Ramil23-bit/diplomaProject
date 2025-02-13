@@ -18,10 +18,6 @@ public class CartItems {
     @JoinColumn(name = "cart_product_id", foreignKey = @ForeignKey(name = "FK_CART_ITEMS_PRODUCT"))
     private Product product;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
-
     public CartItems(Long id, Long quantity, Cart cart, Product product) {
         this.id = id;
         this.quantity = quantity;
