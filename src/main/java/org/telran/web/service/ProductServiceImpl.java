@@ -164,6 +164,7 @@ public class ProductServiceImpl implements ProductService {
         actualProduct.setCategory(categoryService.getByName(productDto.getCategory()));
         actualProduct.setDiscount(productDto.getDiscount());
         actualProduct.setUpdatedAt(productDto.getUpdateAt());
+        actualProduct.setImageUrl(productDto.getImage());
 
         try {
             Product updatedProduct = productJpaRepository.save(actualProduct);
@@ -194,8 +195,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProductsById(Long id) {
         logger.info("Deleting product with ID: {}", id);
-        Product product = getById(id);
-        productJpaRepository.deleteById(product.getId());
+        productJpaRepository.deleteById(id);
         logger.info("Product with ID: {} deleted successfully", id);
     }
 }

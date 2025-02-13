@@ -32,9 +32,9 @@ public class Product {
     @Column(name = "product_info")
     private String productInfo;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne //(cascade = CascadeType.ALL)
     @NotNull
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     @JsonBackReference
     private Category category;
 
