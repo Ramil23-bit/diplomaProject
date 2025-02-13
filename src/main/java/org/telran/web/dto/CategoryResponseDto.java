@@ -1,9 +1,13 @@
 package org.telran.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CategoryResponseDto {
 
+    @JsonProperty("id")
     private Long id;
 
+    @JsonProperty("category_title")
     private String categoryTitle;
 
     public CategoryResponseDto(Long id, String categoryTitle) {

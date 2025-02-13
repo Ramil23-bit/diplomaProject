@@ -22,12 +22,17 @@ import java.util.logging.Logger;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtService jwtService;
+//    @Autowired
+    private final JwtService jwtService;
 
-    @Autowired
-    @Lazy
-    private UserDetailsService userDetailService;
+//    @Autowired
+//    @Lazy
+    private final UserDetailsService userDetailService;
+
+    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailService) {
+        this.jwtService = jwtService;
+        this.userDetailService = userDetailService;
+    }
 
     private static final Logger logger = Logger.getLogger(SchedulerService.class.getName());
 

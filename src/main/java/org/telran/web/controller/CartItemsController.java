@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.CartItemsCreateDto;
 import org.telran.web.dto.CartItemsResponseDto;
@@ -48,11 +49,26 @@ public class CartItemsController {
     @PostMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public CartItemsResponseDto create(@RequestBody CartItemsCreateDto cartItemsCreateDto) {
+
         logger.info("Received request to add item to cart: {}", cartItemsCreateDto);
-        CartItemsResponseDto response = cartItemsConverter.toDto(cartItemsService.createCartItems(cartItemsConverter.toEntity(cartItemsCreateDto)));
+
+        CartItems cartItems = cartItemsConverter.toEntity(cartItemsCreateDto);
+        logger.info("Creating CartItem entity: {}", cartItems);
+
+        CartItems savedCartItem = cartItemsService.createCartItems(cartItems);
+//        if (savedCartItem == null) {
+//            logger.error("Failed to create CartItem, returned null from createCartItems");
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create Cart Item");
+//        }
+
+        CartItemsResponseDto response = cartItemsConverter.toDto(savedCartItem);
+        logger.info("Converted CartItem DTO: {}", response);
+
         logger.info("Cart item added successfully with ID: {}", response.getId());
+
         return response;
     }
+
 
     /**
      * Retrieves all cart items (Admin only).

@@ -14,6 +14,7 @@ import org.telran.web.converter.Converter;
 import org.telran.web.dto.CartCreateDto;
 import org.telran.web.dto.CartResponseDto;
 import org.telran.web.entity.Cart;
+import org.telran.web.repository.CartJpaRepository;
 import org.telran.web.service.CartService;
 
 import java.util.List;
@@ -50,14 +51,20 @@ public class CartController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<CartResponseDto> create(@RequestBody CartCreateDto cartCreateDto) {
+        System.out.println("📌 CartController.create() вызван!");
         logger.info("Received request to create cart: {}", cartCreateDto);
+
         Cart cart = cartConverter.toEntity(cartCreateDto);
         CartResponseDto response = cartConverter.toDto(cartService.createCart(cart));
+
+        System.out.println("✅ Cart создан! ID: " + response.getId());
         logger.info("Cart created successfully with ID: {}", response.getId());
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
                 .body(response);
     }
+
 
     /**
      * Retrieves the current user's cart.

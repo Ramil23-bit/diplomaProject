@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.telran.web.configuration.SecurityConfig;
+import org.telran.web.configuration.TestSecurityConfig;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.CartCreateDto;
 import org.telran.web.dto.CartResponseDto;
@@ -33,22 +33,20 @@ import java.util.Collections;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(value = CartController.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
 })
-@ActiveProfiles("test")
-@Import(SecurityConfig.class)
+@Import({TestSecurityConfig.class})
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class CartControllerTest {
+    @Autowired private MockMvc mockMvc;
+
     @MockBean
     private CartService cartService;
     @MockBean
     private Converter<Cart, CartCreateDto, CartResponseDto> converter;
-
-    @Autowired
-    private MockMvc mockMvc;
 
     static {
         System.setProperty("spring.profiles.active", "test");
@@ -61,8 +59,8 @@ public class CartControllerTest {
         Cart cart = new Cart(1L, null);
         CartResponseDto cartResponseDto = new CartResponseDto(1L, new UserResponseDto(1L, "user", "test@example.com", "123456789"));
 
-        when(converter.toEntity(any(CartCreateDto.class))).thenReturn(cart);
         when(cartService.createCart(any(Cart.class))).thenReturn(cart);
+        when(converter.toEntity(any(CartCreateDto.class))).thenReturn(cart);
         when(converter.toDto(any(Cart.class))).thenReturn(cartResponseDto);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/cart")
@@ -108,7 +106,7 @@ public class CartControllerTest {
     void getCurrentCartAsAnonymousTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cart/current"))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
     @Test
@@ -135,7 +133,7 @@ public class CartControllerTest {
     void getAllCartsAsAnonymousTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cart"))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
     private static String asJsonString(final Object obj) {
@@ -146,5 +144,3 @@ public class CartControllerTest {
         }
     }
 }
-
-

@@ -69,7 +69,24 @@ public class CartItemsServiceImpl implements CartItemsService {
     @Override
     public CartItems createCartItems(CartItems cartItems) {
         logger.info("Creating new cart item for cart ID: {}", cartItems.getCart().getId());
+
+        if (cartItems == null) {
+            logger.error("CartItems entity cannot be null");
+            throw new IllegalArgumentException("Cart items cannot be null");
+        }
+
+        if (cartItems.getCart() == null || cartItems.getProduct() == null) {
+            logger.error("Cart or Product cannot be null for cart item: {}", cartItems);
+            throw new IllegalArgumentException("Cart and Product must not be null");
+        }
+
         CartItems savedCartItem = cartItemsJpaRepository.save(cartItems);
+
+        if (savedCartItem == null) {
+            logger.error("Failed to save cart item");
+            throw new RuntimeException("Failed to create CartItem");
+        }
+
         logger.info("Cart item created successfully with ID: {}", savedCartItem.getId());
         return savedCartItem;
     }

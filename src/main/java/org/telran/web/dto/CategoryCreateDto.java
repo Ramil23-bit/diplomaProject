@@ -1,15 +1,22 @@
 package org.telran.web.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.telran.web.entity.Product;
+
 import java.util.List;
 
 public class CategoryCreateDto {
-    private String categoryTitle;
-    private List<Long> productIds; // Список ID продуктов
 
-    public CategoryCreateDto(String categoryTitle, List<Long> productIds) { // Принимаем список Long ID
+    private String categoryTitle;
+
+    @JsonDeserialize(contentAs = Product.class)
+    private List<Product> products;
+
+    public CategoryCreateDto(String categoryTitle, List<Product> products) {
         this.categoryTitle = categoryTitle;
-        this.productIds = productIds; // Теперь правильно сохраняем productIds
+        this.products = products;
     }
+
 
     public String getCategoryTitle() {
         return categoryTitle;
@@ -19,11 +26,11 @@ public class CategoryCreateDto {
         this.categoryTitle = categoryTitle;
     }
 
-    public List<Long> getProductIds() { // Исправлено название метода (camelCase)
-        return productIds;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setProductIds(List<Long> productIds) { // Исправлено название метода (camelCase)
-        this.productIds = productIds; // Теперь правильно обновляется productIds
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

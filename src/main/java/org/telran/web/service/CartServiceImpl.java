@@ -43,11 +43,12 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public Cart createCart(Cart cart) {
-        logger.info("Creating a new cart for user ID: {}", cart.getUser().getId());
+        logger.info("Attempting to create cart for user ID: {}", cart.getUser().getId());
         Cart savedCart = cartJpaRepository.save(cart);
         logger.info("Cart created successfully with ID: {}", savedCart.getId());
         return savedCart;
     }
+
 
     /**
      * Adds an item to the current user's cart.

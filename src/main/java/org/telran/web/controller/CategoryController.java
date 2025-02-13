@@ -14,7 +14,10 @@ import org.telran.web.dto.CategoryResponseDto;
 import org.telran.web.entity.Category;
 import org.telran.web.service.CategoryService;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -65,7 +68,9 @@ public class CategoryController {
     @GetMapping
     public List<CategoryResponseDto> getAll() {
         logger.info("Fetching all categories");
-        List<CategoryResponseDto> categories = categoryService.getAll().stream()
+        List<CategoryResponseDto> categories = Optional.ofNullable(categoryService.getAll())
+                .orElse(Collections.emptyList())
+                .stream()
                 .map(categoryConverter::toDto)
                 .collect(Collectors.toList());
         logger.info("Total categories retrieved: {}", categories.size());

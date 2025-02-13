@@ -15,6 +15,10 @@ public class CartCreateDto {
         this.productId = productId;
         this.quantity = quantity;
     }
+    public CartCreateDto() {
+        //
+    }
+
 
     public Long getProductId() {
         return productId;
