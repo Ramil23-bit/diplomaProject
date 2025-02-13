@@ -44,17 +44,17 @@ public class OrdersServiceImpl implements OrdersService {
                 .orElseThrow(() -> new OrderNotFoundException("Order with id " + id + " not found"));
     }
     @Override
-    public List<Orders> checkOrderStatus(){
+    public List<Orders> checkOrderStatus() {
         List<Orders> ordersAwaitingStatus = new ArrayList<>();
-        for(Orders orders : getAll()){
-            if (orders.getStatus().equals(OrderStatus.AWAITING_PAYMENT)){
+        for (Orders orders : getAll()) {
+            if (orders.getStatus().equals(OrderStatus.AWAITING_PAYMENT)) {
                 ordersAwaitingStatus.add(orders);
             }
         }
         return ordersAwaitingStatus;
     }
 
-    public void updateStatusOrders(){
+    public void updateStatusOrders() {
         List<Orders> ordersServiceList = repository.findAll();
         for (Orders orders : ordersServiceList) {
             LocalDateTime dateCreateOrders = orders.getCreatedAt();

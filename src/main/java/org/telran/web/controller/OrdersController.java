@@ -55,7 +55,7 @@ public class OrdersController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping
+    @GetMapping("/status")
     @PreAuthorize("hasRole('ADMIN')")
     public List<OrderResponseDto> checkStatus(){
         return service.checkOrderStatus().stream()
