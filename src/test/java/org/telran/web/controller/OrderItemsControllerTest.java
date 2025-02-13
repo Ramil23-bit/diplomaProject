@@ -70,10 +70,8 @@ public class OrderItemsControllerTest {
     void deleteOrderItemTest() throws Exception {
         Long orderItemId = 1L;
 
-        // Мокаем метод удаления
         doNothing().when(orderItemsService).deleteOrderItems(orderItemId);
 
-        // Выполняем запрос
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/order_items/{id}", orderItemId)) // Изменено здесь
                 .andExpect(MockMvcResultMatchers.status().isNoContent());  // Ожидаем статус 204 (No Content)
     }

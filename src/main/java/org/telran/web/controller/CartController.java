@@ -51,13 +51,12 @@ public class CartController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<CartResponseDto> create(@RequestBody CartCreateDto cartCreateDto) {
-        System.out.println("📌 CartController.create() вызван!");
+
         logger.info("Received request to create cart: {}", cartCreateDto);
 
         Cart cart = cartConverter.toEntity(cartCreateDto);
         CartResponseDto response = cartConverter.toDto(cartService.createCart(cart));
 
-        System.out.println("✅ Cart создан! ID: " + response.getId());
         logger.info("Cart created successfully with ID: {}", response.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED)

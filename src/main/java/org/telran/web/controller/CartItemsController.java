@@ -56,10 +56,6 @@ public class CartItemsController {
         logger.info("Creating CartItem entity: {}", cartItems);
 
         CartItems savedCartItem = cartItemsService.createCartItems(cartItems);
-//        if (savedCartItem == null) {
-//            logger.error("Failed to create CartItem, returned null from createCartItems");
-//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create Cart Item");
-//        }
 
         CartItemsResponseDto response = cartItemsConverter.toDto(savedCartItem);
         logger.info("Converted CartItem DTO: {}", response);
