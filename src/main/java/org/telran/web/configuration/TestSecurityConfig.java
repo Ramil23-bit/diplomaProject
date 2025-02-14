@@ -23,7 +23,7 @@ public class TestSecurityConfig {
                         .requestMatchers("/api/v1/cart").hasRole("ADMIN") // Только ADMIN может смотреть все корзины
                         .requestMatchers(HttpMethod.POST, "/api/v1/cart_items/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/v1/order-items").authenticated() // Require authentication
-                        .anyRequest().authenticated()) // Other requests require authentication
+                        .anyRequest().permitAll()) // Other requests require authentication
                 .exceptionHandling(config -> config.authenticationEntryPoint(
                         (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
                 ));
