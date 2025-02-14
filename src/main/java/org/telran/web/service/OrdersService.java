@@ -17,6 +17,17 @@ public interface OrdersService {
      * @return The created Orders entity.
      */
     Orders create(Orders orders);
+    /**
+     * Retrieves a list of orders that are currently awaiting payment.
+     *
+     * <p>
+     * This method iterates through all available orders and filters them based on their
+     * status. Only orders with the status {AWAITING_PAYMENT} will be included
+     * in the returned list.
+     * </p>
+     *
+     * @return a list of {@link Orders} that have the status {AWAITING_PAYMENT}.
+     */
     List<Orders> checkOrderStatus();
 
     /**

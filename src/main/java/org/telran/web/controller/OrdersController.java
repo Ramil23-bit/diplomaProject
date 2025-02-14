@@ -3,6 +3,7 @@ package org.telran.web.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,6 @@ public class OrdersController {
     @PostMapping
     @PreAuthorize("hasAnyRole('USER' ,'ADMIN')")
     public ResponseEntity<OrderResponseDto> create(@Valid @RequestBody OrderCreateDto dto) {
-    public ResponseEntity<OrderResponseDto> create(@RequestBody OrderCreateDto dto) {
         logger.info("Received request to create order: {}", dto);
         Orders order = service.create(converter.toEntity(dto));
         OrderResponseDto responseDto = converter.toDto(order);

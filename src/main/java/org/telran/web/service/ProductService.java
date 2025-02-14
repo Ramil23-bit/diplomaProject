@@ -81,4 +81,6 @@ public interface ProductService {
      * @return The created Product entity.
      */
     Product create(Product product);
+
+    Product createProductDays(Long id);
 }
