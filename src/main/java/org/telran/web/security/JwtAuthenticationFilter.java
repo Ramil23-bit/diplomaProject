@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.telran.web.service.OrdersSchedulerService;
+import org.telran.web.service.PaymentSchedulerService;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
@@ -34,7 +35,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailService = userDetailService;
     }
 
-    private static final Logger logger = Logger.getLogger(SchedulerService.class.getName());
+    private static final Logger logger = Logger.getLogger(OrdersSchedulerService.class.getName());
+    private static final Logger loggerPayment = Logger.getLogger(PaymentSchedulerService.class.getName());
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

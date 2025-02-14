@@ -17,7 +17,6 @@ import org.telran.web.repository.PaymentJpaRepository;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.logging.Logger;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -26,7 +25,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     private PaymentJpaRepository paymentJpaRepository;
-    private static final Logger logger = Logger.getLogger(OrdersSchedulerService.class.getName());
 
     /**
      * Retrieves a payment by its ID.
@@ -71,6 +69,19 @@ public class PaymentServiceImpl implements PaymentService {
         logger.info("Payment with ID {} deleted successfully", id);
     }
 
+    /**
+     * Updates the payment statuses based on their creation date and current status.
+     * <p>
+     * This method checks all payments in the repository and updates their statuses
+     * according to the following rules:
+     * <ul>
+     *     <li>If a payment was created more than 2 days ago, its status will be changed to CANCELED.</li>
+     *     <li>If the payment status is CREATED, it will be updated to AWAITING_PAYMENT.</li>
+     *     <li>If the payment status is AWAITING_PAYMENT, it will be updated to PAID.</li>
+     *     <li>If the payment status is PAID, it will be updated to COMPLETED.</li>
+     * </ul>
+     * </p>
+     */
     public void updateStatusPayment(){
         List<Payment> paymentList = paymentJpaRepository.findAll();
         for(Payment payments : paymentList){

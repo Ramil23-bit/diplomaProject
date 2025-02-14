@@ -15,7 +15,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -33,7 +32,6 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private PaymentServiceImpl paymentService;
 
-    private static final Logger logger = Logger.getLogger(OrdersSchedulerService.class.getName());
 
     /**
      * Creates a new order and saves it in the repository.
@@ -78,6 +76,12 @@ public class OrdersServiceImpl implements OrdersService {
                     return new OrderNotFoundException("Order with id " + id + " not found");
                 });
     }
+
+    /**
+     * Checks the status of all orders and returns a list of orders that are awaiting payment.
+     *
+     * @return a list of orders with the status AWAITING_PAYMENT.
+     */
     @Override
     public List<Orders> checkOrderStatus() {
         List<Orders> ordersAwaitingStatus = new ArrayList<>();
@@ -88,6 +92,19 @@ public class OrdersServiceImpl implements OrdersService {
         }
         return ordersAwaitingStatus;
     }
+    /**
+     * Updates the statuses of orders based on their creation time and current status.
+     * <p>
+     * If an order was created more than 60 minutes ago and is in the AWAITING_PAYMENT status,
+     * it will be cancelled. Orders with other statuses will be updated according to their
+     * current status:
+     * <ul>
+     *     <li>CREATED -> AWAITING_PAYMENT</li>
+     *     <li>AWAITING_PAYMENT -> PAID</li>
+     *     <li>PAID -> COMPLETED</li>
+     * </ul>
+     * </p>
+     */
 
     public void updateStatusOrders() {
         List<Orders> ordersServiceList = repository.findAll();

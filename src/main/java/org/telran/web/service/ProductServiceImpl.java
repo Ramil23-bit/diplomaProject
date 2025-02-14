@@ -35,6 +35,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductJpaRepository productJpaRepository;
+    @Autowired
+    private UserService userService;
 
     @Lazy
     @Autowired
@@ -141,6 +143,18 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productJpaRepository.save(product);
         logger.info("Product created successfully with ID: {}", savedProduct.getId());
         return savedProduct;
+    }
+
+    @Override
+    public Product createProductDays(Long id) {
+        String roleUser = userService.getCurrentUserRole();
+        Product product = getById(id);
+        String info = product.getProductInfo();
+        if(roleUser.equals("ROLE_ADMIN")){
+            product.setProductInfo(info + " Товар дня");
+            productJpaRepository.save(product);
+        }
+        return product;
     }
 
     /**

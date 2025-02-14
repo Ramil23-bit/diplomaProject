@@ -10,9 +10,9 @@ public class OrdersSchedulerService {
     @Autowired
     private OrdersServiceImpl ordersService;
 
-    @Scheduled(fixedDelay = 45000L)
-    public void updateOrderStatusInOrders() {
-       ordersService.updateStatusOrders();
-    }
+//    @Scheduled(fixedDelay = 45000L)
+//    public void updateOrderStatusInOrders() {
+//       ordersService.updateStatusOrders();
+//    }
 
 }
