@@ -1,9 +1,7 @@
 package org.telran.web.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -55,6 +53,9 @@ public class SecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/v1/orders").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/orders").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/{id}").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/cart").hasRole("ADMIN")
@@ -66,17 +67,24 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/categories/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/categories/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/storage").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/storage").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/cart_items/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/v1/storage/**").hasRole("ADMIN")
+                        //.requestMatchers("/api/v1/storage/**").hasRole("ADMIN")
                         .anyRequest().permitAll())
+
+                // Exception Handling
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
                         })
                         .accessDeniedHandler(customAccessDeniedHandler()))
+
+                // Session Management
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        // Add JWT Authentication Filter
         if (jwtAuthenticationFilter != null) {
             http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         } else {
@@ -86,6 +94,13 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     *   Checks if the current environment is a test environment.
+     * - Reads the active Spring profile.
+     * - Used to conditionally disable security settings during testing.
+     *
+     * @return `true` if the profile is "test", otherwise `false`.
+     */
     private boolean isTestEnvironment() {
         String profile = System.getProperty("spring.profiles.active");
         System.out.println("Check the environment profile: " + profile);
@@ -104,11 +119,25 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
+    /**
+     *   Custom Access Denied Handler
+     * - Handles unauthorized access attempts.
+     * - Sends an appropriate error response when a user lacks permission.
+     * @return `CustomAccessDeniedHandler` instance.
+     */
     @Bean
     public CustomAccessDeniedHandler customAccessDeniedHandler() {
         return new CustomAccessDeniedHandler();
     }
 
+    /**
+     *   JWT Authentication Filter
+     * - Handles JWT token parsing and validation.
+     * - Ensures that only authenticated users can access protected resources.
+     * @param jwtService          The service responsible for JWT token management.
+     * @param userDetailsService  Service for retrieving user details.
+     * @return Configured `JwtAuthenticationFilter` instance.
+     */
     @Bean
     @ConditionalOnMissingBean(JwtAuthenticationFilter.class)
     public JwtAuthenticationFilter jwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
