@@ -18,6 +18,14 @@ import org.telran.web.entity.User;
 import org.telran.web.exception.OrderNotFoundException;
 import org.telran.web.repository.OrdersRepository;
 
+/**
+ *   Key Features:
+ * - Uses `@ExtendWith(MockitoExtension.class)` for Mockito-based testing.
+ * - Mocks `OrdersRepository` to isolate business logic.
+ * - Covers scenarios like **creating an order, fetching all orders, retrieving by ID, and handling missing orders**.
+ * - Ensures **exception handling for non-existing orders**.
+ */
+
 @ExtendWith(MockitoExtension.class)
 class OrdersServiceImplTest {
 
@@ -30,6 +38,11 @@ class OrdersServiceImplTest {
     private Orders order1;
     private Orders order2;
 
+    /**
+     *   Setup Method**
+     * - Initializes test data before each test execution.
+     * - Creates **two sample orders** with different delivery addresses.
+     */
     @BeforeEach
     void setUp() {
         User user = new User();
@@ -42,6 +55,10 @@ class OrdersServiceImplTest {
         order2.setId(2L);
     }
 
+    /**
+     **Test Case:** Successfully create an order.
+     **Expected Result:** The order is saved and returned correctly.
+     */
     @Test
     void testCreateOrder_Success() {
         when(ordersRepository.save(order1)).thenReturn(order1);
@@ -55,9 +72,12 @@ class OrdersServiceImplTest {
         verify(ordersRepository, times(1)).save(order1);
     }
 
+    /**
+     **Test Case:** Retrieve all orders.
+     **Expected Result:** Returns a list containing all orders.
+     */
     @Test
     void testGetAllOrders_Success() {
-
         List<Orders> ordersList = Arrays.asList(order1, order2);
         when(ordersRepository.findAll()).thenReturn(ordersList);
 
@@ -69,6 +89,10 @@ class OrdersServiceImplTest {
         verify(ordersRepository, times(1)).findAll();
     }
 
+    /**
+     **Test Case:** Retrieve an order by ID when it exists.
+     **Expected Result:** Returns the correct order.
+     */
     @Test
     void testGetById_Success() {
         when(ordersRepository.findById(1L)).thenReturn(Optional.of(order1));
@@ -82,6 +106,10 @@ class OrdersServiceImplTest {
         verify(ordersRepository, times(1)).findById(1L);
     }
 
+    /**
+     **Test Case:** Attempt to retrieve a non-existing order by ID.
+     **Expected Result:** Throws `OrderNotFoundException`.
+     */
     @Test
     void testGetById_NotFound() {
         when(ordersRepository.findById(100L)).thenReturn(Optional.empty());

@@ -16,12 +16,9 @@ import org.telran.web.entity.Product;
 import org.telran.web.entity.Storage;
 import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.ProductJpaRepository;
-
 import java.math.BigDecimal;
 import java.util.*;
-
 import static org.mockito.ArgumentMatchers.any;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

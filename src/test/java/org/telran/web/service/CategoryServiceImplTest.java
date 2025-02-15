@@ -20,6 +20,14 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ *   Key Features:
+ * - Uses `@ExtendWith(MockitoExtension.class)` for Mockito integration.
+ * - Mocks `CategoryJpaRepository` and `ProductServiceImpl` to isolate service logic.
+ * - Covers **category creation, retrieval, updating, and product management**.
+ * - Ensures **exception handling for missing categories**.
+ */
+
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceImplTest {
 
@@ -32,6 +40,10 @@ class CategoryServiceImplTest {
     @InjectMocks
     private CategoryServiceImpl categoryService;
 
+    /**
+     **Test Case:** Successfully create a new category.
+     **Expected Result:** Returns the created category.
+     */
     @Test
     void create() {
         Category newCategory = new Category(null, "New Category", null);
@@ -41,11 +53,15 @@ class CategoryServiceImplTest {
 
         Category result = categoryService.create(newCategory);
 
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
-        assertEquals("New Category", result.getCategoryTitle());
+        assertNotNull(result);  // Category should not be null
+        assertEquals(1L, result.getId());  // ID must match expected value
+        assertEquals("New Category", result.getCategoryTitle());  // Title should match
     }
 
+    /**
+     **Test Case:** Retrieve all categories.
+     **Expected Result:** Returns a list of categories.
+     */
     @Test
     public void testGetAllCategories() {
         List<Category> categories = Arrays.asList(
@@ -54,13 +70,17 @@ class CategoryServiceImplTest {
         when(categoryJpaRepository.findAll()).thenReturn(categories);
 
         List<Category> result = categoryService.getAll();
-        assertEquals(2, result.size());
-        assertEquals("Tools and equipment", result.get(0).getCategoryTitle());
-        assertEquals("Planting material", result.get(1).getCategoryTitle());
+        assertEquals(2, result.size());  // The size must match expected value
+        assertEquals("Tools and equipment", result.get(0).getCategoryTitle());  // Verify category title
+        assertEquals("Planting material", result.get(1).getCategoryTitle());  // Verify category title
     }
 
+    /**
+     **Test Case:** Retrieve category by ID when it exists.
+     **Expected Result:** Returns the expected category.
+     */
     @Test
-    public void getByIdWhenCategryExists() {
+    public void getByIdWhenCategoryExists() {
         Long categoryId = 3333333L;
         Category categoryExpected = new Category();
         categoryExpected.setId(categoryId);
@@ -70,9 +90,13 @@ class CategoryServiceImplTest {
 
         Category categoryActual = categoryService.getById(categoryId);
 
-        assertEquals(categoryExpected.getId(), categoryActual.getId());
+        assertEquals(categoryExpected.getId(), categoryActual.getId());  // Verify retrieved ID
     }
 
+    /**
+     **Test Case:** Retrieve category by ID when it does not exist.
+     **Expected Result:** Throws `CategoryNotFoundException`.
+     */
     @Test
     public void getByIdWhenCategoryNotExists() {
         Long id = 4444444L;
@@ -80,9 +104,13 @@ class CategoryServiceImplTest {
                 .thenThrow(new CategoryNotFoundException("Category not found"));
 
         assertThrows(CategoryNotFoundException.class,
-                () -> categoryService.getById(id));
+                () -> categoryService.getById(id));  // Expect exception
     }
 
+    /**
+     **Test Case:** Successfully update category title.
+     **Expected Result:** The category title is updated.
+     */
     @Test
     void editTitle() {
         Long categoryId = 1L;
@@ -90,9 +118,13 @@ class CategoryServiceImplTest {
 
         when(categoryJpaRepository.updateTitle(categoryId, newTitle)).thenReturn(1);
         assertDoesNotThrow(() -> categoryService.editTitle(categoryId, newTitle));
-        verify(categoryJpaRepository, times(1)).updateTitle(categoryId, newTitle);
+        verify(categoryJpaRepository, times(1)).updateTitle(categoryId, newTitle);  // Ensure update method is called
     }
 
+    /**
+     **Test Case:** Update category title when category does not exist.
+     **Expected Result:** Throws `CategoryNotFoundException`.
+     */
     @Test
     void editTitleIfCategoryNotFound() {
         Long categoryId = 1L;
@@ -100,18 +132,20 @@ class CategoryServiceImplTest {
 
         when(categoryJpaRepository.updateTitle(categoryId, newTitle)).thenReturn(0);
         assertThrows(CategoryNotFoundException.class, () -> categoryService.editTitle(categoryId, newTitle));
-        verify(categoryJpaRepository, times(1)).updateTitle(categoryId, newTitle);
+        verify(categoryJpaRepository, times(1)).updateTitle(categoryId, newTitle);  // Ensure update method is called
     }
 
-
-
+    /**
+     **Test Case:** Add a product to a category.
+     **Expected Result:** The product is associated with the category.
+     */
     @Test
     void editListOfProductsAddProductShouldAddProductToCategory() {
         Long categoryId = 1L;
         Long productId = 100L;
 
         Category category = new Category(categoryId, "Test Category", null);
-        Storage storage = new Storage(1L, 100L); // Убрали `new ArrayList<>()`
+        Storage storage = new Storage(1L, 100L);
         Product product = new Product(productId, "Test Product", BigDecimal.valueOf(100), "Test Description", category, storage, BigDecimal.ZERO, null, null);
 
         when(productService.getById(productId)).thenReturn(product);
@@ -120,22 +154,25 @@ class CategoryServiceImplTest {
 
         Category updatedCategory = categoryService.editListOfProductsAddProduct(categoryId, productId);
 
-        assertNotNull(updatedCategory);
-        assertEquals(categoryId, updatedCategory.getId());
+        assertNotNull(updatedCategory);  // The category should not be null
+        assertEquals(categoryId, updatedCategory.getId());  // The category ID should match
 
         verify(productService, times(1)).getById(productId);
         verify(productService, times(1)).setCategory(productId, category);
         verify(categoryJpaRepository, times(1)).findById(categoryId);
     }
 
-
+    /**
+     **Test Case:** Remove a product from a category.
+     **Expected Result:** The product is removed from the category.
+     */
     @Test
     void editListOfProductsRemoveProductShouldRemoveProductFromCategory() {
         Long categoryId = 1L;
         Long productId = 100L;
 
         Category category = new Category(categoryId, "Test Category", null);
-        Storage storage = new Storage(1L, 100L); // Убрали `new ArrayList<>()`
+        Storage storage = new Storage(1L, 100L);
         Product product = new Product(productId, "Test Product", BigDecimal.valueOf(100), "Test Description", category, storage, BigDecimal.ZERO, null, null);
 
         when(categoryJpaRepository.findById(categoryId)).thenReturn(Optional.of(category));
@@ -144,12 +181,11 @@ class CategoryServiceImplTest {
 
         Category updatedCategory = categoryService.editListOfProductsRemoveProduct(categoryId, productId);
 
-        assertNotNull(updatedCategory);
-        assertEquals(categoryId, updatedCategory.getId());
+        assertNotNull(updatedCategory);  // The category should not be null
+        assertEquals(categoryId, updatedCategory.getId());  // The category ID should match
 
         verify(categoryJpaRepository, times(1)).findById(categoryId);
         verify(productService, times(1)).getById(productId);
         verify(productService, times(1)).setCategory(productId, null);
     }
-
 }

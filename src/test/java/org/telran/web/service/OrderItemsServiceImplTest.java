@@ -24,6 +24,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
+/**
+ *   Key Features:
+ * - Uses `@ExtendWith(MockitoExtension.class)` for Mockito integration.
+ * - Mocks `OrderItemsJpaRepository` to isolate service logic.
+ * - Covers **creating, fetching all, retrieving by ID, and deleting order items**.
+ * - Ensures **exception handling for non-existing order items**.
+ */
+
 @ExtendWith(MockitoExtension.class)
 public class OrderItemsServiceImplTest {
 
@@ -34,11 +42,15 @@ public class OrderItemsServiceImplTest {
     private OrderItemsServiceImpl orderItemsService;
 
     private OrderItems orderItemsExpected;
-
     private OrderItems orderItemsExpectedTwo;
     private Product product;
     private Orders orders;
 
+    /**
+     *   Setup Method
+     * - Initializes test data before each test execution.
+     * - Creates sample `OrderItems` instances with predefined attributes.
+     */
     @BeforeEach
     void setUp(){
         BigDecimal price = new BigDecimal(10);
@@ -49,6 +61,10 @@ public class OrderItemsServiceImplTest {
         orderItemsExpectedTwo = new OrderItems(2L, 5L, priceTwo, product, orders);
     }
 
+    /**
+     **Test Case:** Create a new order item.
+     **Expected Result:** The order item is successfully created.
+     */
     @Test
     void testCreateOrderItems(){
         when(orderItemsJpaRepository.save(any(OrderItems.class)))
@@ -56,24 +72,31 @@ public class OrderItemsServiceImplTest {
 
         OrderItems resultOrderItems = orderItemsService.createOrderItems(orderItemsExpected);
 
-        assertNotNull(resultOrderItems);
-        assertEquals(10L, resultOrderItems.getQuantity());
+        assertNotNull(resultOrderItems);  // Created order item should not be null
+        assertEquals(10L, resultOrderItems.getQuantity());  // Quantity should match expected
         Mockito.verify(orderItemsJpaRepository, times(1)).save(orderItemsExpected);
     }
 
+    /**
+     **Test Case:** Retrieve all order items.
+     **Expected Result:** Returns a list of order items.
+     */
     @Test
     void testGetAllOrderItems(){
         List<OrderItems> orderItemsList = Arrays.asList(orderItemsExpected, orderItemsExpectedTwo);
-        when(orderItemsJpaRepository.findAll())
-                .thenReturn(orderItemsList);
+        when(orderItemsJpaRepository.findAll()).thenReturn(orderItemsList);
 
         Collection<OrderItems> actualListOrderItems = orderItemsService.getAllOrderItems();
 
-        assertNotNull(actualListOrderItems);
-        assertEquals(2, actualListOrderItems.size());
+        assertNotNull(actualListOrderItems);  // List should not be null
+        assertEquals(2, actualListOrderItems.size());  // List size should match expected
         Mockito.verify(orderItemsJpaRepository, times(1)).findAll();
     }
 
+    /**
+     **Test Case: Retrieve an order item by ID when it does not exist.
+     **Expected Result: Throws `OrderItemsNotFoundException`.
+     */
     @Test
     void testGetByIdOrderItemsWhenNotFound(){
         Long orderItemsId = 3L;
@@ -81,29 +104,35 @@ public class OrderItemsServiceImplTest {
         when(orderItemsJpaRepository.findById(orderItemsId))
                 .thenThrow(new OrderItemsNotFoundException("Order items not Found"));
 
-        assertThrows(OrderItemsNotFoundException.class,()-> orderItemsService.getByIdOrderItems(orderItemsId));
+        assertThrows(OrderItemsNotFoundException.class, () -> orderItemsService.getByIdOrderItems(orderItemsId));
     }
 
+    /**
+     **Test Case: Retrieve an order item by ID when it exists.
+     **Expected Result: Returns the correct order item.
+     */
     @Test
     void testGetByIdOrderItemsWhenOrderItemsExist(){
         Long orderItemsId = 1L;
 
-        when(orderItemsJpaRepository.findById(orderItemsId))
-                .thenReturn(Optional.of(orderItemsExpected));
+        when(orderItemsJpaRepository.findById(orderItemsId)).thenReturn(Optional.of(orderItemsExpected));
 
         OrderItems actualOrderItems = orderItemsService.getByIdOrderItems(orderItemsId);
 
-        assertNotNull(actualOrderItems);
-        assertEquals(1L, actualOrderItems.getId());
-        assertEquals(10L, actualOrderItems.getQuantity());
+        assertNotNull(actualOrderItems);  // Retrieved order item should not be null
+        assertEquals(1L, actualOrderItems.getId());  // ID should match expected
+        assertEquals(10L, actualOrderItems.getQuantity());  // Quantity should match expected
         Mockito.verify(orderItemsJpaRepository, times(1)).findById(orderItemsId);
     }
 
+    /**
+     **Test Case: Delete an order item by ID when it exists.
+     **Expected Result: Order item is successfully deleted.
+     */
     @Test
     void testDeleteByIdOrderItemsWhenOrderItemsExist(){
         Optional<OrderItems> foundOrderItems = orderItemsJpaRepository.findById(1L);
-        when(orderItemsJpaRepository.existsById(1L))
-                .thenReturn(true);
+        when(orderItemsJpaRepository.existsById(1L)).thenReturn(true);
 
         orderItemsService.deleteOrderItems(1L);
 
