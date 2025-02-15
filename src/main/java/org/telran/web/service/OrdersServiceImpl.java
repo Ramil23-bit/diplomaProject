@@ -50,7 +50,12 @@ public class OrdersServiceImpl implements OrdersService {
     public Orders create(Orders orders) {
         logger.info("Creating new order for user ID: {}", orders.getUser().getId());
         Orders savedOrder = repository.save(orders);
-        List<Product> products = savedOrder.getOrderItems().stream().map(OrderItems::getProduct).collect(Collectors.toList());
+        List<OrderItems> orderItems = savedOrder.getOrderItems();
+        if (orderItems == null || orderItems.isEmpty()) {
+            logger.warn("Order has no items!");
+            return savedOrder;
+        }
+        List<Product> products = orderItems.stream().map(OrderItems::getProduct).collect(Collectors.toList());
         List<CartItems> currentCartItems = cartItemsService.getAllCartItems().stream().filter(cartItems -> products.contains(cartItems.getProduct())).collect(Collectors.toList());
         currentCartItems.forEach(cartItemsService::removeCartItem);
         logger.info("Order created successfully with ID: {}", savedOrder.getId());

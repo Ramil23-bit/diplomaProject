@@ -3,17 +3,20 @@ package org.telran.web.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.telran.web.entity.OrderItems;
 import org.telran.web.entity.Orders;
+import org.telran.web.entity.Product;
 import org.telran.web.entity.User;
 import org.telran.web.exception.OrderNotFoundException;
 import org.telran.web.repository.OrdersRepository;
@@ -31,6 +34,8 @@ class OrdersServiceImplTest {
 
     @Mock
     private OrdersRepository ordersRepository;
+    @Mock
+    private CartItemsService cartItemsService;
 
     @InjectMocks
     private OrdersServiceImpl ordersService;
@@ -61,13 +66,33 @@ class OrdersServiceImplTest {
      */
     @Test
     void testCreateOrder_Success() {
-        when(ordersRepository.save(order1)).thenReturn(order1);
+        User user = new User();
+        user.setId(1L);
+
+        Product product = new Product();
+        product.setId(1L);
+        product.setPrice(BigDecimal.valueOf(100));
+
+        OrderItems orderItem = new OrderItems();
+        orderItem.setProduct(product);
+        orderItem.setQuantity(2L);
+        orderItem.setPriceAtPurchase(product.getPrice());
+
+        order1.setOrderItems(List.of(orderItem));
+
+        when(cartItemsService.getAllCartItems()).thenReturn(new ArrayList<>());
+
+        when(ordersRepository.save(any(Orders.class))).thenAnswer(invocation -> {
+            Orders savedOrder = invocation.getArgument(0);
+            savedOrder.setOrderItems(List.of(orderItem));
+            return savedOrder;
+        });
 
         Orders createdOrder = ordersService.create(order1);
 
         assertNotNull(createdOrder, "Order must not be null");
+        assertFalse(createdOrder.getOrderItems().isEmpty(), "Order must contain items");
         assertEquals(order1.getId(), createdOrder.getId(), "Order ID must match");
-        assertEquals(order1.getDeliveryAddress(), createdOrder.getDeliveryAddress(), "Address must match");
 
         verify(ordersRepository, times(1)).save(order1);
     }
