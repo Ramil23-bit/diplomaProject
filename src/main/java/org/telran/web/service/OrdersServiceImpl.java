@@ -32,6 +32,8 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private PaymentServiceImpl paymentService;
 
+    @Autowired
+    private UserService userService;
 
     /**
      * Creates a new order and saves it in the repository.
@@ -58,6 +60,11 @@ public class OrdersServiceImpl implements OrdersService {
         List<Orders> ordersList = repository.findAll();
         logger.info("Total orders retrieved: {}", ordersList.size());
         return ordersList;
+    }
+
+    @Override
+    public List<Orders> getAllByUserIdHistory() {
+        return repository.findAllByUserIdHistory(userService.getCurrentUserId());
     }
 
     /**

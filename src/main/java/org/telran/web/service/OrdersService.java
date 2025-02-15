@@ -44,4 +44,6 @@ public interface OrdersService {
      * @return The found Orders entity.
      */
     Orders getById(Long id);
+
+    List<Orders> getAllByUserIdHistory();
 }
