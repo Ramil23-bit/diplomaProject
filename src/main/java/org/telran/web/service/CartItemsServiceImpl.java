@@ -120,4 +120,9 @@ public class CartItemsServiceImpl implements CartItemsService {
         cartItemsJpaRepository.deleteById(CartItemsId);
         logger.info("Cart item with ID {} successfully deleted", CartItemsId);
     }
+
+    @Override
+    public void removeCartItem(CartItems cartItems) {
+        cartItemsJpaRepository.delete(cartItems);
+    }
 }
