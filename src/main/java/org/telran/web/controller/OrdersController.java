@@ -67,7 +67,7 @@ public class OrdersController {
             @ApiResponse(responseCode = "200", description = "Orders successfully retrieved")
     })
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<OrderResponseDto> getAll() {
         logger.info("Fetching all orders");
         List<OrderResponseDto> orders = service.getAll().stream()
@@ -77,8 +77,14 @@ public class OrdersController {
         return orders;
     }
 
+    @GetMapping("/history")
+    public List<OrderResponseDto> getHistory(){
+        return service.getAllByUserIdHistory().stream()
+                .map(orders -> converter.toDto(orders))
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("/status")
-    @PreAuthorize("hasRole('ADMIN')")
     public List<OrderResponseDto> checkStatus(){
         return service.checkOrderStatus().stream()
                 .map(orders -> converter.toDto(orders))
@@ -97,7 +103,7 @@ public class OrdersController {
             @ApiResponse(responseCode = "404", description = "Order not found")
     })
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public OrderResponseDto getById(@PathVariable Long id) {
         logger.info("Fetching order with ID: {}", id);
         OrderResponseDto order = converter.toDto(service.getById(id));

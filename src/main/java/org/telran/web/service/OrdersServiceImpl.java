@@ -5,8 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telran.web.entity.CartItems;
 import org.telran.web.entity.OrderItems;
 import org.telran.web.entity.Orders;
+import org.telran.web.entity.Product;
 import org.telran.web.enums.OrderStatus;
 import org.telran.web.exception.OrderNotFoundException;
 import org.telran.web.repository.OrdersRepository;
@@ -32,6 +34,11 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     private PaymentServiceImpl paymentService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CartItemsService cartItemsService;
 
     /**
      * Creates a new order and saves it in the repository.
@@ -43,6 +50,9 @@ public class OrdersServiceImpl implements OrdersService {
     public Orders create(Orders orders) {
         logger.info("Creating new order for user ID: {}", orders.getUser().getId());
         Orders savedOrder = repository.save(orders);
+        List<Product> products = savedOrder.getOrderItems().stream().map(OrderItems::getProduct).collect(Collectors.toList());
+        List<CartItems> currentCartItems = cartItemsService.getAllCartItems().stream().filter(cartItems -> products.contains(cartItems.getProduct())).collect(Collectors.toList());
+        currentCartItems.forEach(cartItemsService::removeCartItem);
         logger.info("Order created successfully with ID: {}", savedOrder.getId());
         return savedOrder;
     }
@@ -58,6 +68,11 @@ public class OrdersServiceImpl implements OrdersService {
         List<Orders> ordersList = repository.findAll();
         logger.info("Total orders retrieved: {}", ordersList.size());
         return ordersList;
+    }
+
+    @Override
+    public List<Orders> getAllByUserIdHistory() {
+        return repository.findAllByUserIdHistory(userService.getCurrentUserId());
     }
 
     /**
