@@ -47,7 +47,7 @@ public interface UserService {
      * Updates an existing user's details.
      *
      * @param userId ID of the user to update.
-     * @param dto DTO containing updated user details.
+     * @param dto    DTO containing updated user details.
      * @return The updated User entity.
      */
     User updateUser(Long userId, @Valid UserCreateDto dto);

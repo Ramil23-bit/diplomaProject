@@ -1,8 +1,6 @@
 package org.telran.web.service;
 
-import org.telran.web.dto.CartItemsResponseDto;
 import org.telran.web.entity.Cart;
-import org.telran.web.entity.CartItems;
 
 import java.util.List;
 

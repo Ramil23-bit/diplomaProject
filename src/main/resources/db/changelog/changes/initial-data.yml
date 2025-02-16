@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 11
+      id: 12
       author: team_diploma_project
       changes:
         - insert:
@@ -22,7 +22,7 @@ databaseChangeLog:
                   name: category_title
                   value: 'земля'
   - changeSet:
-      id: 12
+      id: 13
       author: team_diploma_project
       changes:
         - insert:
@@ -44,7 +44,7 @@ databaseChangeLog:
                   name: amount
                   value: 200
   - changeSet:
-      id: 13
+      id: 14
       author: team_diploma_project
       changes:
         - insert:
@@ -111,7 +111,7 @@ databaseChangeLog:
                   name: discount
                   valueNumeric: 15.0
   - changeSet:
-      id: 14
+      id: 15
       author: team_diploma_project
       changes:
         - sql:
@@ -127,7 +127,7 @@ databaseChangeLog:
               VALUES ('userTest', 'user@user.com', 'password', '+89765432109', 'ROLE_USER')
               ON CONFLICT (email) DO NOTHING;
   - changeSet:
-      id: 15
+      id: 16
       author: team_diploma_project
       changes:
         - insert:
@@ -158,7 +158,7 @@ databaseChangeLog:
                   name: product_id
                   valueNumeric: 3
   - changeSet:
-      id: 16
+      id: 17
       author: team_diploma_project
       changes:
         - insert:
@@ -174,7 +174,7 @@ databaseChangeLog:
                   name: user_id
                   valueNumeric: 2
   - changeSet:
-      id: 17
+      id: 18
       author: team_diploma_project
       changes:
         - insert:
@@ -202,7 +202,7 @@ databaseChangeLog:
                   name: order_status
                   value: 'CREATED'
   - changeSet:
-      id: 18
+      id: 19
       author: team_diploma_project
       changes:
         - insert:
@@ -260,7 +260,7 @@ databaseChangeLog:
                   name: status
                   value: 'CREATED'
   - changeSet:
-      id: 19
+      id: 20
       author: team_diploma_project
       changes:
         - insert:
@@ -309,7 +309,7 @@ databaseChangeLog:
                   name: order_id
                   valueNumeric: 3
   - changeSet:
-      id: 20
+      id: 21
       author: team_diploma_project
       changes:
         - insert:

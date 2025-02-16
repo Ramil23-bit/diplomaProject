@@ -15,6 +15,7 @@ public class OrderCreateDto {
         this.deliveryAddress = deliveryAddress;
         this.deliveryMethod = deliveryMethod;
     }
+
     public OrderCreateDto() {
         //
     }

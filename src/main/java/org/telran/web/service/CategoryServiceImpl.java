@@ -99,7 +99,7 @@ public class CategoryServiceImpl implements CategoryService {
      * Adds a product to a category.
      *
      * @param categoryId ID of the category.
-     * @param productId ID of the product to add.
+     * @param productId  ID of the product to add.
      * @return The updated Category entity.
      */
     @Override
@@ -117,7 +117,7 @@ public class CategoryServiceImpl implements CategoryService {
      * Removes a product from a category.
      *
      * @param categoryId ID of the category.
-     * @param productId ID of the product to remove.
+     * @param productId  ID of the product to remove.
      * @return The updated Category entity.
      * @throws IllegalArgumentException if the product does not belong to the category.
      */
@@ -139,7 +139,7 @@ public class CategoryServiceImpl implements CategoryService {
     /**
      * Updates the title of a category.
      *
-     * @param id ID of the category.
+     * @param id    ID of the category.
      * @param title New title for the category.
      */
     @Override

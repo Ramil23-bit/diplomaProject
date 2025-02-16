@@ -20,13 +20,13 @@ public class JwtService {
 
     private final SecretKey secretKey;
 
-    public JwtService(@Value("${jwttoken.signing.key}")String jwtSecretKey) {
+    public JwtService(@Value("${jwttoken.signing.key}") String jwtSecretKey) {
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecretKey));
     }
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        if(userDetails instanceof User user) {
+        if (userDetails instanceof User user) {
             claims.put("id", user);
             claims.put("email", user.getEmail());
             claims.put("role", user.getRole().name());
@@ -73,12 +73,12 @@ public class JwtService {
         return extractClaim(jwt, Claims::getExpiration);
     }
 
-    private <T> T extractClaim(String token, Function<Claims, T> claimResolver){
+    private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
         Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token){
+    private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .build()

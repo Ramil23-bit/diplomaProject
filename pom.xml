@@ -131,6 +131,7 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
+
     </dependencies>
     <build>
         <plugins>
@@ -139,13 +140,6 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>4.29.0</version>
                 <executions>
-                    <!--
-                    <execution>
-                        <goals>
-                            <goal>status</goal>
-                        </goals>
-                    </execution>
-                    -->
                     <execution>
                         <goals>
                             <goal>generateChangeLog</goal>

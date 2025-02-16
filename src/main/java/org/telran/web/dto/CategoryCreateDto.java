@@ -17,7 +17,6 @@ public class CategoryCreateDto {
         this.products = products;
     }
 
-
     public String getCategoryTitle() {
         return categoryTitle;
     }

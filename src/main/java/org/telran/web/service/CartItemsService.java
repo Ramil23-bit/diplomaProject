@@ -1,6 +1,5 @@
 package org.telran.web.service;
 
-import org.telran.web.dto.CartItemsResponseDto;
 import org.telran.web.entity.CartItems;
 
 import java.util.List;
@@ -47,5 +46,6 @@ public interface CartItemsService {
      * @param CartItemsId ID of the cart item to delete.
      */
     void deleteById(Long CartItemsId);
+
     void removeCartItem(CartItems cartItems);
 }

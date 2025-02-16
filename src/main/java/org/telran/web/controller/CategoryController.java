@@ -14,7 +14,6 @@ import org.telran.web.dto.CategoryResponseDto;
 import org.telran.web.entity.Category;
 import org.telran.web.service.CategoryService;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;

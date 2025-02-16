@@ -52,9 +52,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * Handles validation exceptions for request bodies.
      *
      * @param validException The exception containing validation errors.
-     * @param headers HTTP headers.
-     * @param statusCode HTTP status code.
-     * @param request Web request details.
+     * @param headers        HTTP headers.
+     * @param statusCode     HTTP status code.
+     * @param request        Web request details.
      * @return ResponseEntity containing validation error details.
      */
     @Override

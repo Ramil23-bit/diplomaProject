@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.telran.web.entity.Favorites;
-import org.telran.web.entity.User;
 
 import java.util.List;
 

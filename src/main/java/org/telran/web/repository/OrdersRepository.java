@@ -30,20 +30,20 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
      * @param groupBy   The grouping criteria for revenue aggregation. Allowed values: "HOUR", "DAY", "WEEK", "MONTH".
      * @return A list of objects where each entry contains a time period and the corresponding revenue sum.
      */
-    @Query("SELECT " + // SQL-request
+    @Query("SELECT " +
             "CASE " +
             "WHEN :groupBy = 'HOUR' THEN HOUR(o.updatedAt) " +
             "WHEN :groupBy = 'DAY' THEN DAY(o.updatedAt) " +
             "WHEN :groupBy = 'WEEK' THEN WEEK(o.updatedAt) " +
             "WHEN :groupBy = 'MONTH' THEN MONTH(o.updatedAt) " +
             "END AS period, " +
-            "SUM(oi.priceAtPurchase * oi.quantity) " + // Using `oi.priceAtPurchase` * 'oi.quantity' from OrderItems(oi)
+            "SUM(oi.priceAtPurchase * oi.quantity) " +
             "FROM Orders o " +
-            "JOIN o.orderItems oi " + // Join Orders(o) + orderitems(oi)
+            "JOIN o.orderItems oi " +
             "WHERE o.status = 'COMPLETED' " +
             "AND o.updatedAt BETWEEN :startDate AND :endDate " +
-            "GROUP BY period " + // Group by HOUR, DAY, WEEK, MONTH
-            "ORDER BY 1") // Sorted by HOUR, DAY, WEEK, MONTH
+            "GROUP BY period " +
+            "ORDER BY 1")
     List<Object[]> findRevenueBetween(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,

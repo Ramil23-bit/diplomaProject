@@ -1,7 +1,6 @@
 package org.telran.web.service;
 
 import org.telran.web.entity.Category;
-import org.telran.web.entity.Product;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public interface CategoryService {
     /**
      * Updates the title of a category.
      *
-     * @param id ID of the category.
+     * @param id    ID of the category.
      * @param title New title for the category.
      */
     void editTitle(Long id, String title);
@@ -54,7 +53,7 @@ public interface CategoryService {
      * Adds a product to a category.
      *
      * @param categoryId ID of the category.
-     * @param productId ID of the product to add.
+     * @param productId  ID of the product to add.
      * @return The updated Category entity.
      */
     Category editListOfProductsAddProduct(Long categoryId, Long productId);
@@ -63,7 +62,7 @@ public interface CategoryService {
      * Removes a product from a category.
      *
      * @param categoryId ID of the category.
-     * @param productId ID of the product to remove.
+     * @param productId  ID of the product to remove.
      * @return The updated Category entity.
      */
     Category editListOfProductsRemoveProduct(Long categoryId, Long productId);

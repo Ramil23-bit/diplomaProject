@@ -10,7 +10,6 @@ import org.telran.web.entity.User;
 import org.telran.web.service.UserService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
@@ -21,7 +20,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User userEntity = userService.getByEmail(email);
-        if(userEntity == null) {
+        if (userEntity == null) {
             throw new UsernameNotFoundException("User with email " + email + " not found");
         }
         org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(

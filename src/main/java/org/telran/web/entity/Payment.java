@@ -12,12 +12,10 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long amount;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
-
     @CreationTimestamp
     private LocalDateTime date;
     @Enumerated(EnumType.STRING)
@@ -77,5 +75,16 @@ public class Payment {
 
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", user=" + user +
+                ", date=" + date +
+                ", orderStatus=" + orderStatus +
+                '}';
     }
 }

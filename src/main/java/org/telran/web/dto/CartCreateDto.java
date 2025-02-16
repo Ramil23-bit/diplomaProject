@@ -1,6 +1,5 @@
 package org.telran.web.dto;
 
-import org.telran.web.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CartCreateDto {
@@ -15,10 +14,10 @@ public class CartCreateDto {
         this.productId = productId;
         this.quantity = quantity;
     }
+
     public CartCreateDto() {
         //
     }
-
 
     public Long getProductId() {
         return productId;

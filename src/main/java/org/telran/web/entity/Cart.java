@@ -12,10 +12,12 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @OneToOne
     @NotNull
     @JoinColumn(name = "user_id")
     private User user;
+
     @OneToMany
     @JoinColumn(name = "cart_id")
     private List<CartItems> cartItemsList = new ArrayList<>();
@@ -61,7 +63,10 @@ public class Cart {
     public List<CartItems> getCartItemsList() {
         return cartItemsList;
     }
-    public void addCartItem(CartItems cartItems) { this.cartItemsList.add(cartItems); }
+
+    public void addCartItem(CartItems cartItems) {
+        this.cartItemsList.add(cartItems);
+    }
 
     public void setCartItemsList(List<CartItems> cartItemsList) {
         this.cartItemsList = cartItemsList;

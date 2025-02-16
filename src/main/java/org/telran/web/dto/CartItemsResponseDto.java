@@ -1,7 +1,5 @@
 package org.telran.web.dto;
 
-import org.telran.web.entity.Product;
-import org.telran.web.entity.User;
 
 public class CartItemsResponseDto {
     private Long id;

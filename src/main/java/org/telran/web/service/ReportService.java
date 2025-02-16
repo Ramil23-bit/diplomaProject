@@ -71,35 +71,23 @@ public class ReportService {
      * @throws IllegalArgumentException If an unsupported time unit is provided.
      */
     public List<RevenueReportDto> getRevenueReport(int n, ChronoUnit unit, GroupBy groupBy) {
-        // Validate time unit
         if (!List.of(ChronoUnit.HOURS, ChronoUnit.DAYS, ChronoUnit.WEEKS, ChronoUnit.MONTHS, ChronoUnit.YEARS).contains(unit)) {
             throw new IllegalArgumentException("Unsupported time unit: " + unit);
         }
-
-        // Calculate the date range for the report
-        LocalDateTime endDate = LocalDateTime.now(); // current time
-        LocalDateTime startDate = endDate.minus(n, unit); // current time - n
-
-        // Log the request details
+        LocalDateTime endDate = LocalDateTime.now();
+        LocalDateTime startDate = endDate.minus(n, unit);
         logger.info("Fetching revenue report: n={}, unit={}, groupBy={}", n, unit, groupBy.getValue());
         logger.info("Date range: {} - {}", startDate, endDate);
-
-        // Execute database query
         List<Object[]> results = ordersRepository.findRevenueBetween(startDate, endDate, groupBy.getValue());
-
-        // Log the number of results found
         logger.info("Query returned {} results", results.size());
 
         if (results.isEmpty()) {
             logger.warn("No revenue data found for the given parameters.");
         } else {
-            // Log sample results for verification
             results.stream()
                     .limit(5)
                     .forEach(result -> logger.info("Sample result: id={}, revenue={}", result[0], result[1]));
         }
-
-        // Convert the query results into DTO objects
         return results.stream()
                 .map(result -> {
                     try {

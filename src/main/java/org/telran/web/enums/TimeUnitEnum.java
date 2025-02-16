@@ -2,11 +2,12 @@ package org.telran.web.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.time.temporal.ChronoUnit;
 
 /**
  * Enum representing different time units that can be used for reporting purposes.
- * This enum maps time units to {@link ChronoUnit} for precise temporal calculations.
+ * This enum maps time units to {@link "ChronoUnit"} for precise temporal calculations.
  */
 public enum TimeUnitEnum {
 
@@ -28,9 +29,9 @@ public enum TimeUnitEnum {
     private final ChronoUnit chronoUnit;
 
     /**
-     * Constructs a TimeUnitEnum with the corresponding {@link ChronoUnit}.
+     * Constructs a TimeUnitEnum with the corresponding {@link "ChronoUnit"}.
      *
-     * @param chronoUnit The corresponding {@link ChronoUnit} value.
+     * @param chronoUnit The corresponding {@link "ChronoUnit}" value.
      */
     TimeUnitEnum(ChronoUnit chronoUnit) {
         this.chronoUnit = chronoUnit;
@@ -43,13 +44,13 @@ public enum TimeUnitEnum {
      */
     @JsonValue
     public String getValue() {
-        return name(); // Returns "HOURS", "DAYS", "WEEKS", "MONTHS", "YEARS".
+        return name();
     }
 
     /**
-     * Converts this enum to its corresponding {@link ChronoUnit} value.
+     * Converts this enum to its corresponding {@link "ChronoUnit"} value.
      *
-     * @return The corresponding {@link ChronoUnit} value.
+     * @return The corresponding {@link "ChronoUnit"} value.
      */
     public ChronoUnit toChronoUnit() {
         return chronoUnit;

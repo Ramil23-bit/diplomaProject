@@ -1,7 +1,6 @@
 package org.telran.web.service;
 
 import org.telran.web.entity.Favorites;
-import org.telran.web.entity.User;
 
 import java.util.List;
 

@@ -38,12 +38,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_USER;
 
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Favorites> favorites = new ArrayList<>();
 
     public User() {
-        //
+
     }
 
     public User(Long id, String username, String email, String password, String phoneNumber) {
@@ -60,8 +59,6 @@ public class User {
         this.password = password;
         this.phoneNumber = phoneNumber;
     }
-
-
 
     public Long getId() {
         return id;

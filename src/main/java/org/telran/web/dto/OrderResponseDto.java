@@ -1,7 +1,6 @@
 package org.telran.web.dto;
 
 import org.telran.web.entity.OrderItems;
-import org.telran.web.entity.User;
 import org.telran.web.enums.OrderStatus;
 
 import java.time.LocalDateTime;

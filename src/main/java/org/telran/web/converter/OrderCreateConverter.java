@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.telran.web.dto.OrderCreateDto;
 import org.telran.web.dto.OrderResponseDto;
 import org.telran.web.entity.Orders;
-import org.telran.web.service.OrderItemsService;
 import org.telran.web.service.UserService;
 
 /**

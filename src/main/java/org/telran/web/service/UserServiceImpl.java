@@ -18,7 +18,6 @@ import org.telran.web.exception.UserNotFoundException;
 import org.telran.web.repository.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Implementation of UserService.
@@ -75,7 +74,7 @@ public class UserServiceImpl implements UserService {
      * @param user User entity containing user details.
      * @return The created User entity.
      * @throws UserAlreadyExistsException if the email is already in use.
-     * @throws BadArgumentsException if form data is incorrect.
+     * @throws BadArgumentsException      if form data is incorrect.
      */
     @Transactional
     @Override
@@ -99,7 +98,7 @@ public class UserServiceImpl implements UserService {
      * Updates an existing user's details.
      *
      * @param userId ID of the user to update.
-     * @param dto DTO containing updated user details.
+     * @param dto    DTO containing updated user details.
      * @return The updated User entity.
      * @throws UserNotFoundException if the user is not found.
      */
@@ -129,13 +128,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserRole(Long id) {
         logger.info("Updating user role for ID: {}", id);
-        User currentUser = getById(getCurrentUserId());
-        if (currentUser.getRole().equals(Role.ROLE_ADMIN)) {
-            User updateRoleUser = getById(id);
-            updateRoleUser.setRole(Role.ROLE_ADMIN);
-            repository.save(updateRoleUser);
-            logger.info("User role updated successfully for ID: {}", id);
-        }
+        User updateRoleUser = getById(id);
+        updateRoleUser.setRole(Role.ROLE_ADMIN);
+        repository.save(updateRoleUser);
+        logger.info("User role updated successfully for ID: {}", id);
     }
 
     /**

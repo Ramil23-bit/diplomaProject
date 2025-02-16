@@ -7,7 +7,6 @@ import org.telran.web.dto.CartItemsResponseDto;
 import org.telran.web.entity.CartItems;
 import org.telran.web.service.CartService;
 import org.telran.web.service.ProductService;
-import org.telran.web.service.UserService;
 
 /**
  * Converter class for transforming CartItems entities to DTOs and vice versa.

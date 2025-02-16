@@ -125,7 +125,6 @@ public class OrdersServiceImpl implements OrdersService {
      * </ul>
      * </p>
      */
-
     public void updateStatusOrders() {
         List<Orders> ordersServiceList = repository.findAll();
         for (Orders orders : ordersServiceList) {

@@ -1,9 +1,6 @@
 package org.telran.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.telran.web.entity.Product;
-
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StorageCreateDto {
@@ -17,7 +14,6 @@ public class StorageCreateDto {
     public StorageCreateDto() {
         //
     }
-
 
     public Long getAmount() {
         return amount;

@@ -1,7 +1,5 @@
 package org.telran.web.dto;
 
-import org.telran.web.entity.Cart;
-import org.telran.web.entity.Product;
 
 public class CartItemsCreateDto {
 
@@ -10,7 +8,6 @@ public class CartItemsCreateDto {
     private Long cartId;
 
     private Long productId;
-
 
     public CartItemsCreateDto(Long quantity, Long cartId, Long productId) {
         this.quantity = quantity;

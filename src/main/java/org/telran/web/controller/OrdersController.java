@@ -77,15 +77,57 @@ public class OrdersController {
         return orders;
     }
 
+    /**
+     * Retrieves the order history for the currently authenticated user.
+     *
+     * This method handles HTTP GET requests to the "/history" endpoint.
+     * It fetches all orders associated with the user's ID from the service layer,
+     * converts each order to a Data Transfer Object (DTO) using the converter,
+     * and returns a list of order response DTOs.
+     *
+     * @return a list of {@link OrderResponseDto} representing the order history
+     *         of the authenticated user. If there are no orders, an empty list is returned.
+     *
+     * @throws "UnauthorizedException" if the user is not authenticated or does not have permission
+     *         to access the order history.
+     *
+     * @see OrderResponseDto
+     */
+    @Operation(summary = "Get History", description = "Gets order history")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order history received successfully")
+    })
     @GetMapping("/history")
-    public List<OrderResponseDto> getHistory(){
+    public List<OrderResponseDto> getHistory() {
         return service.getAllByUserIdHistory().stream()
                 .map(orders -> converter.toDto(orders))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Checks the status of orders for the currently authenticated user.
+     *
+     * This method handles HTTP GET requests to the "/status" endpoint.
+     * It retrieves the current status of all orders associated with the user's ID
+     * from the service layer, converts each order to a Data Transfer Object (DTO)
+     * using the converter, and returns a list of order response DTOs.
+     *
+     * @return a list of {@link OrderResponseDto} representing the current status
+     *         of the orders for the authenticated user. If there are no orders,
+     *         an empty list is returned.
+     *
+     * @throws "UnauthorizedException" if the user is not authenticated or does not have permission
+     *         to access the order status.
+     *
+     * @see OrderResponseDto
+     */
+    @Operation(summary = "Get Status Order", description = "Gets order status")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order status received successfully")
+    })
     @GetMapping("/status")
-    public List<OrderResponseDto> checkStatus(){
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public List<OrderResponseDto> checkStatus() {
         return service.checkOrderStatus().stream()
                 .map(orders -> converter.toDto(orders))
                 .collect(Collectors.toList());
@@ -110,5 +152,4 @@ public class OrdersController {
         logger.info("Order retrieved: {}", order);
         return order;
     }
-
 }

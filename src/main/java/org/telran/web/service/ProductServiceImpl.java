@@ -48,10 +48,10 @@ public class ProductServiceImpl implements ProductService {
      * Retrieves all products with optional filters for category, price range, and discount.
      *
      * @param categoryId ID of the category to filter products.
-     * @param direction Sorting direction (ascending or descending).
-     * @param minPrice Minimum price filter.
-     * @param maxPrice Maximum price filter.
-     * @param discount Discount percentage filter.
+     * @param direction  Sorting direction (ascending or descending).
+     * @param minPrice   Minimum price filter.
+     * @param maxPrice   Maximum price filter.
+     * @param discount   Discount percentage filter.
      * @return List of filtered Product entities.
      */
     @Override
@@ -103,7 +103,6 @@ public class ProductServiceImpl implements ProductService {
         return query.getResultList();
     }
 
-
     /**
      * Retrieves all products without filters.
      *
@@ -150,7 +149,7 @@ public class ProductServiceImpl implements ProductService {
         String roleUser = userService.getCurrentUserRole();
         Product product = getById(id);
         String info = product.getProductInfo();
-        if(roleUser.equals("ROLE_ADMIN")){
+        if (roleUser.equals("ROLE_ADMIN")) {
             product.setProductInfo(info + " Товар дня");
             productJpaRepository.save(product);
         }
@@ -161,7 +160,7 @@ public class ProductServiceImpl implements ProductService {
      * Assigns a category to a product.
      *
      * @param productId ID of the product.
-     * @param category Category entity to assign.
+     * @param category  Category entity to assign.
      * @return The updated Product entity.
      * @throws IllegalStateException if the product already belongs to a different category.
      */
@@ -186,7 +185,7 @@ public class ProductServiceImpl implements ProductService {
     /**
      * Updates an existing product.
      *
-     * @param id ID of the product to update.
+     * @param id         ID of the product to update.
      * @param productDto DTO containing updated product details.
      * @return The updated Product entity.
      * @throws BadArgumentsException if the product update fails due to invalid data.

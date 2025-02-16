@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.telran.web.entity.Orders;
 import org.telran.web.entity.Payment;
 import org.telran.web.enums.OrderStatus;
 import org.telran.web.exception.PaymentNotFoundException;
@@ -82,14 +81,14 @@ public class PaymentServiceImpl implements PaymentService {
      * </ul>
      * </p>
      */
-    public void updateStatusPayment(){
+    public void updateStatusPayment() {
         List<Payment> paymentList = paymentJpaRepository.findAll();
-        for(Payment payments : paymentList){
+        for (Payment payments : paymentList) {
             LocalDateTime dateCreatePayment = payments.getDate();
             LocalDateTime dateNow = LocalDateTime.now();
             Duration duration = Duration.between(dateCreatePayment, dateNow);
             logger.info("Проверка даты создания заказа Payment");
-            if(duration.toDays() > 2L){
+            if (duration.toDays() > 2L) {
                 logger.info("Смена статуса заказа на CANCELED Payment");
                 payments.setOrderStatus(OrderStatus.CANCELLED);
                 paymentJpaRepository.save(payments);

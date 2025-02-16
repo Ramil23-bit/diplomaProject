@@ -2,6 +2,7 @@ package org.telran.web.entity;
 
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -20,14 +21,12 @@ public class OrderItems {
 
     @ManyToOne
     @JoinColumn(name = "order_item_product_id", foreignKey = @ForeignKey(name = "FK_ORDER_ITEMS_PRODUCT"))
-//    @JsonIgnore
     private Product product;
 
     @ManyToOne
     @JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "FK_ORDER_ITEMS_ORDER"))
     @JsonIgnore
     private Orders orders;
-
 
     public OrderItems(Long id, Long quantity, BigDecimal priceAtPurchase, Product product, Orders orders) {
         this.id = id;
@@ -51,7 +50,7 @@ public class OrderItems {
     }
 
     public OrderItems() {
-        //
+
     }
 
     public Long getId() {

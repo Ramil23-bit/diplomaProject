@@ -18,10 +18,10 @@ public interface ProductService {
      * Retrieves all products with optional filters.
      *
      * @param categoryId ID of the category to filter products.
-     * @param direction Sorting direction (ascending or descending).
-     * @param minPrice Minimum price filter.
-     * @param maxPrice Maximum price filter.
-     * @param discount Discount percentage filter.
+     * @param direction  Sorting direction (ascending or descending).
+     * @param minPrice   Minimum price filter.
+     * @param maxPrice   Maximum price filter.
+     * @param discount   Discount percentage filter.
      * @return List of filtered Product entities.
      */
     List<Product> getAll(Long categoryId, int direction, BigDecimal minPrice, BigDecimal maxPrice, BigDecimal discount, String sortBy);
@@ -45,7 +45,7 @@ public interface ProductService {
      * Assigns a category to a product.
      *
      * @param productId ID of the product.
-     * @param category Category entity to assign.
+     * @param category  Category entity to assign.
      * @return The updated Product entity.
      */
     Product setCategory(Long productId, Category category);
@@ -53,7 +53,7 @@ public interface ProductService {
     /**
      * Updates an existing product.
      *
-     * @param id ID of the product to update.
+     * @param id      ID of the product to update.
      * @param product DTO containing updated product details.
      * @return The updated Product entity.
      */

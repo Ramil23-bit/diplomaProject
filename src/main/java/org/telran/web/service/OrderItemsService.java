@@ -3,6 +3,7 @@ package org.telran.web.service;
 import org.telran.web.entity.OrderItems;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Service interface for managing order items.

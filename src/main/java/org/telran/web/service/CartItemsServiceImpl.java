@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.telran.web.dto.CartItemsResponseDto;
-import org.telran.web.entity.Cart;
 import org.telran.web.entity.CartItems;
 import org.telran.web.exception.CartItemsNotFoundException;
 import org.telran.web.repository.CartItemsJpaRepository;

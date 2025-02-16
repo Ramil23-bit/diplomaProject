@@ -25,7 +25,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private JwtService jwtService;
     private static final Logger logger = Logger.getLogger(OrdersSchedulerService.class.getName());
 
-
     @Override
     public JwtAuthenticationResponse authenticate(SignInRequest request) {
         logger.info("Аутентификация пользователя");

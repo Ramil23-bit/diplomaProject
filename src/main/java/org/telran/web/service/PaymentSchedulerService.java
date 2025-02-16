@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component;
 public class PaymentSchedulerService {
     @Autowired
     private PaymentServiceImpl paymentService;
-//    @Scheduled(fixedDelay = 30000L)
-//    public void updateOrderStatusInPayment(){
-//        paymentService.updateStatusPayment();
-//    }
+
+    @Scheduled(fixedDelay = 30000L)
+    public void updateOrderStatusInPayment() {
+        paymentService.updateStatusPayment();
+    }
 }

@@ -35,12 +35,6 @@ public class SecurityConfig {
     @Lazy
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-
-//    @Bean
-//    public CustomAccessDeniedHandler customAccessDeniedHandler() {
-//        return new CustomAccessDeniedHandler();
-//    }
-
     /**
      * Configures security settings, including role-based access control and JWT authentication.
      *
@@ -50,7 +44,6 @@ public class SecurityConfig {
      */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
-
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/v1/orders").hasAnyRole("USER", "ADMIN")
@@ -72,30 +65,23 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/cart_items/**").hasAnyRole("USER", "ADMIN")
                         //.requestMatchers("/api/v1/storage/**").hasRole("ADMIN")
                         .anyRequest().permitAll())
-
-                // Exception Handling
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
                         })
                         .accessDeniedHandler(customAccessDeniedHandler()))
-
-                // Session Management
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        // Add JWT Authentication Filter
         if (jwtAuthenticationFilter != null) {
             http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         } else {
             System.out.println("JwtAuthenticationFilter is disables in test environment");
         }
-
         return http.build();
     }
 
     /**
-     *   Checks if the current environment is a test environment.
+     * Checks if the current environment is a test environment.
      * - Reads the active Spring profile.
      * - Used to conditionally disable security settings during testing.
      *
@@ -120,9 +106,10 @@ public class SecurityConfig {
     }
 
     /**
-     *   Custom Access Denied Handler
+     * Custom Access Denied Handler
      * - Handles unauthorized access attempts.
      * - Sends an appropriate error response when a user lacks permission.
+     *
      * @return `CustomAccessDeniedHandler` instance.
      */
     @Bean
@@ -131,11 +118,12 @@ public class SecurityConfig {
     }
 
     /**
-     *   JWT Authentication Filter
+     * JWT Authentication Filter
      * - Handles JWT token parsing and validation.
      * - Ensures that only authenticated users can access protected resources.
-     * @param jwtService          The service responsible for JWT token management.
-     * @param userDetailsService  Service for retrieving user details.
+     *
+     * @param jwtService         The service responsible for JWT token management.
+     * @param userDetailsService Service for retrieving user details.
      * @return Configured `JwtAuthenticationFilter` instance.
      */
     @Bean

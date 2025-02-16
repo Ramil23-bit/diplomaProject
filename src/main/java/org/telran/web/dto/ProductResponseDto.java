@@ -108,7 +108,7 @@ public class ProductResponseDto {
         return categoryId;
     }
 
-    public void setCategoryId  (Long categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 }

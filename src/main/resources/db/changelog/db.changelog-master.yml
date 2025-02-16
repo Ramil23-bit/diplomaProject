@@ -8,7 +8,7 @@ databaseChangeLog:
       file: db/changelog/changes/initial-data.yml
 
   - changeSet:
-      id: 21
+      id: 22
       author: team_diploma_project
       runOnChange: true
       rollback:
@@ -22,3 +22,13 @@ databaseChangeLog:
             tableName: categories
         - delete:
             tableName: storage
+        - delete:
+            tableName: cart
+        - delete:
+            tableName: cart_items
+        - delete:
+            tableName: order_items
+        - delete:
+            tableName: orders
+        - delete:
+            tableName: payment

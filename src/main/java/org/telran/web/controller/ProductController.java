@@ -73,10 +73,8 @@ public class ProductController {
             @RequestParam(name = "minPrice", required = false) BigDecimal minPrice,
             @RequestParam(name = "maxPrice", required = false) BigDecimal maxPrice,
             @RequestParam(name = "discount", required = false) BigDecimal discount) {
-
         logger.info("Fetching all products with filters - category: {}, minPrice: {}, maxPrice: {}, discount: {}, sortBy: {}, direction: {}",
                 categoryId.orElse(null), minPrice, maxPrice, discount, sortBy, direction);
-
         List<Product> products = productService.getAll(
                 categoryId.orElse(null),
                 direction,
@@ -84,14 +82,11 @@ public class ProductController {
                 maxPrice != null ? maxPrice : BigDecimal.valueOf(Long.MAX_VALUE),
                 discount,
                 sortBy);
-
         logger.info("Total products retrieved: {}", products.size());
-
         return products.stream()
                 .map(createConverter::toDto)
                 .collect(Collectors.toList());
     }
-
 
     /**
      * Retrieves a product by its ID.
@@ -115,7 +110,7 @@ public class ProductController {
     /**
      * Updates an existing product.
      *
-     * @param id The ID of the product.
+     * @param id      The ID of the product.
      * @param product The updated product details.
      * @return The updated product response DTO.
      */
@@ -132,13 +127,14 @@ public class ProductController {
         logger.info("Product updated successfully: {}", productResponseDto);
         return ResponseEntity.ok(productResponseDto);
     }
+
     @Operation(summary = "Create Product Days", description = "Create an existing product day.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Add Product Day"),
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PutMapping("/days/{id}")
-    public ResponseEntity<ProductResponseDto> createProductDays(@PathVariable Long id){
+    public ResponseEntity<ProductResponseDto> createProductDays(@PathVariable Long id) {
         Product addProductsDays = productService.createProductDays(id);
         ProductResponseDto productResponseDto = createConverter.toDto(addProductsDays);
         return ResponseEntity.ok(productResponseDto);

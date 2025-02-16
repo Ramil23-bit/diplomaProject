@@ -2,7 +2,6 @@ package org.telran.web.entity;
 
 import jakarta.persistence.*;
 
-import java.util.List;
 
 @Entity
 @Table(name = "cart_items")
@@ -10,10 +9,13 @@ public class CartItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long quantity;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id")
     private Cart cart;
+
     @ManyToOne
     @JoinColumn(name = "cart_product_id", foreignKey = @ForeignKey(name = "FK_CART_ITEMS_PRODUCT"))
     private Product product;
@@ -25,8 +27,6 @@ public class CartItems {
         this.product = product;
     }
 
-
-
     public CartItems(Cart cart, Product product) {
         this.cart = cart;
         this.product = product;
@@ -37,7 +37,6 @@ public class CartItems {
         this.cart = cart;
         this.product = product;
     }
-
 
     public CartItems() {
     }

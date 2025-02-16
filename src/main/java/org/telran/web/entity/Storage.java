@@ -1,10 +1,6 @@
 package org.telran.web.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "storage")
@@ -16,7 +12,7 @@ public class Storage {
     private Long amount;
 
     public Storage() {
-        //
+
     }
 
     public Storage(Long id, Long amount) {
