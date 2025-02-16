@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 
 public class OrderItemsCreateDto {
 
-    private Long quantity;
+
 
     private Long productId;
 
-    private Long orderId;
+    private Long quantity;
 
     private BigDecimal priceAtPurchase;
 
@@ -16,16 +16,9 @@ public class OrderItemsCreateDto {
         //
     }
 
-    public OrderItemsCreateDto(Long quantity, Long productId, Long orderId, BigDecimal priceAtPurchase) {
-        this.quantity = quantity;
+    public OrderItemsCreateDto(Long productId, Long quantity, BigDecimal priceAtPurchase) {
         this.productId = productId;
-        this.orderId = orderId;
-        this.priceAtPurchase = priceAtPurchase;
-    }
-
-    public OrderItemsCreateDto(Long quantity, Long productId, BigDecimal priceAtPurchase) {
         this.quantity = quantity;
-        this.productId = productId;
         this.priceAtPurchase = priceAtPurchase;
     }
 
@@ -43,14 +36,6 @@ public class OrderItemsCreateDto {
 
     public void setProductId(Long productId) {
         this.productId = productId;
-    }
-
-    public long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
     }
 
     public BigDecimal getPriceAtPurchase() {

@@ -52,11 +52,6 @@ public class OrderItemsConverter implements Converter<OrderItems, OrderItemsCrea
     @Override
     public OrderItems toEntity(OrderItemsCreateDto orderItemsCreateDto) {
         Product product = productService.getById(orderItemsCreateDto.getProductId());
-        Orders orders = ordersService.getById(orderItemsCreateDto.getOrderId());
-        return new OrderItems(
-                orderItemsCreateDto.getQuantity(),
-                orderItemsCreateDto.getPriceAtPurchase(),
-                product,
-                orders);
+        return new OrderItems(orderItemsCreateDto.getQuantity(), orderItemsCreateDto.getPriceAtPurchase(), productService.getById(orderItemsCreateDto.getProductId()));
     }
 }

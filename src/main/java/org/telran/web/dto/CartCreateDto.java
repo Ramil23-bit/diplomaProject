@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CartCreateDto {
 
-    @JsonProperty("product_id")
+    @JsonProperty("productId")
     private Long productId;
 
     @JsonProperty("quantity")
     private Long quantity;
+
+
 
     public CartCreateDto(Long productId, Long quantity) {
         this.productId = productId;

@@ -51,7 +51,8 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryResponseDto create(@RequestBody CategoryCreateDto categoryDto) {
         logger.info("Received request to create category: {}", categoryDto);
-        CategoryResponseDto response = categoryConverter.toDto(categoryService.create(categoryConverter.toEntity(categoryDto)));
+        Category category = categoryConverter.toEntity(categoryDto);
+        CategoryResponseDto response = categoryConverter.toDto(categoryService.create(category));
         logger.info("Category created successfully with ID: {}", response.getId());
         return response;
     }
@@ -111,5 +112,12 @@ public class CategoryController {
         logger.info("Request to delete category with ID: {}", id);
         categoryService.delete(id);
         logger.info("Category with ID {} successfully deleted", id);
+    }
+
+    @PutMapping("/{id}")
+    public CategoryResponseDto update(@PathVariable(name = "id") Long id, @RequestBody CategoryCreateDto categoryDto) {
+        String title = categoryDto.getCategoryTitle();
+        categoryService.editTitle(id, title);
+        return categoryConverter.toDto(categoryService.getById(id));
     }
 }

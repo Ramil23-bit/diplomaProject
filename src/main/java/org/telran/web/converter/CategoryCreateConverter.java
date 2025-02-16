@@ -31,6 +31,6 @@ public class CategoryCreateConverter implements Converter<Category, CategoryCrea
      */
     @Override
     public Category toEntity(CategoryCreateDto categoryCreateDto) {
-        return new Category(categoryCreateDto.getCategoryTitle(), categoryCreateDto.getProducts());
+        return new Category(categoryCreateDto.getCategoryTitle());
     }
 }

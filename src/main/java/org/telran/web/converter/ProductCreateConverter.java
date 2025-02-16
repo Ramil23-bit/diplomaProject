@@ -8,6 +8,9 @@ import org.telran.web.entity.Product;
 import org.telran.web.service.CategoryService;
 import org.telran.web.service.StorageService;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * Converter class for transforming Product entities to DTOs and vice versa.
  * Handles the conversion between Product, ProductCreateDto, and ProductResponseDto.
@@ -29,6 +32,14 @@ public class ProductCreateConverter implements Converter<Product, ProductCreateD
      */
     @Override
     public ProductResponseDto toDto(Product product) {
+        if(null == product.getDiscount()) {
+            product.setDiscount(BigDecimal.ZERO);
+        }
+        if (product.getDiscount().compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal discountMultiplier = BigDecimal.ONE.subtract(product.getDiscount().divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
+            BigDecimal discountedPrice = product.getPrice().multiply(discountMultiplier).setScale(2, RoundingMode.HALF_UP);
+            product.setPrice(discountedPrice);
+        }
         return new ProductResponseDto(
                 product.getId(),
                 product.getProductTitle(),

@@ -82,5 +82,5 @@ public interface ProductService {
      */
     Product create(Product product);
 
-    Product createProductDays(Long id);
+    Product createProductDays();
 }
