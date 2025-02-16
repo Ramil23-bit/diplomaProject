@@ -120,6 +120,22 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    @Transactional
+    public void deleteCurrentUser() {
+        deleteUserById(getCurrentUserId());
+    }
+
+    @Override
+    public User updateCurrentUser(UserCreateDto user) {
+        return updateUser(getCurrentUserId(), user);
+    }
+
+    @Override
+    public User getCurrentUser() {
+        return getById(getCurrentUserId());
+    }
+
     /**
      * Updates the role of a user to admin.
      *

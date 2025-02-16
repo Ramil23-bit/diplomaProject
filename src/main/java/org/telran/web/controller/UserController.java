@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.telran.web.converter.Converter;
+import org.telran.web.converter.UserCreateConverter;
 import org.telran.web.dto.UserCreateDto;
 import org.telran.web.dto.UserResponseDto;
 import org.telran.web.entity.User;
@@ -43,6 +44,8 @@ public class UserController {
 
     @Autowired
     private AuthenticationService authenticationService;
+    @Autowired
+    private UserCreateConverter userCreateConverter;
 
     /**
      * Authenticates a user and returns a JWT token.
@@ -70,6 +73,12 @@ public class UserController {
         String role = userService.getCurrentUserRole();
         logger.info("Current user's role: {}", role);
         return Map.of("role", role);
+    }
+
+    @GetMapping("/myinfo")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public UserResponseDto getCurrentUser() {
+        return converter.toDto(userService.getCurrentUser());
     }
 
     /**
@@ -121,5 +130,17 @@ public class UserController {
         UserResponseDto responseDto = converter.toDto(savedUser);
         logger.info("User registered successfully with ID: {}", responseDto.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    @PutMapping
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public UserResponseDto update(@RequestBody UserCreateDto dto) {
+        return userCreateConverter.toDto(userService.updateCurrentUser(dto));
+    }
+
+    @DeleteMapping
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public void delete() {
+        userService.deleteCurrentUser();
     }
 }

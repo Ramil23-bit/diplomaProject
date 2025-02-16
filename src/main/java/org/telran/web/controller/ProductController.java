@@ -128,16 +128,10 @@ public class ProductController {
         return ResponseEntity.ok(productResponseDto);
     }
 
-    @Operation(summary = "Create Product Days", description = "Create an existing product day.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Add Product Day"),
-            @ApiResponse(responseCode = "404", description = "Product not found")
-    })
-    @PutMapping("/days/{id}")
-    public ResponseEntity<ProductResponseDto> createProductDays(@PathVariable Long id) {
-        Product addProductsDays = productService.createProductDays(id);
-        ProductResponseDto productResponseDto = createConverter.toDto(addProductsDays);
-        return ResponseEntity.ok(productResponseDto);
+    @GetMapping("/dayproduct")
+    public ProductResponseDto getDayProduct() {
+        Product productDays = productService.createProductDays();
+        return createConverter.toDto(productDays);
     }
 
     /**

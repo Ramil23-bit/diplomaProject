@@ -17,7 +17,9 @@ import org.telran.web.dto.OrderResponseDto;
 import org.telran.web.entity.Orders;
 import org.telran.web.service.OrdersService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -98,7 +100,7 @@ public class OrdersController {
             @ApiResponse(responseCode = "200", description = "Order history received successfully")
     })
     @GetMapping("/history")
-    public List<OrderResponseDto> getHistory() {
+    public List<OrderResponseDto> getHistory(){
         return service.getAllByUserIdHistory().stream()
                 .map(orders -> converter.toDto(orders))
                 .collect(Collectors.toList());
@@ -129,6 +131,18 @@ public class OrdersController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<OrderResponseDto> checkStatus() {
         return service.checkOrderStatus().stream()
+    @GetMapping("/{id}/status")
+    public ResponseEntity<Map<String, String>> checkOrderStatus(@PathVariable Long id) {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", service.getOrderStatusById(id));
+        return ResponseEntity.ok(response);
+    }
+
+
+
+    @GetMapping("/current")
+    public List<OrderResponseDto> getCurrent(){
+        return service.getAllByCurrentUser().stream()
                 .map(orders -> converter.toDto(orders))
                 .collect(Collectors.toList());
     }
@@ -152,4 +166,14 @@ public class OrdersController {
         logger.info("Order retrieved: {}", order);
         return order;
     }
+
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable Long orderId) {
+        service.delete(orderId);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Order cancelled successfully");
+        return ResponseEntity.ok(response);
+    }
+
+
 }

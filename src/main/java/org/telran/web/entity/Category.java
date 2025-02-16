@@ -22,6 +22,8 @@ public class Category {
     @JsonManagedReference
     private List<Product> products = new ArrayList<>();
 
+
+
     public Category(Long id, String categoryTitle, List<Product> products) {
         this.id = id;
         this.categoryTitle = categoryTitle;
@@ -41,7 +43,6 @@ public class Category {
 
     public Category(String categoryTitle) {
         this.categoryTitle = categoryTitle;
-        this.products = new ArrayList<>();
     }
 
     public Category() {

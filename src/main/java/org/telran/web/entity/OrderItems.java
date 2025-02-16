@@ -21,12 +21,19 @@ public class OrderItems {
 
     @ManyToOne
     @JoinColumn(name = "order_item_product_id", foreignKey = @ForeignKey(name = "FK_ORDER_ITEMS_PRODUCT"))
+//    @JsonIgnore
     private Product product;
 
     @ManyToOne
     @JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "FK_ORDER_ITEMS_ORDER"))
     @JsonIgnore
     private Orders orders;
+
+    public OrderItems(Long quantity, BigDecimal priceAtPurchase, Product product) {
+        this.quantity = quantity;
+        this.priceAtPurchase = priceAtPurchase;
+        this.product = product;
+    }
 
     public OrderItems(Long id, Long quantity, BigDecimal priceAtPurchase, Product product, Orders orders) {
         this.id = id;

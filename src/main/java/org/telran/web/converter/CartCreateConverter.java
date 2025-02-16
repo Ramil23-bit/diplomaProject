@@ -55,8 +55,9 @@ public class CartCreateConverter implements Converter<Cart, CartCreateDto, CartR
     public Cart toEntity(CartCreateDto cartCreateDto) {
         User user = userService.getById(userService.getCurrentUserId());
         Cart cart = cartService.findByCurrentUser();
+        Long productId = cartCreateDto.getProductId();
         CartItems cartItem = cartItemsService.createCartItems(
-                new CartItems(cartCreateDto.getQuantity(), cart, productService.getById(cartCreateDto.getProductId())));
+                new CartItems(cartCreateDto.getQuantity(), cart, productService.getById(productId)));
         cart.getCartItemsList().add(cartItem);
         return cart;
     }

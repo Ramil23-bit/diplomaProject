@@ -4,8 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telran.web.dto.OrderCreateDto;
 import org.telran.web.dto.OrderResponseDto;
+import org.telran.web.entity.OrderItems;
 import org.telran.web.entity.Orders;
+import org.telran.web.service.OrderItemsService;
+import org.telran.web.service.OrdersService;
 import org.telran.web.service.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Converter class for transforming Orders entities to DTOs and vice versa.
@@ -19,6 +26,12 @@ public class OrderCreateConverter implements Converter<Orders, OrderCreateDto, O
 
     @Autowired
     private UserCreateConverter userCreateConverter;
+
+    @Autowired
+    private OrderItemsConverter orderItemsConverter;
+
+    @Autowired
+    private OrdersService ordersService;
 
     /**
      * Converts an Orders entity to an OrderResponseDto.
@@ -46,8 +59,26 @@ public class OrderCreateConverter implements Converter<Orders, OrderCreateDto, O
      * @param orderCreateDto The DTO containing order creation data.
      * @return The created Orders entity.
      */
-    @Override
     public Orders toEntity(OrderCreateDto orderCreateDto) {
-        return new Orders(userService.getById(userService.getCurrentUserId()), orderCreateDto.getDeliveryAddress(), orderCreateDto.getDeliveryMethod());
+        Orders orders = new Orders(userService.getCurrentUser(),
+                orderCreateDto.getDeliveryAddress(),
+                orderCreateDto.getContactPhone(),
+                orderCreateDto.getDeliveryMethod());
+
+        Orders orderWithId = ordersService.create(orders);
+
+        List<OrderItems> orderItems = new ArrayList<>(orderCreateDto.getItems()
+                .stream()
+                .map(orderItemsConverter::toEntity)
+                .collect(Collectors.toList()));
+
+        orderItems.forEach(orderItem -> orderItem.setOrders(orderWithId));
+
+        orderWithId.getOrderItems().clear();
+        orderWithId.getOrderItems().addAll(orderItems);
+
+        return orderWithId;
     }
+
+
 }
