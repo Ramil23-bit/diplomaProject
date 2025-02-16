@@ -61,15 +61,7 @@ public class ReportService {
         return orderItemsJpaRepository.findUnpaidOrdersOlderThan(dateThreshold);
     }
 
-    /**
-     * Retrieves revenue reports for a specified time period and grouping criteria.
-     *
-     * @param n       The number of time units (e.g., 3 days, 2 months).
-     * @param unit    The time unit for the report (e.g., HOURS, DAYS, WEEKS, MONTHS, YEARS).
-     * @param groupBy The grouping criteria (e.g., category, date, customer).
-     * @return A list of revenue reports based on the provided parameters.
-     * @throws IllegalArgumentException If an unsupported time unit is provided.
-     */
+
     public List<RevenueReportDto> getRevenueReport(int n, ChronoUnit unit, GroupBy groupBy) {
         // Validate time unit
         if (!List.of(ChronoUnit.HOURS, ChronoUnit.DAYS, ChronoUnit.WEEKS, ChronoUnit.MONTHS, ChronoUnit.YEARS).contains(unit)) {

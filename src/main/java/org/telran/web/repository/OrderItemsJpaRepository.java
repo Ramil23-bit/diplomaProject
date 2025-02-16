@@ -52,4 +52,8 @@ public interface OrderItemsJpaRepository extends JpaRepository<OrderItems, Long>
             "JOIN oi.orders o " +
             "WHERE o.status = 'AWAITING_PAYMENT' AND o.createdAt < :date") // JOIN OrdetItems(oi) + Orders(o)-AWAITING_PAYMENT + 'createdAt' from Orders
     List<Product> findUnpaidOrdersOlderThan(@Param("date") LocalDateTime date);
+
+
+
+
 }

@@ -57,6 +57,13 @@ public class Orders {
         this.deliveryMethod = deliveryMethod;
     }
 
+    public Orders(User user, String deliveryAddress, String contactPhone, String deliveryMethod) {
+        this.user = user;
+        this.deliveryAddress = deliveryAddress;
+        this.contactPhone = contactPhone;
+        this.deliveryMethod = deliveryMethod;
+    }
+
     public Orders(User user, String deliveryAddress, String deliveryMethod) {
         this.user = user;
         this.deliveryAddress = deliveryAddress;
