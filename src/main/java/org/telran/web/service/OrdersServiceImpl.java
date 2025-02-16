@@ -49,18 +49,34 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public Orders create(Orders orders) {
         logger.info("Creating new order for user ID: {}", orders.getUser().getId());
+
+        if (orders.getOrderItems() == null) {
+            orders.setOrderItems(new ArrayList<>());
+        }
+
         Orders savedOrder = repository.save(orders);
-        List<OrderItems> orderItems = savedOrder.getOrderItems();
-        if (orderItems == null || orderItems.isEmpty()) {
-            logger.warn("Order has no items!");
+
+        if (savedOrder.getOrderItems().isEmpty()) {
+            logger.warn("⚠️ Order created but has no items! Order ID: {}", savedOrder.getId());
             return savedOrder;
         }
-        List<Product> products = orderItems.stream().map(OrderItems::getProduct).collect(Collectors.toList());
-        List<CartItems> currentCartItems = cartItemsService.getAllCartItems().stream().filter(cartItems -> products.contains(cartItems.getProduct())).collect(Collectors.toList());
+
+        List<Product> products = savedOrder.getOrderItems()
+                .stream()
+                .map(OrderItems::getProduct)
+                .collect(Collectors.toList());
+
+        List<CartItems> currentCartItems = cartItemsService.getAllCartItems()
+                .stream()
+                .filter(cartItems -> products.contains(cartItems.getProduct()))
+                .collect(Collectors.toList());
+
         currentCartItems.forEach(cartItemsService::removeCartItem);
-        logger.info("Order created successfully with ID: {}", savedOrder.getId());
+
+        logger.info("✅ Order created successfully with ID: {}", savedOrder.getId());
         return savedOrder;
     }
+
 
     /**
      * Retrieves all orders from the repository.
@@ -103,15 +119,34 @@ public class OrdersServiceImpl implements OrdersService {
      * @return a list of orders with the status AWAITING_PAYMENT.
      */
     @Override
-    public List<Orders> checkOrderStatus() {
-        List<Orders> ordersAwaitingStatus = new ArrayList<>();
-        for (Orders orders : getAll()) {
-            if (orders.getStatus().equals(OrderStatus.AWAITING_PAYMENT)) {
-                ordersAwaitingStatus.add(orders);
-            }
-        }
-        return ordersAwaitingStatus;
+    public String getOrderStatusById(Long orderId) {
+        Orders order = repository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        return order.getStatus().name();
     }
+
+
+    @Override
+    public List<Orders> getAllByCurrentUser() {
+        return repository.findAllByUserId(userService.getCurrentUserId());
+    }
+
+    @Override
+    public void delete(Long id) {
+        Orders byId = getById(id);
+        OrderStatus status = byId.getStatus();
+        Long userId = byId.getUser().getId();
+
+        if ((OrderStatus.COMPLETED.equals(status) || OrderStatus.AWAITING_PAYMENT.equals(status))
+                && userId.equals(userService.getCurrentUserId())) {
+            throw new IllegalStateException("You cannot cancel a completed or awaiting payment order.");
+        }
+
+        byId.setStatus(OrderStatus.CANCELLED);
+        repository.save(byId);
+    }
+
+
     /**
      * Updates the statuses of orders based on their creation time and current status.
      * <p>
@@ -125,6 +160,7 @@ public class OrdersServiceImpl implements OrdersService {
      * </ul>
      * </p>
      */
+
     public void updateStatusOrders() {
         List<Orders> ordersServiceList = repository.findAll();
         for (Orders orders : ordersServiceList) {

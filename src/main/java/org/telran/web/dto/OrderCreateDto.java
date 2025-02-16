@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderCreateDto {
-
     private Long userId;
     private List<OrderItemsCreateDto> items = new ArrayList<>();
     private String contactPhone;
