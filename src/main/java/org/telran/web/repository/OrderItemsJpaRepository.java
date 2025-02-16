@@ -12,25 +12,44 @@ import java.util.List;
 @Repository
 public interface OrderItemsJpaRepository extends JpaRepository<OrderItems, Long> {
 
-    @Query("SELECT oi.product, COUNT(oi.product) AS purchaseCount " +
+    /**
+     * Retrieves the top 10 most purchased products.
+     * This method counts the occurrences of each product in completed orders and returns the most frequently purchased ones.
+     *
+     * @return A list of objects where each entry contains a {@link Product} and its purchase count.
+     */
+    @Query("SELECT oi.product, COUNT(oi.product) AS purchaseCount " + // SQL-request: 'oi.product' from OrderItems
             "FROM OrderItems oi " +
             "JOIN oi.orders o " +
-            "WHERE o.status = 'COMPLETED' " +
-            "GROUP BY oi.product " +
-            "ORDER BY purchaseCount DESC LIMIT 10")
+            "WHERE o.status = 'COMPLETED' " + // JOIN OrdetItems(oi) + Orders(o)-COMPLETED
+            "GROUP BY oi.product " + // group by product
+            "ORDER BY purchaseCount DESC LIMIT 10") //sort by purchaseCount DESC(decrease)
     List<Object[]> findTop10PurchasedProducts();
 
-    @Query("SELECT oi.product, COUNT(oi.product) AS cancelCount " +
+    /**
+     * Retrieves the top 10 most canceled products.
+     * This method counts the occurrences of each product in canceled orders and returns the most frequently canceled ones.
+     *
+     * @return A list of objects where each entry contains a {@link Product} and its cancellation count.
+     */
+    @Query("SELECT oi.product, COUNT(oi.product) AS cancelCount " + // SQL-request: 'oi.product' from OrderItems
             "FROM OrderItems oi " +
             "JOIN oi.orders o " +
-            "WHERE o.status = 'CANCELLED' " +
-            "GROUP BY oi.product " +
-            "ORDER BY cancelCount DESC LIMIT 10")
+            "WHERE o.status = 'CANCELLED' " + // JOIN OrdetItems(oi) + Orders(o)-CANCELLED
+            "GROUP BY oi.product " + // group by product
+            "ORDER BY cancelCount DESC LIMIT 10") //sort by cancelCount DESC(decrease)
     List<Object[]> findTop10CancelledProducts();
 
-    @Query("SELECT oi.product " +
+    /**
+     * Retrieves a list of products that are part of unpaid orders older than the specified date.
+     * This method finds products from orders that are still in the "CREATED" status and were created before the given date.
+     *
+     * @param date The cutoff date; orders created before this date will be considered unpaid.
+     * @return A list of unpaid {@link Product} instances.
+     */
+    @Query("SELECT oi.product " + // SQL-request: 'oi.product' from OrderItems
             "FROM OrderItems oi " +
             "JOIN oi.orders o " +
-            "WHERE o.status = 'CREATED' AND o.createdAt < :date")
+            "WHERE o.status = 'CREATED' AND o.createdAt < :date") // JOIN OrdetItems(oi) + Orders(o)-CREATED + 'createdAt' from Orders
     List<Product> findUnpaidOrdersOlderThan(@Param("date") LocalDateTime date);
 }
