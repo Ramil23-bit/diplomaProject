@@ -3,7 +3,6 @@ package org.telran.web.dto;
 import java.util.List;
 
 public class OrderCreateDto {
-
     private Long userId;
     private List<OrderItemsCreateDto> items;
     private String deliveryAddress;

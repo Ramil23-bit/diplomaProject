@@ -48,4 +48,6 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
             @Param("groupBy") String groupBy);
+
+    List<Orders> findAllByUserId(Long currentUserId);
 }
