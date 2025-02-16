@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/orders").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/orders").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/categories").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/categories").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories/{id}").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/cart").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/cart/current").hasAnyRole("USER", "ADMIN")
@@ -70,7 +70,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/storage").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/storage").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/cart_items/**").hasAnyRole("USER", "ADMIN")
-                        //.requestMatchers("/api/v1/storage/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/storage/**").hasRole("ADMIN")
                         .anyRequest().permitAll())
 
                 // Exception Handling

@@ -80,7 +80,6 @@ public class ProductServiceImpl implements ProductService {
 
         cq.where(cb.and(predicates.toArray(new Predicate[0])));
 
-        // Sortare în funcție de parametru
         if (sortBy != null) {
             switch (sortBy) {
                 case "price":
@@ -93,10 +92,10 @@ public class ProductServiceImpl implements ProductService {
                     cq.orderBy(direction == 1 ? cb.asc(root.get("productTitle")) : cb.desc(root.get("productTitle")));
                     break;
                 default:
-                    cq.orderBy(cb.desc(root.get("createdAt"))); // Implicit sortare după dată
+                    cq.orderBy(cb.desc(root.get("createdAt")));
             }
         } else {
-            cq.orderBy(cb.desc(root.get("createdAt"))); // Sortare implicită după data creării
+            cq.orderBy(cb.desc(root.get("createdAt")));
         }
 
         TypedQuery<Product> query = entityManager.createQuery(cq);

@@ -28,7 +28,7 @@ public interface OrdersService {
      *
      * @return a list of {@link Orders} that have the status {AWAITING_PAYMENT}.
      */
-    List<Orders> checkOrderStatus();
+    String getOrderStatusById(Long orderId);
 
     /**
      * Retrieves all orders.
@@ -46,4 +46,8 @@ public interface OrdersService {
     Orders getById(Long id);
 
     List<Orders> getAllByUserIdHistory();
+
+    List<Orders> getAllByCurrentUser();
+
+    void delete(Long id);
 }

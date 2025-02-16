@@ -86,4 +86,10 @@ public interface UserService {
      * @return The role of the current user.
      */
     String getCurrentUserRole();
+
+    User getCurrentUser();
+
+    User updateCurrentUser(UserCreateDto user);
+
+    void deleteCurrentUser();
 }

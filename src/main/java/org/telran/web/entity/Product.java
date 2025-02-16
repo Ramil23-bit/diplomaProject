@@ -57,7 +57,7 @@ public class Product {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
     private List<Favorites> favorites = new ArrayList<>();
 
     @Column(name = "image_url")

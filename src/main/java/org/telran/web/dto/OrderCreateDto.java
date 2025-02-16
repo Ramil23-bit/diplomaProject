@@ -1,20 +1,32 @@
 package org.telran.web.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderCreateDto {
 
     private Long userId;
-    private List<OrderItemsCreateDto> items;
+    private List<OrderItemsCreateDto> items = new ArrayList<>();
+    private String contactPhone;
     private String deliveryAddress;
     private String deliveryMethod;
 
-    public OrderCreateDto(Long userId, List<OrderItemsCreateDto> items, String deliveryAddress, String deliveryMethod) {
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
+    public OrderCreateDto(Long userId, List<OrderItemsCreateDto> items, String contactPhone, String deliveryAddress, String deliveryMethod) {
         this.userId = userId;
         this.items = items;
+        this.contactPhone = contactPhone;
         this.deliveryAddress = deliveryAddress;
         this.deliveryMethod = deliveryMethod;
     }
+
     public OrderCreateDto() {
         //
     }

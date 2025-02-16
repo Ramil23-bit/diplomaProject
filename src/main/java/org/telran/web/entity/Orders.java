@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.telran.web.enums.OrderStatus;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,12 +18,12 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItems> orderItems;
+    private List<OrderItems> orderItems = new ArrayList<>();
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -47,6 +48,13 @@ public class Orders {
     public Orders(List<OrderItems> orderItems, String deliveryAddress, String deliveryMethod) {
         this.orderItems = orderItems;
         this.deliveryAddress = deliveryAddress;
+        this.deliveryMethod = deliveryMethod;
+    }
+
+    public Orders(User user, String deliveryAddress, String contactPhone, String deliveryMethod) {
+        this.user = user;
+        this.deliveryAddress = deliveryAddress;
+        this.contactPhone = contactPhone;
         this.deliveryMethod = deliveryMethod;
     }
 

@@ -28,6 +28,11 @@ public class OrderItems {
     @JsonIgnore
     private Orders orders;
 
+    public OrderItems(Long quantity, BigDecimal priceAtPurchase, Product product) {
+        this.quantity = quantity;
+        this.priceAtPurchase = priceAtPurchase;
+        this.product = product;
+    }
 
     public OrderItems(Long id, Long quantity, BigDecimal priceAtPurchase, Product product, Orders orders) {
         this.id = id;
