@@ -16,10 +16,8 @@ import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.repository.ProductJpaRepository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of ProductService.
@@ -29,6 +27,8 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+
+    private final Random random = new Random();
 
     @Autowired
     private EntityManager entityManager;
@@ -145,15 +145,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product createProductDays(Long id) {
-        String roleUser = userService.getCurrentUserRole();
-        Product product = getById(id);
-        String info = product.getProductInfo();
-        if(roleUser.equals("ROLE_ADMIN")){
-            product.setProductInfo(info + " Товар дня");
-            productJpaRepository.save(product);
+    public Product createProductDays() {
+        List<Product> allProducts = productJpaRepository.findAll();
+        List<Product> discountedProducts = allProducts.stream()
+                .filter(p -> p.getDiscount() != null && p.getDiscount().compareTo(BigDecimal.ZERO) > 0)
+                .collect(Collectors.toList());
+        if (discountedProducts.isEmpty()) {
+            return null;
         }
-        return product;
+        BigDecimal maxDiscount = discountedProducts.stream()
+                .map(Product::getDiscount)
+                .max(BigDecimal::compareTo)
+                .orElse(BigDecimal.ZERO);
+        List<Product> maxDiscountProducts = discountedProducts.stream()
+                .filter(p -> p.getDiscount().compareTo(maxDiscount) == 0)
+                .collect(Collectors.toList());
+        return maxDiscountProducts.get(random.nextInt(maxDiscountProducts.size()));
     }
 
     /**
