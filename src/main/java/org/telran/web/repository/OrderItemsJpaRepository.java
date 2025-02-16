@@ -42,7 +42,7 @@ public interface OrderItemsJpaRepository extends JpaRepository<OrderItems, Long>
 
     /**
      * Retrieves a list of products that are part of unpaid orders older than the specified date.
-     * This method finds products from orders that are still in the "CREATED" status and were created before the given date.
+     * This method finds products from orders that are still in the "AWAITING_PAYMENT" status and were created before the given date.
      *
      * @param date The cutoff date; orders created before this date will be considered unpaid.
      * @return A list of unpaid {@link Product} instances.
@@ -50,6 +50,6 @@ public interface OrderItemsJpaRepository extends JpaRepository<OrderItems, Long>
     @Query("SELECT oi.product " + // SQL-request: 'oi.product' from OrderItems
             "FROM OrderItems oi " +
             "JOIN oi.orders o " +
-            "WHERE o.status = 'CREATED' AND o.createdAt < :date") // JOIN OrdetItems(oi) + Orders(o)-CREATED + 'createdAt' from Orders
+            "WHERE o.status = 'AWAITING_PAYMENT' AND o.createdAt < :date") // JOIN OrdetItems(oi) + Orders(o)-AWAITING_PAYMENT + 'createdAt' from Orders
     List<Product> findUnpaidOrdersOlderThan(@Param("date") LocalDateTime date);
 }
