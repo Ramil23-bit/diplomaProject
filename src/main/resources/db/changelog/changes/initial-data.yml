@@ -7,17 +7,28 @@ databaseChangeLog:
             tableName: categories
             columns:
               - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
                   name: category_title
                   value: 'вода'
+
         - insert:
             tableName: categories
             columns:
               - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
                   name: category_title
                   value: 'инвентарь'
+
         - insert:
             tableName: categories
             columns:
+              - column:
+                  name: id
+                  valueNumeric: 3
               - column:
                   name: category_title
                   value: 'земля'
@@ -29,20 +40,31 @@ databaseChangeLog:
             tableName: storage
             columns:
               - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
                   name: amount
-                  value: 500
+                  valueNumeric: 500
+
         - insert:
             tableName: storage
             columns:
               - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
                   name: amount
-                  value: 100
+                  valueNumeric: 100
+
         - insert:
             tableName: storage
             columns:
               - column:
+                  name: id
+                  valueNumeric: 3
+              - column:
                   name: amount
-                  value: 200
+                  valueNumeric: 200
   - changeSet:
       id: 14
       author: team_diploma_project
@@ -50,6 +72,9 @@ databaseChangeLog:
         - insert:
             tableName: products
             columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
               - column:
                   name: product_title
                   value: 'акваминерале'
@@ -68,9 +93,13 @@ databaseChangeLog:
               - column:
                   name: discount
                   valueNumeric: 10.0
+
         - insert:
             tableName: products
             columns:
+              - column:
+                  name: id
+                  valueNumeric: 2
               - column:
                   name: product_title
                   value: 'грабли'
@@ -92,6 +121,9 @@ databaseChangeLog:
         - insert:
             tableName: products
             columns:
+              - column:
+                    name: id
+                    valueNumeric: 3
               - column:
                   name: product_title
                   value: 'чернозем'
@@ -165,14 +197,21 @@ databaseChangeLog:
             tableName: cart
             columns:
               - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
                   name: user_id
                   valueNumeric: 1
         - insert:
             tableName: cart
             columns:
               - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
                   name: user_id
                   valueNumeric: 2
+
   - changeSet:
       id: 18
       author: team_diploma_project
@@ -209,47 +248,14 @@ databaseChangeLog:
             tableName: orders
             columns:
               - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
                   name: user_id
                   valueNumeric: 1
               - column:
                   name: delivery_address
                   value: 'Main Street 10'
-              - column:
-                  name: contact_phone
-                  value: '+1234567890'
-              - column:
-                  name: delivery_method
-                  value: 'Courier'
-              - column:
-                  name: status
-                  value: 'CREATED'
-        - insert:
-            tableName: orders
-            columns:
-              - column:
-                  name: user_id
-                  valueNumeric: 2
-              - column:
-                  name: delivery_address
-                  value: 'Package Street 21'
-              - column:
-                  name: contact_phone
-                  value: '+89765432109'
-              - column:
-                  name: delivery_method
-                  value: 'Courier'
-              - column:
-                  name: status
-                  value: 'CREATED'
-        - insert:
-            tableName: orders
-            columns:
-              - column:
-                  name: user_id
-                  valueNumeric: 1
-              - column:
-                  name: delivery_address
-                  value: 'File Street 89'
               - column:
                   name: contact_phone
                   value: '+1234567890'
@@ -267,6 +273,9 @@ databaseChangeLog:
             tableName: order_items
             columns:
               - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
                   name: quantity
                   valueNumeric: 2
               - column:
@@ -282,6 +291,9 @@ databaseChangeLog:
             tableName: order_items
             columns:
               - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
                   name: quantity
                   valueNumeric: 5
               - column:
@@ -296,6 +308,9 @@ databaseChangeLog:
         - insert:
             tableName: order_items
             columns:
+              - column:
+                  name: id
+                  valueNumeric: 3
               - column:
                   name: quantity
                   valueNumeric: 10
