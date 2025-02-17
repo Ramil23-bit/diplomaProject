@@ -53,9 +53,9 @@ class CategoryServiceImplTest {
 
         Category result = categoryService.create(newCategory);
 
-        assertNotNull(result);  // Category should not be null
-        assertEquals(1L, result.getId());  // ID must match expected value
-        assertEquals("New Category", result.getCategoryTitle());  // Title should match
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("New Category", result.getCategoryTitle());
     }
 
     /**
@@ -70,9 +70,9 @@ class CategoryServiceImplTest {
         when(categoryJpaRepository.findAll()).thenReturn(categories);
 
         List<Category> result = categoryService.getAll();
-        assertEquals(2, result.size());  // The size must match expected value
-        assertEquals("Tools and equipment", result.get(0).getCategoryTitle());  // Verify category title
-        assertEquals("Planting material", result.get(1).getCategoryTitle());  // Verify category title
+        assertEquals(2, result.size());
+        assertEquals("Tools and equipment", result.get(0).getCategoryTitle());
+        assertEquals("Planting material", result.get(1).getCategoryTitle());
     }
 
     /**
@@ -90,7 +90,7 @@ class CategoryServiceImplTest {
 
         Category categoryActual = categoryService.getById(categoryId);
 
-        assertEquals(categoryExpected.getId(), categoryActual.getId());  // Verify retrieved ID
+        assertEquals(categoryExpected.getId(), categoryActual.getId());
     }
 
     /**
@@ -104,7 +104,7 @@ class CategoryServiceImplTest {
                 .thenThrow(new CategoryNotFoundException("Category not found"));
 
         assertThrows(CategoryNotFoundException.class,
-                () -> categoryService.getById(id));  // Expect exception
+                () -> categoryService.getById(id));
     }
 
     /**
@@ -118,7 +118,7 @@ class CategoryServiceImplTest {
 
         when(categoryJpaRepository.updateTitle(categoryId, newTitle)).thenReturn(1);
         assertDoesNotThrow(() -> categoryService.editTitle(categoryId, newTitle));
-        verify(categoryJpaRepository, times(1)).updateTitle(categoryId, newTitle);  // Ensure update method is called
+        verify(categoryJpaRepository, times(1)).updateTitle(categoryId, newTitle);
     }
 
     /**
@@ -132,7 +132,7 @@ class CategoryServiceImplTest {
 
         when(categoryJpaRepository.updateTitle(categoryId, newTitle)).thenReturn(0);
         assertThrows(CategoryNotFoundException.class, () -> categoryService.editTitle(categoryId, newTitle));
-        verify(categoryJpaRepository, times(1)).updateTitle(categoryId, newTitle);  // Ensure update method is called
+        verify(categoryJpaRepository, times(1)).updateTitle(categoryId, newTitle);
     }
 
     /**
@@ -146,7 +146,8 @@ class CategoryServiceImplTest {
 
         Category category = new Category(categoryId, "Test Category", null);
         Storage storage = new Storage(1L, 100L);
-        Product product = new Product(productId, "Test Product", BigDecimal.valueOf(100), "Test Description", category, storage, BigDecimal.ZERO, null, null);
+        Product product = new Product(productId, "Test Product", BigDecimal.valueOf(100),
+                "Test Description", category, storage, BigDecimal.ZERO, null, null);
 
         when(productService.getById(productId)).thenReturn(product);
         when(productService.setCategory(productId, category)).thenReturn(product);
@@ -154,8 +155,8 @@ class CategoryServiceImplTest {
 
         Category updatedCategory = categoryService.editListOfProductsAddProduct(categoryId, productId);
 
-        assertNotNull(updatedCategory);  // The category should not be null
-        assertEquals(categoryId, updatedCategory.getId());  // The category ID should match
+        assertNotNull(updatedCategory);
+        assertEquals(categoryId, updatedCategory.getId());
 
         verify(productService, times(1)).getById(productId);
         verify(productService, times(1)).setCategory(productId, category);
@@ -173,7 +174,8 @@ class CategoryServiceImplTest {
 
         Category category = new Category(categoryId, "Test Category", null);
         Storage storage = new Storage(1L, 100L);
-        Product product = new Product(productId, "Test Product", BigDecimal.valueOf(100), "Test Description", category, storage, BigDecimal.ZERO, null, null);
+        Product product = new Product(productId, "Test Product", BigDecimal.valueOf(100),
+                "Test Description", category, storage, BigDecimal.ZERO, null, null);
 
         when(categoryJpaRepository.findById(categoryId)).thenReturn(Optional.of(category));
         when(productService.getById(productId)).thenReturn(product);
@@ -181,8 +183,8 @@ class CategoryServiceImplTest {
 
         Category updatedCategory = categoryService.editListOfProductsRemoveProduct(categoryId, productId);
 
-        assertNotNull(updatedCategory);  // The category should not be null
-        assertEquals(categoryId, updatedCategory.getId());  // The category ID should match
+        assertNotNull(updatedCategory);
+        assertEquals(categoryId, updatedCategory.getId());
 
         verify(categoryJpaRepository, times(1)).findById(categoryId);
         verify(productService, times(1)).getById(productId);

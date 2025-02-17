@@ -56,7 +56,6 @@ public class OrdersControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     public void testGetOrdersForAdmin() throws Exception {
-        // Execute request and validate response
         mockMvc.perform(get("/api/v1/orders"))
                 .andExpect(status().isOk())  // HTTP 200 OK
                 .andExpect(content().string(""))
@@ -70,7 +69,6 @@ public class OrdersControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     public void testGetOrdersForUser() throws Exception {
-        // Execute request and validate response
         mockMvc.perform(get("/api/v1/orders"))
                 .andExpect(status().isOk())  // HTTP 200 OK
                 .andExpect(content().string(""))

@@ -57,7 +57,6 @@ public class CategoryControllerTest {
     @InjectMocks
     private CategoryController categoryController;
 
-    // Set test profile for isolated configuration
     static {
         System.setProperty("spring.profiles.active", "test");
     }
@@ -71,9 +70,9 @@ public class CategoryControllerTest {
     void getAllCategoriesAsUserTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories"))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())  // ✅ HTTP 200 OK
-                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())  // ✅ Ensures the response is an array
-                .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());  // ✅ Ensures the array is empty
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
     }
 
     /**
@@ -83,20 +82,17 @@ public class CategoryControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void getCategoryByIdAsAdminTest() throws Exception {
-        // Mock category data
         Category category = new Category(1L, "Category Name");
         CategoryResponseDto categoryResponseDto = new CategoryResponseDto(1L, "Category Name");
 
-        // Mock service behavior
         when(categoryService.getById(1L)).thenReturn(category);
         when(categoryConverter.toDto(any(Category.class))).thenReturn(categoryResponseDto);
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories/{id}", 1L))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())  // ✅ HTTP 200 OK
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))  // ✅ ID must be 1
-                .andExpect(MockMvcResultMatchers.jsonPath("$.category_title").value("Category Name"));  // ✅ Title must match
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.category_title").value("Category Name"));
     }
 
     /**
@@ -106,10 +102,9 @@ public class CategoryControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void deleteCategoryByIdAsAdminTest() throws Exception {
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/categories/{id}", 1L))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk());  // ✅ HTTP 200 OK
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     /**

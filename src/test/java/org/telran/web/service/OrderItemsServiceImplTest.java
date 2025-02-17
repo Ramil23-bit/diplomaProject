@@ -72,8 +72,8 @@ public class OrderItemsServiceImplTest {
 
         OrderItems resultOrderItems = orderItemsService.createOrderItems(orderItemsExpected);
 
-        assertNotNull(resultOrderItems);  // Created order item should not be null
-        assertEquals(10L, resultOrderItems.getQuantity());  // Quantity should match expected
+        assertNotNull(resultOrderItems);
+        assertEquals(10L, resultOrderItems.getQuantity());
         Mockito.verify(orderItemsJpaRepository, times(1)).save(orderItemsExpected);
     }
 
@@ -88,8 +88,8 @@ public class OrderItemsServiceImplTest {
 
         Collection<OrderItems> actualListOrderItems = orderItemsService.getAllOrderItems();
 
-        assertNotNull(actualListOrderItems);  // List should not be null
-        assertEquals(2, actualListOrderItems.size());  // List size should match expected
+        assertNotNull(actualListOrderItems);
+        assertEquals(2, actualListOrderItems.size());
         Mockito.verify(orderItemsJpaRepository, times(1)).findAll();
     }
 
@@ -119,9 +119,9 @@ public class OrderItemsServiceImplTest {
 
         OrderItems actualOrderItems = orderItemsService.getByIdOrderItems(orderItemsId);
 
-        assertNotNull(actualOrderItems);  // Retrieved order item should not be null
-        assertEquals(1L, actualOrderItems.getId());  // ID should match expected
-        assertEquals(10L, actualOrderItems.getQuantity());  // Quantity should match expected
+        assertNotNull(actualOrderItems);
+        assertEquals(1L, actualOrderItems.getId());
+        assertEquals(10L, actualOrderItems.getQuantity());
         Mockito.verify(orderItemsJpaRepository, times(1)).findById(orderItemsId);
     }
 

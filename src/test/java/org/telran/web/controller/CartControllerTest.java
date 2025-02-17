@@ -55,7 +55,6 @@ public class CartControllerTest {
     @MockBean
     private UserDetailsService userDetailsService;
 
-    // Set test profile for isolated configuration
     static {
         System.setProperty("spring.profiles.active", "test");
     }
@@ -67,17 +66,12 @@ public class CartControllerTest {
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void createCartAsUserTest() throws Exception {
-        // Mock request data
         CartCreateDto cartCreateDto = new CartCreateDto(1L, 1L);
         Cart cart = new Cart(1L, null);
         CartResponseDto cartResponseDto = new CartResponseDto(1L, new UserResponseDto(1L, "user", "test@example.com", "123456789"));
-
-        // Mock service behavior
         when(cartService.createCart(any(Cart.class))).thenReturn(cart);
         when(converter.toEntity(any(CartCreateDto.class))).thenReturn(cart);
         when(converter.toDto(any(Cart.class))).thenReturn(cartResponseDto);
-
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/cart")
                         .content(asJsonString(cartCreateDto))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -96,15 +90,10 @@ public class CartControllerTest {
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void getCurrentCartAsUserTest() throws Exception {
-        // Mock cart data
         Cart cart = new Cart(1L, null);
         CartResponseDto cartResponseDto = new CartResponseDto(1L, new UserResponseDto(1L, "user", "test@example.com", "123456789"));
-
-        // Mock service behavior
         when(cartService.findByCurrentUser()).thenReturn(cart);
         when(converter.toDto(any(Cart.class))).thenReturn(cartResponseDto);
-
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cart/current"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -121,7 +110,6 @@ public class CartControllerTest {
     void getCurrentCartAsAdminTest() throws Exception {
         when(cartService.findByCurrentUser()).thenReturn(new Cart(1L, null));
         when(converter.toDto(any(Cart.class))).thenReturn(new CartResponseDto(1L, new UserResponseDto(1L, "admin", "admin@example.com", "123456789")));
-
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cart/current"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -136,7 +124,6 @@ public class CartControllerTest {
     void getAllCartsAsAdminTest() throws Exception {
         when(cartService.getAllCart()).thenReturn(Collections.singletonList(new Cart(1L, null)));
         when(converter.toDto(any(Cart.class))).thenReturn(new CartResponseDto(1L, new UserResponseDto(1L, "admin", "admin@example.com", "123456789")));
-
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cart"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());

@@ -57,9 +57,9 @@ class CartServiceImplTest {
 
         Cart result = cartService.createCart(cart);
 
-        assertNotNull(result);  // The created cart must not be null
-        assertEquals(1L, result.getId());  // The cart ID must match expected value
-        verify(cartJpaRepository, times(1)).save(cart);  // Ensure repository save is called once
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        verify(cartJpaRepository, times(1)).save(cart);
     }
 
     /**
@@ -72,9 +72,9 @@ class CartServiceImplTest {
 
         Cart result = cartService.getByIdCart(1L);
 
-        assertNotNull(result);  // The retrieved cart must not be null
-        assertEquals(1L, result.getId());  // The cart ID must match expected value
-        verify(cartJpaRepository, times(1)).findById(1L);  // Ensure repository method is called once
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        verify(cartJpaRepository, times(1)).findById(1L);
     }
 
     /**
@@ -86,6 +86,6 @@ class CartServiceImplTest {
         when(cartJpaRepository.findById(2L)).thenReturn(Optional.empty());
 
         assertThrows(CartNotFoundException.class, () -> cartService.getByIdCart(2L));
-        verify(cartJpaRepository, times(1)).findById(2L);  // Ensure repository method is called once
+        verify(cartJpaRepository, times(1)).findById(2L);
     }
 }

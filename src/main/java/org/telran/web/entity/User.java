@@ -29,7 +29,7 @@ public class User {
 
     @NotBlank(message = "Password is required")
     @Size(min = 4, max = 128, message = "Password must be between 4 and 128 characters")
-    //@ValidPassword
+    @ValidPassword
     private String password;
 
     @NotBlank

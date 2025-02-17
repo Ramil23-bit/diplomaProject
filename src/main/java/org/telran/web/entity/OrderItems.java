@@ -21,7 +21,6 @@ public class OrderItems {
 
     @ManyToOne
     @JoinColumn(name = "order_item_product_id", foreignKey = @ForeignKey(name = "FK_ORDER_ITEMS_PRODUCT"))
-//    @JsonIgnore
     private Product product;
 
     @ManyToOne

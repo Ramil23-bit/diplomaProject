@@ -83,9 +83,9 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isCreated())  // HTTP 201 Created
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(responseDto.getId()))  // ID matches
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(responseDto.getEmail()));  // Email matches
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(responseDto.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(responseDto.getEmail()));
     }
 
     /**
@@ -105,7 +105,7 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())  // HTTP 200 OK
-                .andExpect(MockMvcResultMatchers.content().json(asJsonString(responseDto)));  // JSON matches expected response
+                .andExpect(MockMvcResultMatchers.content().json(asJsonString(responseDto)));
     }
 
     /**
@@ -121,8 +121,8 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/" + nonExistentId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())  // HTTP 400 Bad Request
-                .andExpect(exception -> assertTrue(exception.getResolvedException() instanceof BadArgumentsException));  // Exception matches
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(exception -> assertTrue(exception.getResolvedException() instanceof BadArgumentsException));
     }
 
     /**

@@ -63,22 +63,18 @@ public class ProductControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     void getAllTest() throws Exception {
-        // Mock product entity
         Product product = new Product(1L, "title", new BigDecimal(10), "info", new BigDecimal(5));
 
-        // Mock service behavior
         when(productService.getAll(1L, 1, new BigDecimal(5), new BigDecimal(10), new BigDecimal(5), "createdAt"))
                 .thenReturn(List.of(product));
 
         when(converter.toDto(product))
                 .thenReturn(new ProductResponseDto(product.getId(), product.getProductTitle(), product.getPrice(),
                         product.getDiscount(), product.getCategoryId()));
-
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk());  // HTTP 200 OK
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     /**
@@ -88,23 +84,19 @@ public class ProductControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     void getByIdWhenIdExists() throws Exception {
-        // Mock product entity
         Product product = new Product(1L, "title", new BigDecimal(10), "info", new BigDecimal(5));
 
-        // Mock DTO
         ProductResponseDto productResponseDto = new ProductResponseDto(product.getId(), product.getProductTitle(),
                 product.getPrice(), product.getDiscount(), product.getCategoryId());
 
-        // Mock service behavior
         when(productService.getById(product.getId())).thenReturn(product);
         when(converter.toDto(product)).thenReturn(productResponseDto);
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products/" + product.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())  // HTTP 200 OK
-                .andExpect(MockMvcResultMatchers.content().json("{\"id\":1,\"productTitle\":\"title\",\"price\":10,\"discount\":5}"));  // JSON matches expected structure
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json("{\"id\":1,\"productTitle\":\"title\",\"price\":10,\"discount\":5}"));
     }
 
     /**
@@ -114,18 +106,15 @@ public class ProductControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     void getByIdWhenIdNotExists() throws Exception {
-        // Mock product entity
         Product product = new Product(1L, "title", new BigDecimal(10), "info", new BigDecimal(5));
 
-        // Mock service behavior for non-existent product
         when(productService.getById(product.getId())).thenThrow(BadArgumentsException.class);
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products/" + product.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())  // HTTP 400 Bad Request
-                .andExpect(exception -> assertTrue(exception.getResolvedException() instanceof BadArgumentsException));  // Exception must be BadArgumentsException
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(exception -> assertTrue(exception.getResolvedException() instanceof BadArgumentsException));
     }
 
     /**
@@ -135,19 +124,15 @@ public class ProductControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void deleteByIdWhenIdExists() throws Exception {
-        // Define test product ID
         Long id = 1L;
 
-        // Mock service behavior
         doNothing().when(productService).deleteProductsById(id);
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/products/" + id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isNoContent());  // HTTP 204 No Content
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
 
-        // Verify that the service method was called once
         verify(productService).deleteProductsById(id);
     }
 
@@ -158,18 +143,15 @@ public class ProductControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void deleteByIdWhenIdDoesNotExist() throws Exception {
-        // Define non-existent product ID
         Long nonExistentId = 1L;
 
-        // Mock service behavior for non-existent product
         doThrow(BadArgumentsException.class).when(productService).deleteProductsById(nonExistentId);
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/products/" + nonExistentId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())  // HTTP 400 Bad Request
-                .andExpect(exception -> assertTrue(exception.getResolvedException() instanceof BadArgumentsException));  // Exception must be BadArgumentsException
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(exception -> assertTrue(exception.getResolvedException() instanceof BadArgumentsException));
     }
 
     /**
@@ -179,23 +161,19 @@ public class ProductControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void updateWhenProductDoesNotExist() throws Exception {
-        // Define non-existent product ID
         Long nonExistentId = 1L;
 
-        // Define test product DTO
         ProductCreateDto productCreateDto = new ProductCreateDto("Product", new BigDecimal(49.99),
                 "Description", 1L, 1L, new BigDecimal(5), null);
 
-        // Mock service behavior
         doThrow(ProductNotFoundException.class).when(productService).editProducts(eq(nonExistentId), any(ProductCreateDto.class));
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/products/" + nonExistentId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Product\",\"description\":\"Description\",\"price\":49.99}"))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isNotFound())  // HTTP 404 Not Found
-                .andExpect(exception -> assertTrue(exception.getResolvedException() instanceof ProductNotFoundException));  // ✅ Exception must be ProductNotFoundException
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(exception -> assertTrue(exception.getResolvedException() instanceof ProductNotFoundException));
     }
 
     /**

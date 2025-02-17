@@ -22,8 +22,6 @@ public class Category {
     @JsonManagedReference
     private List<Product> products = new ArrayList<>();
 
-
-
     public Category(Long id, String categoryTitle, List<Product> products) {
         this.id = id;
         this.categoryTitle = categoryTitle;

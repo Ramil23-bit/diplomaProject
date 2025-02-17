@@ -57,7 +57,6 @@ public class FavoritesControllerTest {
     @MockBean
     private UserDetailsService userDetailsService;
 
-    // Set test profile for isolated configuration
     static {
         System.setProperty("spring.profiles.active", "test");
     }
@@ -69,20 +68,17 @@ public class FavoritesControllerTest {
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void getAllFavoritesTest() throws Exception {
-        // Mock user, product, and favorite entity
         User user = new User("username", "email@example.com", "123456", "+1234567890");
         Product product = new Product();
         Favorites favorite = new Favorites(1L, user, product);
 
-        // Mock service response
         when(favoritesService.getAll()).thenReturn(Collections.emptyList());
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/favorites")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())  // HTTP 200 OK
-                .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());  // List should be empty
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
     }
 
     /**
@@ -92,16 +88,13 @@ public class FavoritesControllerTest {
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void deleteFavoriteTest() throws Exception {
-        // Define test favorite ID
         Long favoriteId = 1L;
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/favorites/{favoriteId}", favoriteId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isNoContent());  // HTTP 204 No Content
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
 
-        // Verify that the service method was called once
         verify(favoritesService, times(1)).deleteById(favoriteId);
     }
 
@@ -112,11 +105,10 @@ public class FavoritesControllerTest {
     @Test
     @WithAnonymousUser
     void getAllFavoritesAsAnonymousTest() throws Exception {
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/favorites")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());  // HTTP 401 Unauthorized
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
     /**
@@ -126,16 +118,14 @@ public class FavoritesControllerTest {
     @Test
     @WithAnonymousUser
     void addProductToFavoritesAsAnonymousTest() throws Exception {
-        // Prepare request DTO
         FavoritesCreateDto favoritesCreateDto = new FavoritesCreateDto(1L);
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/favorites")
                         .content(asJsonString(favoritesCreateDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());  // HTTP 401 Unauthorized
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
 
     /**

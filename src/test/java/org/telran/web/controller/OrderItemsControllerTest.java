@@ -48,7 +48,6 @@ public class OrderItemsControllerTest {
     @MockBean
     private UserDetailsService userDetailsService;
 
-    // 🔹 Set test profile for isolated configuration
     static {
         System.setProperty("spring.profiles.active", "test");
     }
@@ -60,15 +59,10 @@ public class OrderItemsControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void deleteOrderItemTest() throws Exception {
-        // Define test order item ID
         Long orderItemId = 1L;
-
-        // Mock service behavior
         doNothing().when(orderItemsService).deleteOrderItems(orderItemId);
-
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/order_items/{id}", orderItemId))
-                .andExpect(MockMvcResultMatchers.status().isNoContent());  // HTTP 204 No Content
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     /**
@@ -78,9 +72,8 @@ public class OrderItemsControllerTest {
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void getOrderItemsTest() throws Exception {
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/order_items")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());  // HTTP 200 OK
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

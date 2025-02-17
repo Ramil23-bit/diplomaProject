@@ -1,6 +1,7 @@
 package org.telran.web.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,13 +13,15 @@ import org.telran.web.entity.CartItems;
 import org.telran.web.entity.Product;
 import org.telran.web.exception.CartItemsNotFoundException;
 import org.telran.web.repository.CartItemsJpaRepository;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
 import static org.mockito.Mockito.*;
 
 /**
- *   Key Features:
+ * Key Features:
  * - Uses `@ExtendWith(MockitoExtension.class)` to integrate Mockito.
  * - Mocks `CartItemsJpaRepository` to isolate service layer behavior.
  * - Tests for **valid and invalid retrieval of cart items**.
@@ -41,7 +44,7 @@ class CartItemsServiceImplTest {
     private Product product;
 
     /**
-     *   Setup Method: Initializes test data before each test**
+     * Setup Method: Initializes test data before each test**
      * - Creates a cart and product instance.
      * - Creates two sample cart items for testing.
      */
@@ -54,8 +57,8 @@ class CartItemsServiceImplTest {
     }
 
     /**
-     **Test Case:** Retrieve all cart items.
-     **Expected Result:** Returns a list of cart items.
+     * *Test Case:** Retrieve all cart items.
+     * *Expected Result:** Returns a list of cart items.
      */
     @Test
     void testGetAllCartItems() {
@@ -63,14 +66,14 @@ class CartItemsServiceImplTest {
 
         List<CartItems> result = cartItemsService.getAllCartItems();
 
-        assertEquals(2, result.size());  // The list must contain 2 cart items
-        assertEquals(10L, result.get(0).getQuantity());  // First item quantity must be 10
-        verify(cartItemsJpaRepository, times(1)).findAll();  // Ensure repository method is called once
+        assertEquals(2, result.size());
+        assertEquals(10L, result.get(0).getQuantity());
+        verify(cartItemsJpaRepository, times(1)).findAll();
     }
 
     /**
-     **Test Case:** Retrieve a cart item by ID when it exists.
-     **Expected Result:** Returns the correct cart item.
+     * *Test Case:** Retrieve a cart item by ID when it exists.
+     * *Expected Result:** Returns the correct cart item.
      */
     @Test
     void testGetByIdCartItems_Found() {
@@ -78,27 +81,27 @@ class CartItemsServiceImplTest {
 
         CartItems result = cartItemsService.getByIdCartItems(1L);
 
-        assertNotNull(result);  // The result must not be null
-        assertEquals(1L, result.getId());  // The ID must match
-        assertEquals(10L, result.getQuantity());  // Quantity must be 10
-        verify(cartItemsJpaRepository, times(1)).findById(1L);  // Ensure repository method is called once
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals(10L, result.getQuantity());
+        verify(cartItemsJpaRepository, times(1)).findById(1L);
     }
 
     /**
-     **Test Case:** Retrieve a cart item by ID when it does not exist.
-     **Expected Result:** Throws `CartItemsNotFoundException`.
+     * *Test Case:** Retrieve a cart item by ID when it does not exist.
+     * *Expected Result:** Throws `CartItemsNotFoundException`.
      */
     @Test
     void testGetByIdCartItems_NotFound() {
         when(cartItemsJpaRepository.findById(3L)).thenReturn(Optional.empty());
 
         assertThrows(CartItemsNotFoundException.class, () -> cartItemsService.getByIdCartItems(3L));
-        verify(cartItemsJpaRepository, times(1)).findById(3L);  // Ensure repository method is called once
+        verify(cartItemsJpaRepository, times(1)).findById(3L);
     }
 
     /**
-     **Test Case:** Create a new cart item.
-     **Expected Result:** Returns the created cart item.
+     * *Test Case:** Create a new cart item.
+     * *Expected Result:** Returns the created cart item.
      */
     @Test
     void testCreateCartItems() {
@@ -106,8 +109,8 @@ class CartItemsServiceImplTest {
 
         CartItems result = cartItemsService.createCartItems(cartItem1);
 
-        assertNotNull(result);  // The created cart item must not be null
-        assertEquals(10L, result.getQuantity());  // Quantity must match expected value
-        verify(cartItemsJpaRepository, times(1)).save(cartItem1);  // Ensure repository save is called once
+        assertNotNull(result);
+        assertEquals(10L, result.getQuantity());
+        verify(cartItemsJpaRepository, times(1)).save(cartItem1);
     }
 }

@@ -29,11 +29,11 @@ public class Orders {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    //@NotNull
+    @NotNull
     private String deliveryAddress;
     private String contactPhone;
 
-    //@NotNull
+    @NotNull
     private String deliveryMethod;
 
     @Enumerated(EnumType.STRING)

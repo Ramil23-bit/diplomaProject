@@ -65,26 +65,21 @@ public class PaymentControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     void getByIdWhenIdIsExists() throws Exception {
-        // Mock user data
         User user = new User(1L, "user", "test@example.com", "password123", "123456789");
 
-        // Mock payment entity
         Payment existsPayment = new Payment(1L, 5L, null, LocalDateTime.now(), OrderStatus.CREATED);
-
         PaymentResponseDto paymentResponseDto = new PaymentResponseDto(existsPayment.getId(), user);
 
-        // Mock service behavior
         when(paymentService.getByIdPayment(existsPayment.getId())).thenReturn(existsPayment);
         when(converter.toDto(existsPayment)).thenReturn(paymentResponseDto);
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/payment/" + existsPayment.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())  // HTTP 200 OK
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))  // ID must be 1
-                .andExpect(MockMvcResultMatchers.jsonPath("$.user.username").value("user"))  // Username must match
-                .andExpect(MockMvcResultMatchers.jsonPath("$.user.email").value("test@example.com"));  // Email must match
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.user.username").value("user"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.user.email").value("test@example.com"));
     }
 
     /**
@@ -94,18 +89,15 @@ public class PaymentControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     void getByIdWhenIdIsNotExists() throws Exception {
-        // Define test payment ID
         Payment existsPayment = new Payment(1L, 5L, null, LocalDateTime.now(), OrderStatus.CREATED);
 
-        // Mock service behavior for non-existent payment
         when(paymentService.getByIdPayment(existsPayment.getId())).thenThrow(BadArgumentsException.class);
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/payment/" + existsPayment.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())  // HTTP 400 Bad Request
-                .andExpect(exception -> assertTrue(exception.getResolvedException() instanceof BadArgumentsException));  // Exception must be BadArgumentsException
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(exception -> assertTrue(exception.getResolvedException() instanceof BadArgumentsException));
     }
 
     /**
@@ -115,19 +107,15 @@ public class PaymentControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     void deleteByIdWhenIdExists() throws Exception {
-        // Define test payment ID
         Payment existsPayment = new Payment(1L, 5L, null, LocalDateTime.now(), OrderStatus.CREATED);
 
-        // Mock service behavior
         Mockito.doNothing().when(paymentService).deletePayment(existsPayment.getId());
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/payment/" + existsPayment.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isNoContent());  // HTTP 204 No Content
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
 
-        // Verify that the service method was called once
         verify(paymentService).deletePayment(existsPayment.getId());
     }
 
@@ -138,18 +126,15 @@ public class PaymentControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     void deleteByIdWhenIdDoesNotExist() throws Exception {
-        // Define non-existent payment ID
         Long nonExistentId = 1L;
 
-        // Mock service behavior for non-existent payment
         doThrow(BadArgumentsException.class).when(paymentService).deletePayment(nonExistentId);
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/payment/" + nonExistentId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())  // HTTP 400 Bad Request
-                .andExpect(exception -> assertTrue(exception.getResolvedException() instanceof BadArgumentsException));  // Exception must be BadArgumentsException
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(exception -> assertTrue(exception.getResolvedException() instanceof BadArgumentsException));
     }
 
     /**

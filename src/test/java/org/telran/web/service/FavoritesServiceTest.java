@@ -50,10 +50,10 @@ class FavoritesServiceTest {
 
         List<Favorites> favoritesList = favoritesService.getAll();
 
-        assertNotNull(favoritesList);  // List should not be null
-        assertEquals(favoritesList.size(), favoritesListFromMock.size());  // Size should match expected
-        assertEquals(favoritesList.get(0), favoritesListFromMock.get(0));  // First item should match
-        assertEquals(favoritesList.get(1), favoritesListFromMock.get(1));  // Second item should match
+        assertNotNull(favoritesList);
+        assertEquals(favoritesList.size(), favoritesListFromMock.size());
+        assertEquals(favoritesList.get(0), favoritesListFromMock.get(0));
+        assertEquals(favoritesList.get(1), favoritesListFromMock.get(1));
     }
 
     /**
@@ -63,16 +63,16 @@ class FavoritesServiceTest {
     @Test
     public void createFavorite() {
         Favorites favorites = createFavoritesList().get(0);
-        favorites.setId(null);  // New favorite should have no ID initially
+        favorites.setId(null);
         Favorites savedFavorites = createFavoritesList().get(0);
-        savedFavorites.setId(1L);  // Expected saved favorite with ID
+        savedFavorites.setId(1L);
 
         when(favoritesRepository.save(favorites)).thenReturn(savedFavorites);
         Favorites createdFavorites = favoritesService.create(favorites);
 
-        assertNotNull(createdFavorites);  // Created favorite should not be null
-        assertNotNull(createdFavorites.getId());  // ID should be assigned
-        assertEquals(1L, savedFavorites.getId());  // ID should match expected
+        assertNotNull(createdFavorites);
+        assertNotNull(createdFavorites.getId());
+        assertEquals(1L, savedFavorites.getId());
     }
 
     /**

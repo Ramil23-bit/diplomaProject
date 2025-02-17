@@ -70,21 +70,18 @@ class StorageControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void testGetAllStorage() throws Exception {
-        // Mock storage entity
         Storage mockStorage = new Storage(1L, 100L);
         StorageResponseDto mockResponse = new StorageResponseDto(1L, 100L);
 
-        // Mock service behavior
         when(storageService.getAllStorage()).thenReturn(List.of(mockStorage));
         when(storageConverter.toDto(mockStorage)).thenReturn(mockResponse);
 
-        // Execute request and validate response
         mockMvc.perform(get("/api/v1/storage"))
                 .andDo(print())
-                .andExpect(status().isOk())  // HTTP 200 OK
-                .andExpect(jsonPath("$", hasSize(1)))  // Expecting one storage item
-                .andExpect(jsonPath("$[0].id", is(1)))  // ID must be 1
-                .andExpect(jsonPath("$[0].amount", is(100)));  // Amount must be 100
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].amount", is(100)));
     }
 
     /**
@@ -94,19 +91,16 @@ class StorageControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     void testGetStorageById() throws Exception {
-        // Mock storage entity
         Storage mockStorage = new Storage(1L, 100L);
         StorageResponseDto mockResponse = new StorageResponseDto(1L, 100L);
 
-        // Mock service behavior
         when(storageService.getByIdStorage(1L)).thenReturn(mockStorage);
         when(storageConverter.toDto(any(Storage.class))).thenReturn(mockResponse);
 
-        // Execute request and validate response
         mockMvc.perform(get("/api/v1/storage/1"))
                 .andDo(print())
-                .andExpect(status().isOk())  // HTTP 200 OK
-                .andExpect(jsonPath("$.id", is(1)))  // ID must be 1
-                .andExpect(jsonPath("$.amount", is(100)));  // Amount must be 100
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.amount", is(100)));
     }
 }

@@ -12,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -72,17 +71,12 @@ public class CartItemsControllerTest {
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     void getCurrentCartItemsAsUserTest() throws Exception {
-        // Mock category, storage, product, and cart items
         Category category = new Category(1L, "Category1");
         Storage storage = new Storage(1L, 100L);
         Cart cart = new Cart(1L);
         Product product = new Product(1L, "Product Title", new BigDecimal("19.99"), "Product Info", category, storage, new BigDecimal("5.00"));
         CartItems cartItems = new CartItems(1L, cart, product);
-
-        // Mock service response
         when(cartItemsService.getAllByCurrentUser()).thenReturn(Collections.singletonList(cartItems));
-
-        // Mock DTO conversion
         ProductResponseDto productResponseDto = new ProductResponseDto(1L, "Product Name", new BigDecimal("100.00"), new BigDecimal("10.00"), 1L);
         UserResponseDto userResponseDto = new UserResponseDto(1L, "user", "user@example.com", "123456789");
         CartItemsResponseDto cartItemsResponseDto = new CartItemsResponseDto(1L, 1L, productResponseDto, userResponseDto);
@@ -90,7 +84,6 @@ public class CartItemsControllerTest {
 
         logger.info("Mocked CartItemsResponseDto: {}", cartItemsResponseDto);
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cart_items/current"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -106,17 +99,14 @@ public class CartItemsControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void getAllCartItemsAsAdminTest() throws Exception {
-        // Mock category, storage, product, and cart items
         Category category = new Category(1L, "Category1");
         Storage storage = new Storage(1L, 100L);
         Cart cart = new Cart(1L);
         Product product = new Product(1L, "Product Title", new BigDecimal("19.99"), "Product Info", category, storage, new BigDecimal("5.00"));
         CartItems cartItems = new CartItems(1L, cart, product);
 
-        // Mock service response
         when(cartItemsService.getAllCartItems()).thenReturn(Collections.singletonList(cartItems));
 
-        // Mock DTO conversion
         ProductResponseDto productResponseDto = new ProductResponseDto(1L, "Product Name", new BigDecimal("100.00"), new BigDecimal("10.00"), 1L);
         UserResponseDto userResponseDto = new UserResponseDto(1L, "user", "user@example.com", "123456789");
         CartItemsResponseDto cartItemsResponseDto = new CartItemsResponseDto(1L, 1L, productResponseDto, userResponseDto);
@@ -124,13 +114,12 @@ public class CartItemsControllerTest {
 
         logger.info("Mocked CartItemsResponseDto: {}", cartItemsResponseDto);
 
-        // Execute request and validate response
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cart_items"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1L))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].product.id").value(1L))  // Verify product ID
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].quantity").value(1L));  // Verify quantity
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].product.id").value(1L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].quantity").value(1L));
     }
 
     /**

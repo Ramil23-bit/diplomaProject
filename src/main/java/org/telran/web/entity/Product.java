@@ -2,7 +2,6 @@ package org.telran.web.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -33,14 +32,14 @@ public class Product {
     @Column(name = "product_info")
     private String productInfo;
 
-    @ManyToOne //(cascade = CascadeType.ALL)
+    @ManyToOne
     @NotNull
     @JoinColumn(name = "category_id", nullable = false)
     @JsonBackReference
     private Category category;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    //@NotNull
+    @NotNull
     @JoinColumn(name = "storage_id")
     @JsonIgnore
     private Storage storage;
