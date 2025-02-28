@@ -25,7 +25,6 @@ public class Orders {
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItems> orderItems = new ArrayList<>();
 
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 

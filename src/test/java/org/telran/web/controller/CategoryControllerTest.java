@@ -20,12 +20,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.telran.web.configuration.SecurityConfig;
 import org.telran.web.configuration.TestSecurityConfig;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.CategoryCreateDto;
 import org.telran.web.dto.CategoryResponseDto;
 import org.telran.web.entity.Category;
 import org.telran.web.security.JwtAuthenticationFilter;
+import org.telran.web.security.JwtService;
 import org.telran.web.service.CategoryService;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -36,7 +38,7 @@ import static org.mockito.Mockito.when;
 @WebMvcTest(value = CategoryController.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
 })
-@Import(TestSecurityConfig.class)
+@Import(SecurityConfig.class)
 @AutoConfigureMockMvc
 public class CategoryControllerTest {
 
@@ -53,6 +55,9 @@ public class CategoryControllerTest {
 
     @MockBean
     private UserDetailsService userDetailsService;
+
+    @MockBean
+    private JwtService jwtService;
 
     @InjectMocks
     private CategoryController categoryController;

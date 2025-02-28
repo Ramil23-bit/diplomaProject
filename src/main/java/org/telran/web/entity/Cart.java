@@ -14,7 +14,7 @@ public class Cart {
     private Long id;
 
     @OneToOne
-    @NotNull
+    //@NotNull
     @JoinColumn(name = "user_id")
     private User user;
 

@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.telran.web.configuration.SecurityConfig;
 import org.telran.web.configuration.TestSecurityConfig;
 import org.telran.web.converter.Converter;
 import org.telran.web.converter.StorageCreateConverter;
@@ -21,6 +22,7 @@ import org.telran.web.dto.StorageCreateDto;
 import org.telran.web.dto.StorageResponseDto;
 import org.telran.web.entity.Storage;
 import org.telran.web.security.JwtAuthenticationFilter;
+import org.telran.web.security.JwtService;
 import org.telran.web.service.StorageService;
 
 import java.util.List;
@@ -44,7 +46,7 @@ import static org.mockito.ArgumentMatchers.any;
 @WebMvcTest(value = StorageController.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
 })
-@Import({TestSecurityConfig.class, StorageCreateConverter.class})
+@Import({SecurityConfig.class, StorageCreateConverter.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class StorageControllerTest {
@@ -58,6 +60,9 @@ class StorageControllerTest {
     private Converter<Storage, StorageCreateDto, StorageResponseDto> storageConverter;
     @MockBean
     private UserDetailsService userDetailsService;
+
+    @MockBean
+    private JwtService jwtService;
 
     static {
         System.setProperty("spring.profiles.active", "test");

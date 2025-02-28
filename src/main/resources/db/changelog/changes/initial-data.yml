@@ -351,3 +351,37 @@ databaseChangeLog:
               - column:
                   name: cart_product_id
                   valueNumeric: 1
+#  - changeSet:
+#      id: 22
+#      author: team_diploma_project
+#      changes:
+#        - insert:
+#            tableName: report
+#            columns:
+#              - column:
+#                  name: name_product
+#
+#              - column:
+#                  name: total_profit
+#                  valueNumeric: 300
+#              - column:
+#                  name: amount
+#                  valueNumeric: 9
+#        - insert:
+#            tableName: report
+#            columns:
+#              - column:
+#                  name: total_profit
+#                  valueNumeric: 440
+#              - column:
+#                  name: amount
+#                  valueNumeric: 10
+#        - insert:
+#            tableName: report
+#            columns:
+#              - column:
+#                  name: total_profit
+#                  valueNumeric: 290
+#              - column:
+#                  name: amount
+#                  valueNumeric: 13

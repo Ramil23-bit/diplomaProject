@@ -416,14 +416,30 @@ databaseChangeLog:
   - changeSet:
       id: 11
       author: team_diploma_project
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: report
       changes:
-        - addColumn:
-            tableName: products
+        - createTable:
+            tableName: report
             columns:
               - column:
-                  name: image_url
-                  type: varchar(255)
-
-
-
-
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name_product
+                  type: varchar(20)
+              - column:
+                  name: amount
+                  type: bigint
+              - column:
+                  name: create_date
+                  type: TIMESTAMP
+              - column:
+                  name: status
+                  type: varchar(50)

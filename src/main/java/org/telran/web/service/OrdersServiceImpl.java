@@ -77,6 +77,11 @@ public class OrdersServiceImpl implements OrdersService {
         return savedOrder;
     }
 
+    @Override
+    public List<Orders> checkOrderStatus() {
+        return null;
+    }
+
 
     /**
      * Retrieves all orders from the repository.
@@ -118,7 +123,7 @@ public class OrdersServiceImpl implements OrdersService {
      *
      * @return a list of orders with the status AWAITING_PAYMENT.
      */
-    @Override
+    //@Override
     public String getOrderStatusById(Long orderId) {
         Orders order = repository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
@@ -126,12 +131,12 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
 
-    @Override
+    //@Override
     public List<Orders> getAllByCurrentUser() {
         return repository.findAllByUserId(userService.getCurrentUserId());
     }
 
-    @Override
+    //@Override
     public void delete(Long id) {
         Orders byId = getById(id);
         OrderStatus status = byId.getStatus();

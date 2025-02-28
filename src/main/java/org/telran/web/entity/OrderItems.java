@@ -25,7 +25,7 @@ public class OrderItems {
 
     @ManyToOne
     @JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "FK_ORDER_ITEMS_ORDER"))
-    @JsonIgnore
+    //@JsonIgnore
     private Orders orders;
 
     public OrderItems(Long quantity, BigDecimal priceAtPurchase, Product product) {
