@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.telran.web.configuration.SecurityConfig;
 import org.telran.web.configuration.TestSecurityConfig;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.ProductCreateDto;
@@ -27,6 +28,7 @@ import org.telran.web.entity.Product;
 import org.telran.web.exception.BadArgumentsException;
 import org.telran.web.exception.ProductNotFoundException;
 import org.telran.web.security.JwtAuthenticationFilter;
+import org.telran.web.security.JwtService;
 import org.telran.web.service.ProductService;
 
 import java.math.BigDecimal;
@@ -39,7 +41,7 @@ import static org.mockito.Mockito.*;
 @WebMvcTest(value = ProductController.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
 })
-@Import({TestSecurityConfig.class})
+@Import({SecurityConfig.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class ProductControllerTest {
@@ -55,6 +57,9 @@ public class ProductControllerTest {
 
     @MockBean
     private UserDetailsService userDetailsService;
+
+    @MockBean
+    private JwtService jwtService;
 
     /**
      **Test Case:** Retrieve all products

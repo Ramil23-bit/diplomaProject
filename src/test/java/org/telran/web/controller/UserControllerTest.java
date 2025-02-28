@@ -12,12 +12,14 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.telran.web.configuration.SecurityConfig;
 import org.telran.web.configuration.TestSecurityConfig;
 import org.telran.web.converter.Converter;
 import org.telran.web.converter.UserCreateConverter;
@@ -26,6 +28,7 @@ import org.telran.web.dto.UserResponseDto;
 import org.telran.web.entity.User;
 import org.telran.web.exception.BadArgumentsException;
 import org.telran.web.security.JwtAuthenticationFilter;
+import org.telran.web.security.JwtService;
 import org.telran.web.service.UserService;
 import org.springframework.security.test.context.support.WithMockUser;
 
@@ -44,20 +47,20 @@ import static org.mockito.Mockito.*;
 @WebMvcTest(value = UserController.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
 })
-@Import({TestSecurityConfig.class, UserCreateConverter.class})
+@Import({SecurityConfig.class, UserCreateConverter.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class UserControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private UserService userService;
     @MockBean
     private Converter<User, UserCreateDto, UserResponseDto> converter;
     @MockBean
     private UserDetailsService userDetailsService;
+    @MockBean
+    private JwtService jwtService;
 
     static {
         System.setProperty("spring.profiles.active", "test");

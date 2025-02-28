@@ -15,7 +15,7 @@ public class Category {
     private Long id;
 
     @Column(name = "category_title")
-    @NotNull
+    //@NotNull
     private String categoryTitle;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)

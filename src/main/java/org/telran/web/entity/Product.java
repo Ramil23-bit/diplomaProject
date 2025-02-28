@@ -22,11 +22,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    //@NotNull
     @Column(name = "product_title")
     private String productTitle;
 
-    @NotNull
+    //@NotNull
     @Column(name = "price")
     private BigDecimal price;
 
@@ -34,7 +34,7 @@ public class Product {
     private String productInfo;
 
     @ManyToOne //(cascade = CascadeType.ALL)
-    @NotNull
+    //@NotNull
     @JoinColumn(name = "category_id", nullable = false)
     @JsonBackReference
     private Category category;
@@ -42,7 +42,7 @@ public class Product {
     @ManyToOne(cascade = CascadeType.ALL)
     //@NotNull
     @JoinColumn(name = "storage_id")
-    @JsonIgnore
+    //@JsonIgnore
     private Storage storage;
 
     @Column(name = "discount")

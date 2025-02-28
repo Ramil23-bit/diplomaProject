@@ -1,75 +1,43 @@
 package org.telran.web.controller;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.telran.web.dto.*;
-import org.telran.web.entity.Product;
-import org.telran.web.enums.GroupBy;
-import org.telran.web.enums.TimeUnitEnum;
 import org.telran.web.service.ReportService;
-import java.util.List;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/report")
 public class ReportController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
+
     @Autowired
     private ReportService reportService;
 
-    /**
-     * Retrieves the top 10 most purchased products.
-     *
-     * @return A list of the top 10 purchased products.
-     */
-    @GetMapping("/top-purchased")
-    public List<ProductReportDto> getTopPurchasedProducts() {
-        return reportService.getTop10PurchasedProducts();
+    @GetMapping("/completed")
+    public void topProductCompleted(@RequestParam String start, @RequestParam String end){
+        LocalDateTime startDate = LocalDateTime.parse(start);
+        LocalDateTime endDate = LocalDateTime.parse(end);
+        reportService.findTopProductCompletedInTime(startDate, endDate);
     }
 
-    /**
-     * Retrieves the top 10 most cancelled products.
-     *
-     * @return A list of the top 10 cancelled products.
-     */
-    @GetMapping("/top-cancelled")
-    public List<ProductReportDto> getTopCancelledProducts() {
-        return reportService.getTop10CancelledProducts();
+    @GetMapping("/canceled")
+    public void topProductCanceled(@RequestParam String start, @RequestParam String end){
+        LocalDateTime startDate = LocalDateTime.parse(start);
+        LocalDateTime endDate = LocalDateTime.parse(end);
+        reportService.findTopProductCanceledInTime(startDate, endDate);
     }
 
-    /**
-     * Retrieves a list of unpaid products older than the specified number of days.
-     *
-     * @param days The number of days after which unpaid products should be retrieved.
-     * @return A list of unpaid products older than the specified number of days.
-     */
-    @GetMapping("/unpaid-products")
-    public List<Product> getUnpaidProducts(@RequestParam int days) {
-        return reportService.getUnpaidProductsOlderThan(days);
-    }
-
-    /**
-     * Retrieves revenue reports for the given time period and grouping criteria.
-     *
-     * @param n       The number of time units (e.g., 3 days, 2 months).
-     * @param unit    The time unit for the report (e.g., HOURS, DAYS, WEEKS, MONTHS, YEARS).
-     * @param groupBy The grouping criteria (e.g., category, date, customer).
-     * @return A list of revenue reports based on the provided parameters.
-     */
-    @GetMapping("/revenue")
-    public List<RevenueReportDto> getRevenue(
-            @RequestParam int n,
-            @RequestParam
-            @Schema(
-                    description = "Allowed values: HOURS, DAYS, WEEKS, MONTHS, YEARS",
-                    allowableValues = {"HOURS", "DAYS", "WEEKS", "MONTHS", "YEARS"}
-            ) TimeUnitEnum unit,
-            @RequestParam
-            @Schema(
-                    description = "Allowed values: category, date, customer",
-                    allowableValues = {"category", "date", "customer"}
-            ) String groupBy) {
-
-        return reportService.getRevenueReport(n, unit.toChronoUnit(), GroupBy.fromString(groupBy));
+    @GetMapping("/profit")
+    public Map<String, BigDecimal> totalProfit(
+            @RequestParam("startDate") LocalDateTime startDate,
+            @RequestParam("endDate") LocalDateTime endDate,
+            @RequestParam("groupBy") String groupBy) {
+        return reportService.profitFromOrders(startDate, endDate, groupBy);
     }
 }

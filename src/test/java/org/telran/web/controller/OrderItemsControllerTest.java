@@ -17,12 +17,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.telran.web.configuration.SecurityConfig;
 import org.telran.web.configuration.TestSecurityConfig;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.OrderItemsCreateDto;
 import org.telran.web.dto.OrderItemsResponseDto;
 import org.telran.web.entity.OrderItems;
 import org.telran.web.security.JwtAuthenticationFilter;
+import org.telran.web.security.JwtService;
 import org.telran.web.service.OrderItemsService;
 
 import static org.mockito.Mockito.doNothing;
@@ -31,7 +33,7 @@ import static org.mockito.Mockito.doNothing;
 @WebMvcTest(value = OrderItemsController.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
 })
-@Import({TestSecurityConfig.class})
+@Import({SecurityConfig.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class OrderItemsControllerTest {
@@ -47,6 +49,9 @@ public class OrderItemsControllerTest {
 
     @MockBean
     private UserDetailsService userDetailsService;
+
+    @MockBean
+    private JwtService jwtService;
 
     // 🔹 Set test profile for isolated configuration
     static {

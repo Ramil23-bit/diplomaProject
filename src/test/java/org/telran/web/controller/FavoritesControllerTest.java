@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.telran.web.configuration.SecurityConfig;
 import org.telran.web.configuration.TestSecurityConfig;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.FavoritesCreateDto;
@@ -28,6 +29,7 @@ import org.telran.web.entity.Favorites;
 import org.telran.web.entity.Product;
 import org.telran.web.entity.User;
 import org.telran.web.security.JwtAuthenticationFilter;
+import org.telran.web.security.JwtService;
 import org.telran.web.service.FavoritesService;
 
 import java.util.Collections;
@@ -40,7 +42,7 @@ import static org.mockito.Mockito.times;
 @WebMvcTest(value = FavoritesController.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
 })
-@Import({TestSecurityConfig.class})
+@Import({SecurityConfig.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class FavoritesControllerTest {
@@ -56,6 +58,8 @@ public class FavoritesControllerTest {
 
     @MockBean
     private UserDetailsService userDetailsService;
+    @MockBean
+    private JwtService jwtService;
 
     // Set test profile for isolated configuration
     static {

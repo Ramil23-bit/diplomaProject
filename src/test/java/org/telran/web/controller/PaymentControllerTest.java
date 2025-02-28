@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.telran.web.configuration.SecurityConfig;
 import org.telran.web.configuration.TestSecurityConfig;
 import org.telran.web.converter.Converter;
 import org.telran.web.dto.PaymentCreateDto;
@@ -30,6 +31,7 @@ import org.telran.web.entity.User;
 import org.telran.web.enums.OrderStatus;
 import org.telran.web.exception.BadArgumentsException;
 import org.telran.web.security.JwtAuthenticationFilter;
+import org.telran.web.security.JwtService;
 import org.telran.web.service.PaymentService;
 
 import java.time.LocalDateTime;
@@ -41,7 +43,7 @@ import static org.mockito.Mockito.*;
 @WebMvcTest(value = PaymentController.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
 })
-@Import({TestSecurityConfig.class})
+@Import({SecurityConfig.class})
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 public class PaymentControllerTest {
@@ -55,6 +57,9 @@ public class PaymentControllerTest {
     @MockBean
     private UserDetailsService userDetailsService;
 
+    @MockBean
+    private JwtService jwtService;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -66,7 +71,8 @@ public class PaymentControllerTest {
     @WithMockUser(roles = "USER")
     void getByIdWhenIdIsExists() throws Exception {
         // Mock user data
-        User user = new User(1L, "user", "test@example.com", "password123", "123456789");
+        User user = new User(1L, "user", "test@example.com", "password123",
+                "123456789");
 
         // Mock payment entity
         Payment existsPayment = new Payment(1L, 5L, null, LocalDateTime.now(), OrderStatus.CREATED);

@@ -3,8 +3,6 @@ package org.telran.web.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +25,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/cart")
 public class CartController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CartController.class);
-
     @Autowired
     private CartService cartService;
 
@@ -50,10 +46,8 @@ public class CartController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<CartResponseDto> create(@RequestBody CartCreateDto cartCreateDto) {
-        logger.info("Received request to create cart: {}", cartCreateDto);
         Cart cart = cartConverter.toEntity(cartCreateDto);
         CartResponseDto response = cartConverter.toDto(cartService.createCart(cart));
-        logger.info("Cart created successfully with ID: {}", response.getId());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
                 .body(response);
@@ -72,9 +66,7 @@ public class CartController {
     @GetMapping("/current")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public CartResponseDto getCurrentCart() {
-        logger.info("Fetching current user's cart");
         CartResponseDto cart = cartConverter.toDto(cartService.findByCurrentUser());
-        logger.info("Cart retrieved: {}", cart);
         return cart;
     }
 
@@ -91,11 +83,9 @@ public class CartController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<CartResponseDto> getCarts() {
-        logger.info("Admin fetching all carts");
         List<CartResponseDto> carts = cartService.getAllCart().stream()
                 .map(cartConverter::toDto)
                 .collect(Collectors.toList());
-        logger.info("Total carts retrieved: {}", carts.size());
         return carts;
     }
 }
